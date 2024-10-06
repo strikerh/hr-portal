@@ -68,6 +68,7 @@ export class AuthService {
                     'login': 'admin',
                     'password': 'adminrana7263',
                 }
+                //
             }
             ).pipe(
             switchMap((response: any) => {

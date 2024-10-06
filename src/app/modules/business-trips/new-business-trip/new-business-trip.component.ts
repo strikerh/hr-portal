@@ -6,6 +6,7 @@ import {
     FormsModule,
     ReactiveFormsModule,
 } from '@angular/forms';
+import { MatCheckbox } from '@angular/material/checkbox';
 import {
     MatDateRangeInput,
     MatDateRangePicker,
@@ -24,7 +25,8 @@ import { MatOption, MatSelect } from '@angular/material/select';
 import { UserService } from '../../../core/user/user.service';
 import { BusinessTripApiService } from '../business-trip-api.service';
 import { CreateTripLookupResponse } from '../businessTripModels';
-import { forkJoin } from 'rxjs';
+import { MatDivider } from '@angular/material/divider';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'app-new-business-trip',
@@ -49,6 +51,9 @@ import { forkJoin } from 'rxjs';
         ReactiveFormsModule,
         JsonPipe,
         NgIf,
+        MatCheckbox,
+        MatDivider,
+        MatButton,
     ],
     templateUrl: './new-business-trip.component.html',
     styleUrl: './new-business-trip.component.scss',
@@ -59,7 +64,12 @@ export class NewBusinessTripComponent {
         projects: [],
         other_trip_types: [],
         approval_types: [],
-
+        distances: [
+            { key: '700_below', name: 'Below 70km' },
+            { key: 'between_70_200', name: 'Between 70km and below 200km' },
+            { key: '200_above', name: 'Above 200km' },
+        ],
+        categories: [{ id: 1, name: 'Business Trip' }],
     };
     tripTypes: { value: string; viewValue: string }[] = [
         { value: 'steak-0', viewValue: 'Steak' },
@@ -75,30 +85,37 @@ export class NewBusinessTripComponent {
 
     ngOnInit() {
         this.businessTripForm = this.fb.group({
-            trip_type: ['visit_clients'],
-            employee_id: [0],
-            location_of_the_trip: ['Dubai, UAE'],
-            start_date: ['2024-10-01'],
-            end_date: ['2024-10-05'],
-            distance: ['200_above'],
-            approval_cycle_type: ['project'],
+            trip_type: [''],
+            employee_id: [null],
+            location_of_the_trip: [null],
+            start_date: [''],
+            end_date: [''],
+            distance: [''],
+            approval_cycle_type: [''],
             accommodation_paid_by_company: [false],
             international_trip: [false],
             car_provided: [false],
-            tickets_allowance: [true],
-            category_id: [1],
+            tickets_allowance: [false],
+            category_id: [null],
 
-            project_id: [1],
-            number_of_trips: [5],
+            project_id: [null],
+            number_of_trips: [0],
+        });
+        this.businessTripApi.fetchCreateTripLookup().subscribe({
+            next: (response) => {
+                this.tripLookupResponse = {
+                    ...this.tripLookupResponse,
+                    ...response,
+                };
+                console.log(response);
+            },
+            error: (error) => {
+                console.error(error);
+            },
         });
 
-        forkJoin([
-            this.businessTripApi.fetchCreateTripLookup(),
-            this.userService.user$,
-        ]).subscribe(([response, user]) => {
-            this.tripLookupResponse = response;
+        this.userService.user$.subscribe((user) => {
             this.businessTripForm.controls['employee_id'].setValue(user.id);
-            console.log(response);
             console.log(user);
         });
     }

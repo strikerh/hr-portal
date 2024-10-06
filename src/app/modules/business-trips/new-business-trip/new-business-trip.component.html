@@ -2,26 +2,26 @@
     <h1 class="text-xl font-bold"> Request Business Trip</h1>
 </div>
 <section class="p-6 overflow-auto">
-    <form class="flex flex-col" [formGroup]="businessTripForm" >
-        <div class="controller">
-            <label class="font-semibold text-secondary block py-1">Trip Type</label>
-            <div class="input-cont">
-                <input type="text" />
-            </div>
-        </div>
-<input  formControlName="employee_id" >
+    <form class="flex flex-col gap-2" [formGroup]="businessTripForm">
+
+
+        <!--         11 category_id: [1], -->
         <mat-form-field>
-            <mat-label>Trip Type</mat-label>
-            <mat-select  formControlName="trip_type" >
-                @for (tripType of tripLookupResponse?.other_trip_types; track tripType.key) {
-                    <mat-option [value]="tripType.key">{{tripType.value}}</mat-option>
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category_id">
+                @for (tripType of tripLookupResponse?.categories; track tripType.id) {
+                    <mat-option [value]="tripType.id">{{ tripType.name }}</mat-option>
                 }
             </mat-select>
         </mat-form-field>
 
+        <mat-divider class="mb-3"></mat-divider>
+
+        <!--     4 end_date    3 start_date -->
+
         <mat-form-field>
             <mat-label>Enter a date range</mat-label>
-            <mat-date-range-input [rangePicker]="picker">
+            <mat-date-range-input [rangePicker]="picker" (click)="picker.open()">
                 <input matStartDate formControlName="start_date" placeholder="Start date">
                 <input matEndDate formControlName="end_date" placeholder="End date">
             </mat-date-range-input>
@@ -37,78 +37,90 @@
         </mat-form-field>
 
 
+        <mat-divider class="mb-3"></mat-divider>
 
 
+        <!--  1 employee_id: -->
+        <input type="hidden" formControlName="employee_id">
+
+        <!--           0 trip_type -->
         <mat-form-field>
-            <mat-label>Distance</mat-label>
-            <mat-select>
-                @for (tripType of tripTypes; track tripType) {
-                    <mat-option [value]="tripType.value">{{tripType.viewValue}}</mat-option>
+            <mat-label>Trip Type</mat-label>
+            <mat-select formControlName="trip_type">
+                @for (tripType of tripLookupResponse?.other_trip_types; track tripType.key) {
+                    <mat-option [value]="tripType.key">{{ tripType.value }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+        <!--{{businessTripForm.value['trip_type'] | json}}-->
 
+
+        <!--    13 number_of_trips: [5], -->
+        <mat-form-field *ngIf="businessTripForm.value['trip_type']  === 'visit_clients'">
+            <mat-label>Number of trips</mat-label>
+            <input matInput type="number" formControlName="number_of_trips" placeholder="Number of trips" value="">
+        </mat-form-field>
+
+
+        <!-- 5 distance -->
+        <mat-form-field *ngIf="businessTripForm.value['trip_type']  === 'visit_clients'">
+            <mat-label>Distance</mat-label>
+            <mat-select formControlName="distance">
+                @for (tripType of tripLookupResponse?.distances; track tripType.key) {
+                    <mat-option [value]="tripType.key">{{ tripType.name }}</mat-option>
                 }
             </mat-select>
         </mat-form-field>
 
-        <mat-radio-group aria-label="Select an option">
-            <mat-radio-button value="1">Project</mat-radio-button>
-            <mat-radio-button value="2">Administrator</mat-radio-button>
+        <!--         2 location_of_the_trip: ['Dubai, UAE'],  -->
+        <mat-form-field *ngIf="businessTripForm.value['trip_type']  === 'business_trip_foreigners_ksa'">
+            <mat-label>Location of the trip</mat-label>
+            <input matInput formControlName="location_of_the_trip" placeholder="Dubai, UAE" value="">
+        </mat-form-field>
+
+
+        <!--    7 accommodation_paid_by_company: [false],
+               8 international_trip: [false],
+              9  car_provided: [false],
+               10 tickets_allowance: [true],
+               -->
+        <section class="flex flex-col" *ngIf="businessTripForm.value['distance']==='200_above' ">
+            <mat-checkbox class="example-margin" formControlName="accommodation_paid_by_company">Accommodation paid by
+                company
+            </mat-checkbox>
+            <mat-checkbox class="example-margin" formControlName="international_trip">International trip</mat-checkbox>
+            <mat-checkbox class="example-margin" formControlName="car_provided">Car provided</mat-checkbox>
+            <mat-checkbox class="example-margin" formControlName="tickets_allowance">Tickets allowance</mat-checkbox>
+
+        </section>
+
+        <mat-divider class="my-2"></mat-divider>
+
+
+        <!--      6  approval_cycle_type   -->
+        <mat-label class="w-full">Approval Type</mat-label>
+        <mat-radio-group formControlName="approval_cycle_type" aria-label="Select an option">
+            <mat-radio-button value="project">Project</mat-radio-button>
+            <mat-radio-button value="administrator">Administrator</mat-radio-button>
         </mat-radio-group>
 
-        <mat-form-field class="">
-            <mat-label>Trip Type</mat-label>
-            <input matInput placeholder="Trip Type" value="">
+        <!--     12  project_id: [1], -->
+        <mat-form-field *ngIf="businessTripForm.value['approval_cycle_type']==='project'">
+            <mat-label>Project</mat-label>
+            <mat-select formControlName="project_id" placeholder="Project">
+                @for (tripType of tripLookupResponse?.projects; track tripType.id) {
+                    <mat-option [value]="tripType.id">{{ tripType.name }}</mat-option>
+                }
+            </mat-select>
         </mat-form-field>
 
-        <mat-form-field class="">
-            <mat-label>Total Days</mat-label>
-            <input matInput placeholder="Trip Type" value="23" readonly>
-        </mat-form-field>
 
-        <mat-form-field class="">
-            <mat-label>Location of the trip</mat-label>
-            <input formControlName="location_of_the_trip" matInput placeholder="Location of the trip" value="">
-        </mat-form-field>
+        <mat-divider class="my-2"></mat-divider>
 
-        <mat-form-field class="example-full-width">
-            <mat-label>Trip Type</mat-label>
-            <input matInput placeholder="Trip Type" value="">
-        </mat-form-field>
+        <div class="flex justify-end">
+            <button type="submit" mat-raised-button color="primary"> Submit</button>
+        </div>
 
-        <div class="controller">
-            <label class="font-semibold text-secondary block py-1">Destination</label>
-            <div class="input-cont">
-                <input type="text" />
-            </div>
-        </div>
-        <div class="controller">
-            <label class="font-semibold text-secondary block py-1">Purpose</label>
-            <div class="input-cont">
-                <input type="text" />
-            </div>
-        </div>
-        <div class="controller">
-            <label class="font-semibold text-secondary block py-1">Start Date</label>
-            <div class="input-cont">
-                <input type="date" />
-            </div>
-        </div>
-        <div class="controller">
-            <label class="font-semibold text-secondary block py-1">End Date</label>
-            <div class="input-cont">
-                <input type="date" />
-            </div>
-        </div>
-        <div class="controller">
-            <label class="font-semibold text-secondary block py-1">Note</label>
-            <div class="input-cont">
-                <input type="text" />
-            </div>
-        </div>
-        <div class="controller">
-            <label class="font-semibold text-secondary block py-1">Document</label>
-            <div class="input-cont">
-                <input type="text" />
-            </div>
-        </div>
+
     </form>
 </section>

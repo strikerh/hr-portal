@@ -1835,12 +1835,12 @@ export const contacts = [
             ],
             phoneNumbers: [
                 {
-                    country: 'tr',
+                    country: 'ar',
                     phoneNumber: '939 555 3054',
                     label: 'Mobile',
                 },
                 {
-                    country: 'tr',
+                    country: 'ar',
                     phoneNumber: '852 486 2053',
                     label: 'Work',
                 },

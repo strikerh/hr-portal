@@ -4102,8 +4102,8 @@ export const countries = [
     },
     {
         id: '784ac645-bc50-4b35-b5fb-effd72f99749',
-        iso: 'tr',
-        name: 'Turkey',
+        iso: 'ar',
+        name: 'arabic',
         code: '+90',
         flagImagePos: '-1px -2126px',
     },

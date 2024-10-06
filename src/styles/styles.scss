@@ -2,3 +2,10 @@
 /*  @ Import/write your custom styles here.
 /*  @ Styles from this file will override 'vendors.scss' and Fuse's base styles.
 /* ----------------------------------------------------------------------------------------------------- */
+app-side-page{
+    z-index: 90000;
+  /*  .overlay{
+        z-index: 90000;
+    }*/
+
+}

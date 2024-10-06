@@ -1,0 +1,86 @@
+<div class="w-full flex flex-col">
+    <header class="w-full flex justify-between p-4 border-b bg-gray-50">
+        <h1 class="text-3xl font-bold flex items-center text-primary-900">
+            <mat-icon svgIcon="airplane_ticket" class="icon-size-10 text-primary-800 mx-4"></mat-icon>
+            Business Trip
+        </h1>
+        <button mat-flat-button color="primary" type="button" (click)="openNewBusinessTrip()">
+            Request Business Trip
+        </button>
+    </header>
+
+    <section class="simple-dashboard p-6">
+        <h2 class="font-bold text-primary-800 pb-2">Simple Dashboard</h2>
+        <div class="items flex justify-center gap-4 px-8">
+            <div class="item"><label>Approved</label> <span>2</span></div>
+            <div class="item"><label>Direct Manager Approval</label> <span>2</span></div>
+            <div class="item"><label>Department Manager Approval</label> <span>2</span></div>
+            <div class="item"><label>HR Manager Approval</label> <span>2</span></div>
+            <div class="item"><label>Rejected</label> <span>2</span></div>
+            <div class="item"><label>Draft</label> <span>2</span></div>
+            <div class="item"><label>CEO Approval</label> <span>2</span></div>
+        </div>
+    </section>
+
+    <section class="details p-6 flex flex-col">
+        <h2 class="font-bold text-primary-800 pb-2">Business Trip Details</h2>
+        <div class="table  p-2 bg-white rounded shadow">
+            <table >
+                <thead class="table-primary">
+                <tr>
+                    <th>Name</th>
+                    <th>Employee</th>
+                    <th>Department</th>
+                    <th>Trip Type</th>
+                    <th>Duration</th>
+                    <th>Destination</th>
+                    <th>Purpose</th>
+                    <th>Note</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>New</td>
+                    <td>Administrator</td>
+                    <td>الادارة المالية </td>
+                    <td>external</td>
+                    <td>2 Jul 2024 - 18 Jul 2024</td>
+                    <td>vryad</td>
+                    <td>عمل</td>
+                    <td>False</td>
+                </tr>
+                <tr>
+                    <td>New</td>
+                    <td>Administrator</td>
+                    <td>الادارة المالية </td>
+                    <td>external</td>
+                    <td>1 Jul 2024 - 10 Jul 2024</td>
+                    <td>جدة</td>
+                    <td>غرض</td>
+                    <td>False</td>
+                </tr>
+                <tr>
+                    <td>New</td>
+                    <td>Administrator</td>
+                    <td>الادارة المالية </td>
+                    <td>external</td>
+                    <td>2 Jul 2024 - 18 Jul 2024</td>
+                    <td>vryad</td>
+                    <td>عمل</td>
+                    <td>False</td>
+                </tr>
+                <tr>
+                    <td>New</td>
+                    <td>Administrator</td>
+                    <td>الادارة المالية </td>
+                    <td>external</td>
+                    <td>1 Jul 2024 - 10 Jul 2024</td>
+                    <td>جدة</td>
+                    <td>غرض</td>
+                    <td>False</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>

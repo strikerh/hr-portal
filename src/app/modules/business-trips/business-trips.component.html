@@ -28,57 +28,24 @@
             <table >
                 <thead class="table-primary">
                 <tr>
-                    <th>Name</th>
-                    <th>Employee</th>
-                    <th>Department</th>
-                    <th>Trip Type</th>
-                    <th>Duration</th>
-                    <th>Destination</th>
-                    <th>Purpose</th>
-                    <th>Note</th>
+                    <th>ID</th>
+                    <th>Date Start</th>
+                    <th>Date End</th>
+                    <th>Trip Status</th>
+
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>New</td>
-                    <td>Administrator</td>
-                    <td>الادارة المالية </td>
-                    <td>external</td>
-                    <td>2 Jul 2024 - 18 Jul 2024</td>
-                    <td>vryad</td>
-                    <td>عمل</td>
-                    <td>False</td>
-                </tr>
-                <tr>
-                    <td>New</td>
-                    <td>Administrator</td>
-                    <td>الادارة المالية </td>
-                    <td>external</td>
-                    <td>1 Jul 2024 - 10 Jul 2024</td>
-                    <td>جدة</td>
-                    <td>غرض</td>
-                    <td>False</td>
-                </tr>
-                <tr>
-                    <td>New</td>
-                    <td>Administrator</td>
-                    <td>الادارة المالية </td>
-                    <td>external</td>
-                    <td>2 Jul 2024 - 18 Jul 2024</td>
-                    <td>vryad</td>
-                    <td>عمل</td>
-                    <td>False</td>
-                </tr>
-                <tr>
-                    <td>New</td>
-                    <td>Administrator</td>
-                    <td>الادارة المالية </td>
-                    <td>external</td>
-                    <td>1 Jul 2024 - 10 Jul 2024</td>
-                    <td>جدة</td>
-                    <td>غرض</td>
-                    <td>False</td>
-                </tr>
+                    @for (trip of trips; track trip.id) {
+                        <tr>
+                            <td>{{ trip.id }}</td>
+                            <td>{{ trip.date_start }}</td>
+                            <td>{{ trip.date_end }} </td>
+                            <td>{{ trip.status }}</td>
+
+                        </tr>
+                    }
+
                 </tbody>
             </table>
         </div>

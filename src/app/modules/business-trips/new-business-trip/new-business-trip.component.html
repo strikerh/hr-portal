@@ -2,41 +2,42 @@
     <h1 class="text-xl font-bold"> Request Business Trip</h1>
 </div>
 <section class="p-6 overflow-auto">
-    <form class="flex flex-col" >
+    <form class="flex flex-col" [formGroup]="businessTripForm" >
         <div class="controller">
             <label class="font-semibold text-secondary block py-1">Trip Type</label>
             <div class="input-cont">
                 <input type="text" />
             </div>
         </div>
-
+<input  formControlName="employee_id" >
         <mat-form-field>
             <mat-label>Trip Type</mat-label>
-            <mat-select>
-                @for (tripType of tripTypes; track tripType) {
-                    <mat-option [value]="tripType.value">{{tripType.viewValue}}</mat-option>
-
+            <mat-select  formControlName="trip_type" >
+                @for (tripType of tripLookupResponse?.other_trip_types; track tripType.key) {
+                    <mat-option [value]="tripType.key">{{tripType.value}}</mat-option>
                 }
             </mat-select>
         </mat-form-field>
 
         <mat-form-field>
             <mat-label>Enter a date range</mat-label>
-            <mat-date-range-input [formGroup]="businessTripForm" [rangePicker]="picker">
-                <input matStartDate formControlName="startDate" placeholder="Start date">
-                <input matEndDate formControlName="endDate" placeholder="End date">
+            <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate formControlName="start_date" placeholder="Start date">
+                <input matEndDate formControlName="end_date" placeholder="End date">
             </mat-date-range-input>
-            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-date-range-picker #picker></mat-date-range-picker>
 
-            @if (businessTripForm.controls.startDate.hasError('matStartDateInvalid')) {
+            @if (businessTripForm.controls['start_date'].hasError('matStartDateInvalid')) {
                 <mat-error>Invalid start date</mat-error>
             }
-            @if (businessTripForm.controls.endDate.hasError('matEndDateInvalid')) {
+            @if (businessTripForm.controls['end_date'].hasError('matEndDateInvalid')) {
                 <mat-error>Invalid end date</mat-error>
             }
         </mat-form-field>
+
+
+
 
         <mat-form-field>
             <mat-label>Distance</mat-label>
@@ -64,8 +65,8 @@
         </mat-form-field>
 
         <mat-form-field class="">
-            <mat-label>Trip Type</mat-label>
-            <input matInput placeholder="Trip Type" value="">
+            <mat-label>Location of the trip</mat-label>
+            <input formControlName="location_of_the_trip" matInput placeholder="Location of the trip" value="">
         </mat-form-field>
 
         <mat-form-field class="example-full-width">

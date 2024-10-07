@@ -14,7 +14,7 @@
                 }
             </mat-select>
         </mat-form-field>
-
+<!--{{businessTripForm.value.category_id}}-->
         <mat-divider class="mb-3"></mat-divider>
 
         <!--     4 end_date    3 start_date -->
@@ -52,7 +52,7 @@
                 }
             </mat-select>
         </mat-form-field>
-        <!--{{businessTripForm.value['trip_type'] | json}}-->
+        {{businessTripForm.value['trip_type'] | json}}
 
 
         <!--    13 number_of_trips: [5], -->
@@ -63,7 +63,7 @@
 
 
         <!-- 5 distance -->
-        <mat-form-field *ngIf="businessTripForm.value['trip_type']  === 'visit_clients'">
+        <mat-form-field *ngIf="businessTripForm.value['trip_type']  === 'long_term'">
             <mat-label>Distance</mat-label>
             <mat-select formControlName="distance">
                 @for (tripType of tripLookupResponse?.distances; track tripType.key) {
@@ -73,7 +73,8 @@
         </mat-form-field>
 
         <!--         2 location_of_the_trip: ['Dubai, UAE'],  -->
-        <mat-form-field *ngIf="businessTripForm.value['trip_type']  === 'business_trip_foreigners_ksa'">
+<!--        *ngIf="businessTripForm.value['trip_type']  === 'business_trip_foreigners_ksa'"-->
+        <mat-form-field>
             <mat-label>Location of the trip</mat-label>
             <input matInput formControlName="location_of_the_trip" placeholder="Dubai, UAE" value="">
         </mat-form-field>

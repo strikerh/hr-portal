@@ -1,7 +1,11 @@
 export interface User {
     id: string;
     name: string;
-    email: string;
+    login: string;
     avatar?: string;
     status?: string;
+
+    employeeId?: number;
+    // uid?:number
+
 }

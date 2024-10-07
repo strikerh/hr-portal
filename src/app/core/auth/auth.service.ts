@@ -60,7 +60,6 @@ export class AuthService {
         if (this._authenticated) {
             return throwError('User is already logged in.');
         }
-        debugger;
         return this._httpClient
             .post(this.apiUrl + '/login', {
                 db: 'test3',
@@ -70,25 +69,26 @@ export class AuthService {
             .pipe(
                 switchMap((response: any) => {
                     // Store the access token in the local storage
-                    debugger;
-                    this.accessToken = response.accessToken;
+                    const data = response.result.data;
+                    this.accessToken = data.access_token;
 
                     // Set the authenticated flag to true
                     this._authenticated = true;
 
                     // Store the user on the user service
                     this._userService.user = {
-                        id: '1',
-                        name: 'Admin',
-                        email: credentials.email,
-                        avatar: 'assets/images/avatars/profile.jpg',
+                        id: data.uid ,
+                        name: data.name || 'Admin',
+                        login: data.login,
+                        employeeId: data.employee_id === false? null : data.employee_id,
                         status: 'online',
+
                     };
 
                     // Return a new observable with the response
                     return of(response);
-                }),
-                catchError(() =>{
+                })
+             /*   catchError(() =>{
 
                     this.accessToken = '80156ca8d911e63a22efb2fedb82de89e90e0e88';
                     this._authenticated = true;
@@ -100,7 +100,7 @@ export class AuthService {
                         status: 'online',
                     };
                     return of({ data : this._userService.user , accessToken: this.accessToken  });
-                    })
+                    })*/
             );
     }
 
@@ -149,6 +149,7 @@ export class AuthService {
     signOut(): Observable<any> {
         // Remove the access token from the local storage
         localStorage.removeItem('accessToken');
+        localStorage.removeItem('user');
 
         // Set the authenticated flag to false
         this._authenticated = false;

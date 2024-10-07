@@ -39,9 +39,17 @@ export interface TripResponse {
 }
 
 export interface Trip {
+    id: number;
     date_end: string;
     date_start: string;
     employee: any;
-    id: number;
     status: string;
+    approval_cycle_type: string;
+    employee_grade: string;
+    location_trip:boolean;
+    total_compensation:number;
+    total_days:number;
+    trip_type:string;
+    request_manager:string;
+
 }

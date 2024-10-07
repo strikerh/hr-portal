@@ -96,7 +96,7 @@ export class NewBusinessTripComponent {
             international_trip: [false],
             car_provided: [false],
             tickets_allowance: [false],
-            category_id: [null],
+            category_id: [1],
 
             project_id: [null],
             number_of_trips: [0],

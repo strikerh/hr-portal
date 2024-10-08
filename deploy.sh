@@ -1,6 +1,9 @@
 #!/bin/bash
 
 cd /var/www/hr-portal
+echo " --- "
+echo " --- "
+echo " --- "
 echo " --- Pull the latest changes from the git repository"
 git stash
 git pull

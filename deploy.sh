@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd /var/www/hr-portal
 # Pull the latest changes from the git repository
 git pull
 

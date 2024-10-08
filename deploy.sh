@@ -2,6 +2,7 @@
 
 cd /var/www/hr-portal
 echo "Pull the latest changes from the git repository"
+git stash
 git pull
 
 echo  "Remove the old dist folder if it exists"

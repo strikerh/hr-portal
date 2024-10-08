@@ -8,7 +8,7 @@
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
-        "build": "ng build",
+        "build": "ng build && tar -czvf dist.tar.gz dist",
         "watch": "ng build --watch --configuration development",
         "test": "ng test"
     },
@@ -53,6 +53,7 @@
         "@types/lodash": "4.17.4",
         "@types/lodash-es": "4.17.12",
         "@types/luxon": "3.4.2",
+        "archiver": "^7.0.1",
         "autoprefixer": "10.4.19",
         "chroma-js": "2.4.2",
         "jasmine-core": "5.1.2",

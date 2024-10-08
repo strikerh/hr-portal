@@ -11,3 +11,7 @@ fi
 
 # Extract the dist.tar.gz file
 tar -xzvf dist.tar.gz -C ./
+
+echo "Deployed successfully"
+echo "cd /var/www/hr-portal"
+echo "cd /var/www/hr-portal/dist/fuse/browser/"/

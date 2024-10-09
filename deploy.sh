@@ -20,6 +20,8 @@ fi
 
 echo " --- Extract the dist.tar.gz file"
 tar -xzvf dist.tar.gz -C ./
+sudo chmod -R 777 ./dist
+sudo chown -R www-data:www-data ./dist
 
 sudo chmod +x deploy.sh
 

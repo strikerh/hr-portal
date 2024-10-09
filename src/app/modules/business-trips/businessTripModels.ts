@@ -5,6 +5,7 @@ export interface CreateTripLookupResponse {
     projects: { id: number; name: string }[];
     distances?: { key: string; name: string }[];
     categories?: { id: number; name: string }[];
+
 }
 
 export interface DtoCreateTripRequest {

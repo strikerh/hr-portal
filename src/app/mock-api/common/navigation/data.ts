@@ -9,20 +9,20 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon : 'dashboard',
         link : '/dashboard'
     },
-    {
-        id   : 'payroll',
-        title: 'Payroll',
-        type : 'basic',
-        icon : 'payments',
-        link : '/payroll'
-    },
-    {
-        id   : 'loan',
-        title: 'Loan',
-        type : 'basic',
-        icon : 'attach_money',
-        link : '/loan'
-    },
+    // {
+    //     id   : 'payroll',
+    //     title: 'Payroll',
+    //     type : 'basic',
+    //     icon : 'payments',
+    //     link : '/payroll'
+    // },
+    // {
+    //     id   : 'loan',
+    //     title: 'Loan',
+    //     type : 'basic',
+    //     icon : 'attach_money',
+    //     link : '/loan'
+    // },
     {
         id   : 'vacations',
         title: 'Vacations',
@@ -30,20 +30,20 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon : 'mat_solid:beach_access',
         link : '/vacations'
     },
-    {
-        id   : 'resignation',
-        title: 'Resignation',
-        type : 'basic',
-        icon : 'emoji_people',
-        link : '/resignation'
-    },
-    {
-        id   : 'iqama',
-        title: 'Iqama',
-        type : 'basic',
-        icon : 'heroicons_outline:credit-card',
-        link : '/iqama'
-    },
+    /*    {
+            id   : 'resignation',
+            title: 'Resignation',
+            type : 'basic',
+            icon : 'emoji_people',
+            link : '/regnation'
+        },
+      /*  {
+            id   : 'iqama',
+            title: 'Iqama',
+            type : 'basic',
+            icon : 'heroicons_outline:credit-card',
+            link : '/iqama'
+        },*/
     {
         id   : 'businessTrip',
         title: 'BusinessTrip',
@@ -51,13 +51,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon : 'airplane_ticket',
         link : '/business-trips'
     },
-    {
-        id   : 'expense',
-        title: 'Expense',
-        type : 'basic',
-        icon : 'payments',
-        link : '/expense'
-    }
+    // {
+    //     id   : 'expense',
+    //     title: 'Expense',
+    //     type : 'basic',
+    //     icon : 'payments',
+    //     link : '/expense'
+    // }
 ];
 export const compactNavigation: FuseNavigationItem[] = [
     {

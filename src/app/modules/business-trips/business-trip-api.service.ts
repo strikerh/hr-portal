@@ -31,7 +31,7 @@ export class BusinessTripApiService {
 
     createTripRequest(data: DtoCreateTripRequest) {
         return this._httpClient.post<any>(
-            this.apiUrl + '/create_trip_request',
+            this.apiUrl + '/approval_request',
             data
         );
     }

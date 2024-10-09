@@ -24,5 +24,6 @@ tar -xzvf dist.tar.gz -C ./
 sudo chmod +x deploy.sh
 
 echo " --- Deployed successfully"
+echo " http://144.24.211.16"
 echo "cd /var/www/hr-portal"
 echo "cd /var/www/hr-portal/dist/fuse/browser/"

@@ -1,0 +1,92 @@
+<div class="  border-b py-4  text-center">
+    <h1 class="text-xl font-bold"> Request Business Trip</h1>
+</div>
+<section class="p-6 overflow-auto">
+    <form class="flex flex-col gap-2" [formGroup]="vacationForm" (submit)="submit($event)">
+
+
+        <!--           0 trip_type -->
+        <mat-form-field>
+            <mat-label>Holiday Type</mat-label>
+            <mat-select formControlName="holiday_status_local" (selectionChange)="onVacationTypeChange($event)">
+
+                @for (vacationType of lookupResponse?.time_off_type; track vacationType.id) {
+                    <mat-option [value]="vacationType">{{ vacationType.name }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <input type="hidden" formControlName="holiday_status_id">
+
+
+        <!--     4 end_date    3 start_date -->
+
+        <mat-form-field *ngIf="selectedVacationType?.request_unit === 'day'">
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [rangePicker]="picker" (click)="picker.open()">
+                <input matStartDate formControlName="date_from" placeholder="Start date"
+                       (dateInput)="onDateChange($event)">
+                <input matEndDate formControlName="date_to" placeholder="End date" (dateInput)="onDateChange($event)">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+
+            @if (vacationForm.controls['date_from'].hasError('matStartDateInvalid')) {
+                <mat-error>Invalid start date</mat-error>
+            }
+            @if (vacationForm.controls['date_to'].hasError('matEndDateInvalid')) {
+                <mat-error>Invalid end date</mat-error>
+            }
+        </mat-form-field>
+
+
+        <div class="flex gap-2" *ngIf="selectedVacationType?.request_unit === 'hour'">
+            <mat-form-field class="grow">
+                <mat-label>From</mat-label>
+                <mat-select formControlName="request_hour_from">
+                    <!--                         @for (tripType of tripLookupResponse?.other_trip_types; track tripType.key) {
+                             <mat-option [value]="'business_trip'">Business Trip</mat-option>
+                             <mat-option [value]="'visit_clients'">Visit Clients</mat-option>
+                                             }-->
+                    @for (item of lookupResponse?.custom_hours; track $index) {
+                        <mat-option [value]="item[0]">{{ item[1] }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="grow">
+                <mat-label>To</mat-label>
+                <mat-select formControlName="request_hour_to">
+
+                    @for (item of lookupResponse?.custom_hours; track $index) {
+                        <mat-option [value]="item[0]">{{ item[1] }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+    <!--    <mat-form-field
+        >
+            <mat-label>Duration Term</mat-label>
+            <input matInput readonly [value]="(businessTripTerm || 'No Range') +' (' +(durationDelta || 0 ) + ' days)'">
+        </mat-form-field>
+-->
+
+        <mat-divider class="my-2"></mat-divider>
+
+        <mat-form-field
+        >
+            <mat-label>Description</mat-label>
+            <textarea matInput  formControlName="description">
+            </textarea>
+        </mat-form-field>
+
+
+        <div class="flex justify-end">
+            <button type="submit" mat-raised-button color="primary"> Submit</button>
+        </div>
+
+
+    </form>
+
+
+</section>

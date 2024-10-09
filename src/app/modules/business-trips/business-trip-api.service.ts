@@ -8,12 +8,6 @@ import {
     DtoCreateTripRequest,
     TripResponse,
 } from './businessTripModels';
-import {
-    fk_api_get_all_trip_by_employee_id,
-    fk_api_get_trips_to_approves_by_user_id,
-    fk_create_trip_lookup,
-    fk_get_approve_line_status,
-} from './fakeData';
 
 @Injectable({
     providedIn: 'root',
@@ -51,11 +45,7 @@ export class BusinessTripApiService {
     getApproveLineStatus() {
         return this._httpClient.get<ApproveLineStatus>(
             this.apiUrl + '/get_approve_line_status'
-        )  .pipe(
-            catchError(() => {
-                return of(fk_get_approve_line_status);
-            })
-        );
+        ) ;
     }
 
     api_get_all_trip_by_employee_id(employee_id: number) {

@@ -1,0 +1,9 @@
+.controller {
+    @apply mt-2;
+    .input-cont {
+        @apply border rounded ;
+        input {
+            @apply w-full h-10 px-2;
+        }
+    }
+}

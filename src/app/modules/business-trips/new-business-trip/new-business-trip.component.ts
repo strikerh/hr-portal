@@ -22,7 +22,7 @@ import { BusinessTripApiService } from '../business-trip-api.service';
 import { CreateTripLookupResponse } from '../businessTripModels';
 
 @Component({
-    selector: 'app-new-business-trip',
+    selector: 'app-new-vacation',
     standalone: true,
     imports: [
         MatFormField,

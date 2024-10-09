@@ -71,7 +71,7 @@ export class BusinessTripsComponent implements OnInit {
     }
 
     openNewBusinessTrip() {
-        const ref = this.sidePageService.openSidePage('new-business-trip', NewBusinessTripComponent, {
+        const ref = this.sidePageService.openSidePage('new-vacation', NewBusinessTripComponent, {
             width: '40%',
             maxWidth: '600px',
         });

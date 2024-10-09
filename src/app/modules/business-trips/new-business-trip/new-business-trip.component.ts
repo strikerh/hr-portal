@@ -1,5 +1,5 @@
 import { JsonPipe, NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
     FormBuilder,
     FormGroup,
@@ -27,6 +27,8 @@ import { BusinessTripApiService } from '../business-trip-api.service';
 import { CreateTripLookupResponse } from '../businessTripModels';
 import { MatDivider } from '@angular/material/divider';
 import { MatButton } from '@angular/material/button';
+import { DateTime } from 'luxon';
+import { SIDE_PAGE_DATA, SIDE_PAGE_REF, SidePageInfo, SidePageRef } from 'ngx-side-page';
 
 @Component({
     selector: 'app-new-business-trip',
@@ -58,7 +60,7 @@ import { MatButton } from '@angular/material/button';
     templateUrl: './new-business-trip.component.html',
     styleUrl: './new-business-trip.component.scss',
 })
-export class NewBusinessTripComponent {
+export class NewBusinessTripComponent implements OnInit  {
     businessTripForm: FormGroup;
     tripLookupResponse: CreateTripLookupResponse = {
         projects: [],
@@ -76,6 +78,10 @@ export class NewBusinessTripComponent {
         { value: 'pizza-1', viewValue: 'Pizza' },
         { value: 'tacos-2', viewValue: 'Tacos' },
     ];
+    readonly data: SidePageInfo<NewBusinessTripComponent> =
+        inject(SIDE_PAGE_DATA);
+    readonly refs: SidePageRef<NewBusinessTripComponent> =
+        inject(SIDE_PAGE_REF);
 
     constructor(
         private fb: FormBuilder,
@@ -117,6 +123,20 @@ export class NewBusinessTripComponent {
         this.userService.user$.subscribe((user) => {
             this.businessTripForm.controls['employee_id'].setValue(user.id);
             console.log(user);
+        });
+    }
+
+    submit($event: SubmitEvent) {
+        debugger
+        const diff = this.businessTripForm.value['end_date'].diff(  this.businessTripForm.value['start_date'] , ['days']).toObject();
+
+        this.businessTripForm.value['end_date'] =  (this.businessTripForm.value['end_date'] as DateTime)?.toFormat('dd/MM/yyyy');
+        this.businessTripForm.value['start_date'] =  (this.businessTripForm.value['start_date'] as DateTime)?.toFormat('dd/MM/yyyy');
+
+        console.log(`Difference in days: ${diff.days}`);
+        console.log(this.businessTripForm.value);
+        this.businessTripApi.createTripRequest(this.businessTripForm.value).subscribe((value)=>{
+            this.refs.close();
         });
     }
 }

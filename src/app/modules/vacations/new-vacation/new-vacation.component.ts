@@ -103,7 +103,7 @@ export class NewVacationComponent implements OnInit {
     }
 
     submit($event: SubmitEvent) {
-        this.validateForm();
+        // this.validateForm();
         if (this.vacationForm.invalid) {
             this.openSnackBar('Please fill in all the required fields');
             return;

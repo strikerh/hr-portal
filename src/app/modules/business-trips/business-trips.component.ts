@@ -109,13 +109,14 @@ export class BusinessTripsComponent implements OnInit {
         this.businessTripApi.api_get_all_trip_by_employee_id(Number(this.user.employeeId)).subscribe((data) => {
 
             this.trips = data.trips
-                .map((trip: any)=>{
-                    return {
-                        ...trip,
-                        total_days: Math.floor((new Date(trip.date_end).getTime() - new Date(trip.date_start).getTime()) / (1000 * 60 * 60 * 24)),
-                    };
-                }).
-            sort((a, b) => b.id - a.id);            console.log(data);
+                // .map((trip: any)=>{
+                //     return {
+                //         ...trip,
+                //         total_days: Math.floor((new Date(trip.date_end).getTime() - new Date(trip.date_start).getTime()) / (1000 * 60 * 60 * 24)),
+                //     };
+                // }).
+                ?.sort((a, b) => b.id - a.id);
+            console.log(data);
         });
 
         this.businessTripApi.api_get_trips_to_approves_by_user_id().subscribe((data) => {

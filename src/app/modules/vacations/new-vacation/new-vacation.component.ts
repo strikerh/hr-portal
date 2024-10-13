@@ -98,6 +98,7 @@ export class NewVacationComponent implements OnInit {
                 console.log(response);
                 this.selectedVacationType = this.lookupResponse.time_off_type[0] as any;
                 this.vacationForm.controls['holiday_status_local'].setValue(this.lookupResponse.time_off_type[0]);
+                this.vacationForm.controls['holiday_status_id'].setValue(this.lookupResponse.time_off_type[0].id);
             },
             error: (error) => {
                 console.error(error);
@@ -118,7 +119,7 @@ export class NewVacationComponent implements OnInit {
         // console.log(`Difference in days: ${this.durationDelta}`);
         // console.log(this.vacationForm.value);
         const finalPayload = new FormData();
-
+        // finalPayload.append('holiday_status_id', this.vacationForm.value['holiday_status_local']);
         finalPayload.append('holiday_status_id', this.vacationForm.value['holiday_status_id']);
         finalPayload.append('description', this.vacationForm.value['description']);
         if (this.selectedVacationType.request_unit === 'day') {
@@ -252,6 +253,7 @@ export class NewVacationComponent implements OnInit {
     }
 
     onVacationTypeChange($event: MatSelectChange) {
+        debugger
         this.vacationForm.controls['holiday_status_id'].setValue($event.value.id);
         this.selectedVacationType = $event.value;
         console.log($event.value);

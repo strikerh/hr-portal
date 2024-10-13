@@ -114,74 +114,6 @@ export class NewBusinessTripComponent implements OnInit {
         });
     }
 
-    submit($event: SubmitEvent) {
-        this.validateForm();
-        if (this.businessTripForm.invalid) {
-            this.openSnackBar('Please fill in all the required fields');
-            return;
-        }
-
-        this.businessTripForm.value['end_date'] = (this.businessTripForm.value['end_date'] as DateTime)?.toISODate();
-        this.businessTripForm.value['start_date'] = (
-            this.businessTripForm.value['start_date'] as DateTime
-        )?.toISODate();
-
-        console.log(`Difference in days: ${this.durationDelta}`);
-        console.log(this.businessTripForm.value);
-        const finalPayload = { ...this.businessTripForm.value };
-        if (!finalPayload['start_date']) finalPayload['start_date'] = DateTime.now().toISODate();
-        if (!finalPayload['end_date']) finalPayload['end_date'] = DateTime.now().plus({ days: 1 }).toISODate();
-        delete finalPayload['trip_type_local'];
-        this.businessTripApi.createTripRequest(finalPayload).subscribe((value) => {
-            if (value) {
-                this.refs.close();
-            }
-        });
-    }
-
-    private validateForm() {
-        this.businessTripForm.markAllAsTouched();
-        const val = this.businessTripForm.value;
-        if (val['trip_type_local'] === 'business_trip') {
-            if (!val['start_date'] || !val['end_date']) {
-                this.businessTripForm.controls['start_date'].setErrors({ required: 'Start date is required' });
-                this.businessTripForm.controls['end_date'].setErrors({ required: 'End date is required' });
-            } else {
-                this.businessTripForm.controls['start_date'].setErrors(null);
-                this.businessTripForm.controls['end_date'].setErrors(null);
-            }
-        } else {
-            this.businessTripForm.controls['start_date'].setErrors(null);
-            this.businessTripForm.controls['end_date'].setErrors(null);
-        }
-        if (val['trip_type_local'] === 'visit_clients') {
-            if (!val['number_of_trips'] || val['number_of_trips'] < 0) {
-                this.businessTripForm.controls['number_of_trips'].setErrors({
-                    required: 'Location of the trip is required',
-                });
-            } else {
-                this.businessTripForm.controls['number_of_trips'].setErrors(null);
-            }
-        }
-
-        if (val['approval_cycle_type'] === 'project') {
-            if (this.businessTripForm.controls['project_id'].value === null) {
-                this.businessTripForm.controls['project_id'].setErrors({ required: true });
-            }
-        }
-    }
-
-    private compare2Object(oldObj: any, newObj: any) {
-        let result = {};
-        for (let key in oldObj) {
-            if (oldObj[key] !== newObj[key]) {
-                result[key] = newObj[key];
-                // break;
-            }
-        }
-        return result;
-    }
-
     openSnackBar(message: string, action: string = 'ok') {
         this._snackBar.open(message, action, {
             horizontalPosition: 'center',
@@ -250,5 +182,76 @@ export class NewBusinessTripComponent implements OnInit {
         if ($event.value === 'business_trip') {
             this.businessTripForm.controls['trip_type'].setValue($event.value);
         }
+    }
+
+    submit($event: SubmitEvent) {
+        this.validateForm();
+        if (this.businessTripForm.invalid) {
+            this.openSnackBar('Please fill in all the required fields');
+            return;
+        }
+
+        const finalPayload = { ...this.businessTripForm.value };
+        finalPayload['end_date'] = (this.businessTripForm.value['end_date'] as DateTime)?.toISODate();
+        finalPayload['start_date'] = (this.businessTripForm.value['start_date'] as DateTime)?.toISODate();
+
+        console.log(`Difference in days: ${this.durationDelta}`);
+        console.log(this.businessTripForm.value);
+
+        if (!finalPayload['start_date']) finalPayload['start_date'] = DateTime.now().toISODate();
+        if (!finalPayload['end_date']) finalPayload['end_date'] = DateTime.now().plus({ days: 1 }).toISODate();
+debugger
+        if(this.businessTripForm.value['trip_type_local'] !== 'visit_clients') {
+            finalPayload['number_of_trips'] = 0;
+        }
+        delete finalPayload['trip_type_local'];
+        this.businessTripApi.createTripRequest(finalPayload).subscribe((value) => {
+            if (value) {
+                this.refs.close();
+            }
+        });
+    }
+
+    private validateForm() {
+        this.businessTripForm.markAllAsTouched();
+        const val = this.businessTripForm.value;
+        if (val['trip_type_local'] === 'business_trip') {
+            if (!val['start_date'] || !val['end_date']) {
+                this.businessTripForm.controls['start_date'].setErrors({ required: 'Start date is required' });
+                this.businessTripForm.controls['end_date'].setErrors({ required: 'End date is required' });
+            } else {
+                this.businessTripForm.controls['start_date'].setErrors(null);
+                this.businessTripForm.controls['end_date'].setErrors(null);
+            }
+        } else {
+            this.businessTripForm.controls['start_date'].setErrors(null);
+            this.businessTripForm.controls['end_date'].setErrors(null);
+        }
+        if (val['trip_type_local'] === 'visit_clients') {
+            if (!val['number_of_trips'] || val['number_of_trips'] < 0) {
+                this.businessTripForm.controls['number_of_trips'].setErrors({
+                    required: 'Location of the trip is required',
+                });
+            } else {
+                this.businessTripForm.controls['number_of_trips'].setErrors(null);
+            }
+        }
+
+        if (val['approval_cycle_type'] === 'project') {
+            if (this.businessTripForm.controls['project_id'].value === null) {
+                this.businessTripForm.controls['project_id'].setErrors({ required: true });
+            }
+        }
+    }
+
+    private compare2Object(oldObj: any, newObj: any) {
+        let result = {};
+        for (let key in oldObj) {
+            if (oldObj[key] !== newObj[key]) {
+                result[key] = newObj[key];
+                // break;
+            }
+        }
+        return result;
     }
 }

@@ -8,7 +8,7 @@
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
-        "build": "ng build && tar -czvf dist.tar.gz dist",
+        "build": "node updateVersion.js && ng build && tar -czvf dist.tar.gz dist",
         "watch": "ng build --watch --configuration development",
         "test": "ng test"
     },
@@ -69,6 +69,8 @@
         "prettier-plugin-organize-imports": "3.2.4",
         "prettier-plugin-tailwindcss": "0.6.1",
         "tailwindcss": "3.4.3",
-        "typescript": "5.4.5"
+        "typescript": "5.4.5",
+        "fs": "^0.0.1-security",
+        "path": "^0.12.7"
     }
 }

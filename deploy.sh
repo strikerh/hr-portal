@@ -26,6 +26,8 @@ sudo chown -R www-data:www-data ./dist
 
 sudo chmod +x deploy.sh
 
+sudo service nginx restart
+
 echo " --- Deployed successfully"
 echo " http://144.24.211.16"
 echo "http://hrportal.pink-team.com/"

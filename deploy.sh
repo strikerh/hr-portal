@@ -28,5 +28,6 @@ sudo chmod +x deploy.sh
 
 echo " --- Deployed successfully"
 echo " http://144.24.211.16"
+echo "http://hrportal.pink-team.com/"
 echo "cd /var/www/hr-portal"
 echo "cd /var/www/hr-portal/dist/fuse/browser/"

@@ -57,11 +57,7 @@ export class NewBusinessTripComponent implements OnInit {
         projects: [],
         other_trip_types: [],
         approval_types: [],
-        distances: [
-            { key: '700_below', name: 'Below 70km' },
-            { key: 'between_70_200', name: 'Between 70km and below 200km' },
-            { key: '200_above', name: 'Above 200km' },
-        ],
+        distance_categories: [],
         categories: [{ id: 1, name: 'Business Trip' }],
     };
 

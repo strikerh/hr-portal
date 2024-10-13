@@ -3,8 +3,8 @@ export interface CreateTripLookupResponse {
     approval_types: { id: number; name: string }[];
     other_trip_types: { key: string; value: string }[];
     projects: { id: number; name: string }[];
-    distances?: { key: string; name: string }[];
     categories?: { id: number; name: string }[];
+    distance_categories?: { key: string; value: string }[];
 
 }
 

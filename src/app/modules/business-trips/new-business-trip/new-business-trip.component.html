@@ -76,8 +76,8 @@
         <mat-form-field *ngIf="businessTripForm.value['trip_type']  === 'short_term'">
             <mat-label>Distance</mat-label>
             <mat-select formControlName="distance">
-                @for (tripType of tripLookupResponse?.distances; track tripType.key) {
-                    <mat-option [value]="tripType.key">{{ tripType.name }}</mat-option>
+                @for (tripType of tripLookupResponse?.distance_categories; track tripType.key) {
+                    <mat-option [value]="tripType.key">{{ tripType.value }}</mat-option>
                 }
             </mat-select>
         </mat-form-field>

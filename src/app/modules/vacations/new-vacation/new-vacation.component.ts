@@ -121,9 +121,17 @@ export class NewVacationComponent implements OnInit {
 
         finalPayload.append('holiday_status_id', this.vacationForm.value['holiday_status_id']);
         finalPayload.append('description', this.vacationForm.value['description']);
-        finalPayload.append('date_from', this.vacationForm.value['date_from']);
-        finalPayload.append('date_to', this.vacationForm.value['date_to']);
-        if (this.vacationForm.value['file_attachment'] && this.vacationForm.value['file_attachment'].length > 0) {
+        if (this.selectedVacationType.request_unit === 'day') {
+            finalPayload.append('date_from', this.vacationForm.value['date_from']);
+            finalPayload.append('date_to', this.vacationForm.value['date_to']);
+        }
+        if (this.selectedVacationType.request_unit === 'hour') {
+            finalPayload.append('request_hour_from', this.vacationForm.value['request_hour_from']);
+            finalPayload.append('request_hour_to', this.vacationForm.value['request_hour_to']);
+            finalPayload.append('date_from', DateTime.now().toISODate());
+            finalPayload.append('date_to', DateTime.now().toISODate());
+        }
+        if (this.selectedVacationType.support_document && this.vacationForm.value['file_attachment'] && this.vacationForm.value['file_attachment'].length > 0) {
             const blob = new Blob([this.vacationForm.value['file_attachment'][0]], {
                 type: 'application/octet-stream',
             });

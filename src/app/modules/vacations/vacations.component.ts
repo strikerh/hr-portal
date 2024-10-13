@@ -133,7 +133,13 @@ export class VacationsComponent implements OnInit {
         });
 
         this.vacationApi.api_get_trips_to_approves_by_user_id().subscribe((data) => {
+            // const g1 = data.time_off_list?.filter((trip) => trip.my_action === 'pending')?.sort((a, b) => b.id - a.id);
+            // const g2 = data.time_off_list?.filter((trip) => trip.my_action !== 'pending')?.sort((a, b) => b.id - a.id);
+            // this.tripsNeedApproves = [...g1, ...g2]
+
+
             this.tripsNeedApproves = data.time_off_list;
+
             console.log('tripsNeedApproves', data);
         });
     }

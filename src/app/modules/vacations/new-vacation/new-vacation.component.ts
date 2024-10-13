@@ -1,6 +1,6 @@
 import { JsonPipe, NgIf } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatCheckbox } from '@angular/material/checkbox';
 import {
@@ -17,10 +17,10 @@ import { MatOption, MatSelect, MatSelectChange } from '@angular/material/select'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DateTime } from 'luxon';
 import { SIDE_PAGE_DATA, SIDE_PAGE_REF, SidePageInfo, SidePageRef } from 'ngx-side-page';
+import { UploadComponent } from '../../../components/upload/upload.component';
 import { UserService } from '../../../core/user/user.service';
 import { VacationsApiService } from '../vacations-api.service';
 import { VacationLookupResponse } from '../vacationsModels';
-import { UploadComponent } from '../../../components/upload/upload.component';
 
 @Component({
     selector: 'app-new-vacation',
@@ -86,7 +86,7 @@ export class NewVacationComponent implements OnInit {
             request_hour_to: ['9.5'],
             date_to: ['2024-11-01'],
             date_from: ['2024-11-01'],
-            attachment_base64: [''],
+            file_attachment: [''],
         });
 
         this.vacationApi.fetchCreateTripLookup().subscribe({
@@ -111,20 +111,31 @@ export class NewVacationComponent implements OnInit {
             this.openSnackBar('Please fill in all the required fields');
             return;
         }
-/*        this.vacationForm.value['attachment_base64'] =  (this.vacationForm.value['date_from'] as any[])[0];
-        this.vacationForm.value['date_from'] = (this.vacationForm.value['date_from'] as DateTime)?.toISODate();
-        this.vacationForm.value['date_to'] = (this.vacationForm.value['date_to'] as DateTime)?.toISODate();*/
+        /*        this.vacationForm.value['file_attachment'] =  (this.vacationForm.value['date_from'] as any[])[0];
+                this.vacationForm.value['date_from'] = (this.vacationForm.value['date_from'] as DateTime)?.toISODate();
+                this.vacationForm.value['date_to'] = (this.vacationForm.value['date_to'] as DateTime)?.toISODate();*/
 
         // console.log(`Difference in days: ${this.durationDelta}`);
         // console.log(this.vacationForm.value);
-        const finalPayload = { ...this.vacationForm.value };
-        finalPayload['attachment_base64'] = (this.vacationForm.value['attachment_base64'] as any[])[0];
-        // finalPayload['attachment_base64'] = (this.vacationForm.value['date_from'] as any[])[0];
+        const finalPayload = new FormData();
 
+        finalPayload.append('holiday_status_id', this.vacationForm.value['holiday_status_id']);
+        finalPayload.append('description', this.vacationForm.value['description']);
+        finalPayload.append('date_from', this.vacationForm.value['date_from']);
+        finalPayload.append('date_to', this.vacationForm.value['date_to']);
+        if (this.vacationForm.value['file_attachment'] && this.vacationForm.value['file_attachment'].length > 0) {
+            const blob = new Blob([this.vacationForm.value['file_attachment'][0]], {
+                type: 'application/octet-stream',
+            });
+            finalPayload.append('file_attachment', blob);
+        }
 
-        delete finalPayload['holiday_status_local'];
+        // finalPayload['file_attachment'] = (this.vacationForm.value['file_attachment'] as any[])[0];
+        // finalPayload['file_attachment'] = (this.vacationForm.value['date_from'] as any[])[0];
+
         this.vacationApi.createTripRequest(finalPayload).subscribe((value) => {
             if (value) {
+                this.openSnackBar(value.msg);
                 this.refs.close();
             }
         });

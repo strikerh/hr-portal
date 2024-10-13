@@ -45,6 +45,7 @@ export interface Trip {
     date_start: string;
     employee: any;
     status: string;
+    my_action: string;
     approval_cycle_type: string;
     employee_grade: string;
     location_trip:boolean;

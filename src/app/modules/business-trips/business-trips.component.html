@@ -88,6 +88,15 @@
                         class="whitespace-nowrap">{{ element.status }}</span></td>
                 </ng-container>
 
+                <!-- my_action Column -->
+                <ng-container matColumnDef="my_action">
+                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> My Action </span>
+                    </th>
+                    <td mat-cell *matCellDef="let element"><span
+                        class="whitespace-nowrap">{{ element.my_action }}</span></td>
+                </ng-container>
+
+
                 <!-- approval_cycle_type Column -->
                 <ng-container matColumnDef="approval_cycle_type">
                     <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Approval  Cycle Type </span>
@@ -198,6 +207,13 @@
                     <td mat-cell *matCellDef="let element"><span
                         class="whitespace-nowrap">{{ element.status }}</span></td>
                 </ng-container>
+                <!-- my_action Column -->
+                <ng-container matColumnDef="my_action">
+                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> My Action </span>
+                    </th>
+                    <td mat-cell *matCellDef="let element"><span
+                        class="whitespace-nowrap">{{ element.my_action }}</span></td>
+                </ng-container>
 
                 <!-- approval_cycle_type Column -->
                 <ng-container matColumnDef="approval_cycle_type">
@@ -260,14 +276,14 @@
                     <th mat-header-cell *matHeaderCellDef class="bg-inherit "><span
                         class="whitespace-nowrap">  </span></th>
                     <td mat-cell *matCellDef="let element" class="bg-inherit">
-                        <span class="whitespace-nowrap flex gap-1">
-                            <button
+                        <span class="whitespace-nowrap flex gap-1" [class.opacity-60]="element.my_action !=='pending'">
+                            <button [disabled]="element.my_action !=='pending'"
                                     (click)="doAction('approve', element.id)"
                                 mat-ripple  class="text-white bg-primary text-sm px-3 py-1 rounded-2xl">Approve</button>
 
 <!--                                [disabled]="element.status !== 'new'" [class.opacity-50]="element.status !== 'new'"-->
 
-                            <button
+                            <button [disabled]="element.my_action !=='pending'"
                                 (click)="doAction('reject', element.id)"
                                 mat-ripple  class="text-white bg-red-600 text-sm px-3 py-1 rounded-2xl">Reject</button>
                     </span></td>

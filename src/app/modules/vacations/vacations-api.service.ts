@@ -24,7 +24,7 @@ export class VacationsApiService {
 
     }
 
-    createTripRequest(data: DtoCreateVacationRequest) {
+    createTripRequest(data: FormData) {
         return this._httpClient.post<any>(
             this.apiUrl + '/create_time_off_request',
             data

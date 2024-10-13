@@ -1,5 +1,5 @@
 import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
-import { Component, EventEmitter, Input, Optional, Output, SkipSelf, forwardRef, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Optional, Output, SkipSelf, forwardRef } from '@angular/core';
 import { ControlContainer, ControlValueAccessor, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { MatProgressBar } from '@angular/material/progress-bar';
@@ -29,7 +29,7 @@ export class UploadComponent implements ControlValueAccessor, OnInit {
     private onChange: (value: any) => void;
     private onTouched: () => void;
 
-    imageUrls: { imgData: string; imgName: string, fileTypes: string }[] = [];
+    imageUrls: { imgData: string; imgName: string; fileTypes: string }[] = [];
     uploadedPaths: any[] = [];
     uploading$sub: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
@@ -41,31 +41,52 @@ export class UploadComponent implements ControlValueAccessor, OnInit {
         return this.controlContainer.control as FormGroup;
     }
 
-    constructor(@Optional() @SkipSelf() private controlContainer: ControlContainer) {
-
-    }
+    constructor(@Optional() @SkipSelf() private controlContainer: ControlContainer) {}
 
     onFileSelected(event: any): void {
         const files = event.target.files;
         const fileNames = Array.from(files).map((file) => file['name']);
         this.uploading$sub.next(fileNames);
-        if ((this.uploadType = 'base64')) {
+        if ((this.uploadType === 'base64')) {
             Array.from(files).forEach((file: Blob) => {
                 const reader = new FileReader();
                 reader.onload = (e: any) => {
                     const base64String = e.target.result;
-                    if (this.multiFiles){
+                    if (this.multiFiles) {
                         this.uploadedPaths.push(base64String);
                         this.imageUrls.push({ imgData: base64String, imgName: file['name'], fileTypes: file['type'] });
-                    }else {
+                    } else {
                         this.uploadedPaths = [base64String];
-                        this.imageUrls = [{ imgData: base64String, imgName: file['name'] , fileTypes: file['type']}];
+                        this.imageUrls = [{ imgData: base64String, imgName: file['name'], fileTypes: file['type'] }];
                     }
 
                     this.formGroup.get(this.formControlName).setValue(this.uploadedPaths);
                     this.uploading$sub.next(this.uploading$sub.value.filter((name) => !fileNames.includes(name)));
                 };
                 reader.readAsDataURL(file);
+            });
+        } else if (this.uploadType === 'blob') {
+            Array.from(files).forEach((file: Blob) => {
+                if (this.multiFiles) {
+                    this.uploadedPaths.push(file);
+                    this.imageUrls.push({
+                        imgData: URL.createObjectURL(file),
+                        imgName: file['name'],
+                        fileTypes: file['type'],
+                    });
+                } else {
+                    this.uploadedPaths = [file];
+                    this.imageUrls = [
+                        {
+                            imgData: URL.createObjectURL(file),
+                            imgName: file['name'],
+                            fileTypes: file['type'],
+                        },
+                    ];
+                }
+debugger
+                this.formGroup.get(this.formControlName).setValue(this.uploadedPaths);
+                this.uploading$sub.next(this.uploading$sub.value.filter((name) => !fileNames.includes(name)));
             });
         }
     }

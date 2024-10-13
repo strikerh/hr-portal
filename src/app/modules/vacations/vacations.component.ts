@@ -75,6 +75,7 @@ export class VacationsComponent implements OnInit {
     }
 
     openNewBusinessTrip() {
+        debugger
         const ref = this.sidePageService.openSidePage('new-vacation', NewVacationComponent, {
             width: '40%',
             maxWidth: '600px',
@@ -82,6 +83,7 @@ export class VacationsComponent implements OnInit {
 
         ref.afterClosed().subscribe((result) => {
             console.log('The dialog was closed');
+            debugger
             this.reloadData();
         });
     }

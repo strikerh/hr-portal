@@ -47,6 +47,7 @@ export class BusinessTripsComponent implements OnInit {
         'total_compensation',
         'trip_type',
         'status',
+        'my_action',
         'approval_cycle_type',
         'employee_grade',
         'location_trip',
@@ -120,7 +121,14 @@ export class BusinessTripsComponent implements OnInit {
         });
 
         this.businessTripApi.api_get_trips_to_approves_by_user_id().subscribe((data) => {
-            this.tripsNeedApproves = data.trips;
+
+            const g1 = data.trips?.filter((trip) => trip.my_action === 'pending')?.sort((a, b) => b.id - a.id);
+            const g2 = data.trips?.filter((trip) => trip.my_action !== 'pending')?.sort((a, b) => b.id - a.id);
+            this.tripsNeedApproves = [...g1, ...g2]
+
+
+            // this.tripsNeedApproves = data.trips;
+
             console.log('tripsNeedApproves', data);
         });
     }

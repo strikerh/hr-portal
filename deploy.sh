@@ -15,11 +15,11 @@ git pull
 
 echo  " --- Remove the old dist folder if it exists"
 if [ -d "./dist" ]; then
-    rm -rf ./dist
+    sudo rm -rf ./dist
 fi
 
 echo " --- Extract the dist.tar.gz file"
-tar -xzvf dist.tar.gz -C ./
+sudo tar -xzvf dist.tar.gz -C ./
 
 sudo chmod -R 755 ./dist
 sudo chown -R www-data:www-data ./dist

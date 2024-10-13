@@ -28,6 +28,7 @@
         "@azure/msal-browser": "^3.23.0",
         "@ngneat/transloco": "6.0.4",
         "apexcharts": "3.49.1",
+        "browser-image-compression": "^2.0.2",
         "crypto-js": "4.2.0",
         "highlight.js": "11.9.0",
         "lodash-es": "4.17.21",

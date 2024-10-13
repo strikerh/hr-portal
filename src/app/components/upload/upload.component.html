@@ -1,0 +1,22 @@
+<input type="file" id="images" class="hidden" (change)="onFileSelected($event)" multiple accept="image/*">
+<label for="images">
+    <!--        <mat-label class="font-medium">Images</mat-label>-->
+    <div
+        class="border-dashed cursor-pointer border rounded border-primary-200 bg-gray-100 min-h-10 w-full flex flex-col py-4 items-center justify-center m-1">
+        <div class="flex items-center gap-1 text-lg font-medium">
+            <mat-icon class="text-primary" svgIcon="attach_file"></mat-icon>
+            <span> Upload File</span></div>
+        <div class="text-secondary">Click to upload or drag your file</div>
+    </div>
+    <div class="h-4"></div>
+
+
+</label>
+<div class="flex flex-wrap gap-2">
+    <div *ngFor="let imageUrl of imageUrls" class="w-20 h-20 bg-gray-200 rounded border flex items-center justify-center overflow-hidden relative">
+        <img *ngIf="imageUrl.fileTypes.includes('image/')" [src]="imageUrl.imgData" class="w-full h-full object-cover rounded"  alt=""/>
+        <mat-progress-bar *ngIf="checkIfUploading(imageUrl.imgName)" class="absolute bottom-0 z-10 w-full" mode="indeterminate"></mat-progress-bar>
+
+        <mat-icon svgIcon="insert_drive_file"></mat-icon>
+    </div>
+</div>

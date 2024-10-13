@@ -20,6 +20,7 @@ import { SIDE_PAGE_DATA, SIDE_PAGE_REF, SidePageInfo, SidePageRef } from 'ngx-si
 import { UserService } from '../../../core/user/user.service';
 import { VacationsApiService } from '../vacations-api.service';
 import { VacationLookupResponse } from '../vacationsModels';
+import { UploadComponent } from '../../../components/upload/upload.component';
 
 @Component({
     selector: 'app-new-vacation',
@@ -47,6 +48,7 @@ import { VacationLookupResponse } from '../vacationsModels';
         MatCheckbox,
         MatDivider,
         MatButton,
+        UploadComponent,
     ],
     templateUrl: './new-vacation.component.html',
     styleUrl: './new-vacation.component.scss',
@@ -65,7 +67,7 @@ export class NewVacationComponent implements OnInit {
     selectedVacationType: {
         id: number;
         name: string;
-        request_unit:  'day' | 'hour';
+        request_unit: 'day' | 'hour';
         support_document: boolean;
     };
 
@@ -84,6 +86,7 @@ export class NewVacationComponent implements OnInit {
             request_hour_to: ['9.5'],
             date_to: ['2024-11-01'],
             date_from: ['2024-11-01'],
+            attachment_base64: [''],
         });
 
         this.vacationApi.fetchCreateTripLookup().subscribe({
@@ -108,16 +111,18 @@ export class NewVacationComponent implements OnInit {
             this.openSnackBar('Please fill in all the required fields');
             return;
         }
+/*        this.vacationForm.value['attachment_base64'] =  (this.vacationForm.value['date_from'] as any[])[0];
+        this.vacationForm.value['date_from'] = (this.vacationForm.value['date_from'] as DateTime)?.toISODate();
+        this.vacationForm.value['date_to'] = (this.vacationForm.value['date_to'] as DateTime)?.toISODate();*/
 
-        this.vacationForm.value['end_date'] = (this.vacationForm.value['end_date'] as DateTime)?.toISODate();
-        this.vacationForm.value['start_date'] = (this.vacationForm.value['start_date'] as DateTime)?.toISODate();
-
-        console.log(`Difference in days: ${this.durationDelta}`);
-        console.log(this.vacationForm.value);
+        // console.log(`Difference in days: ${this.durationDelta}`);
+        // console.log(this.vacationForm.value);
         const finalPayload = { ...this.vacationForm.value };
-        if (!finalPayload['start_date']) finalPayload['start_date'] = DateTime.now().toISODate();
-        if (!finalPayload['end_date']) finalPayload['end_date'] = DateTime.now().plus({ days: 1 }).toISODate();
-        delete finalPayload['trip_type_local'];
+        finalPayload['attachment_base64'] = (this.vacationForm.value['attachment_base64'] as any[])[0];
+        // finalPayload['attachment_base64'] = (this.vacationForm.value['date_from'] as any[])[0];
+
+
+        delete finalPayload['holiday_status_local'];
         this.vacationApi.createTripRequest(finalPayload).subscribe((value) => {
             if (value) {
                 this.refs.close();

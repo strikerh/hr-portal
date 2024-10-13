@@ -72,6 +72,8 @@
 -->
 
         <mat-divider class="my-2"></mat-divider>
+        <app-upload *ngIf="selectedVacationType?.support_document"
+            uploadType="base64"    formControlName="attachment_base64" [formGroup]="vacationForm"></app-upload>
 
         <mat-form-field
         >

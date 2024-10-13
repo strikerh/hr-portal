@@ -13,11 +13,23 @@ import { User } from '../../core/user/user.types';
 import { VacationsApiService } from './vacations-api.service';
 import { vacation } from './vacationsModels';
 import { NewVacationComponent } from './new-vacation/new-vacation.component';
+import { UploadComponent } from '../../components/upload/upload.component';
+
 
 @Component({
     selector: 'app-vacations',
     standalone: true,
-    imports: [MatButton, MatIcon, MatTabsModule, MatTableModule, NgIf, DatePipe, MatRipple],
+    imports: [
+        MatButton,
+        MatIcon,
+        MatTabsModule,
+        MatTableModule,
+        NgIf,
+        DatePipe,
+        MatRipple,
+        UploadComponent,
+
+    ],
     templateUrl: './vacations.component.html',
     styleUrl: './vacations.component.scss',
 })
@@ -31,9 +43,8 @@ export class VacationsComponent implements OnInit {
         'duration',
         'description',
         // 'employee_name',
-    'state',
-    'time_off_type'
-
+        'state',
+        'time_off_type',
     ];
     displayedColumns2: string[] = [
         'id',
@@ -44,7 +55,7 @@ export class VacationsComponent implements OnInit {
         'description',
         'state',
         'time_off_type',
-        'action1'
+        'action1',
     ];
     tabIndex: 'needApprove' | 'myTrips' = 'myTrips';
     private user: User;
@@ -77,16 +88,18 @@ export class VacationsComponent implements OnInit {
 
     doAction(approve: 'approve' | 'reject', trip_id: number) {
         if (approve === 'approve') {
-            this.vacationApi.approveTrip(trip_id).subscribe((data) => {
-                console.log(data);
-                this.openSnackBar(data.msg);
-            }, (error) => {
-                debugger
-                if (error.error.error) {
-                    this.openSnackBar(error.error.error);
+            this.vacationApi.approveTrip(trip_id).subscribe(
+                (data) => {
+                    console.log(data);
+                    this.openSnackBar(data.msg);
+                },
+                (error) => {
+                    if (error.error.error) {
+                        this.openSnackBar(error.error.error);
+                    }
+                    console.error(error);
                 }
-                console.error(error);
-            });
+            );
         } else {
             this.vacationApi.refuse_trip(trip_id).subscribe((data) => {
                 this.openSnackBar(data.msg);
@@ -106,16 +119,15 @@ export class VacationsComponent implements OnInit {
 
     private reloadData() {
         this.vacationApi.api_get_all_trip_by_employee_id().subscribe((data) => {
-
-
             this.vacations = data.time_off_list
-            /*    .map((vacation: any)=>{
+                /*    .map((vacation: any)=>{
                     return {
                         ...vacation,
                         total_days: Math.floor((new Date(vacation.date_end).getTime() - new Date(vacation.date_start).getTime()) / (1000 * 60 * 60 * 24)),
                     };
                 }).*/
-                .sort((a, b) => b.id - a.id);            console.log(data);
+                .sort((a, b) => b.id - a.id);
+            console.log(data);
         });
 
         this.vacationApi.api_get_trips_to_approves_by_user_id().subscribe((data) => {

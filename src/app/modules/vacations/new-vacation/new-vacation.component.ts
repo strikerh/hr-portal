@@ -1,4 +1,4 @@
-import { JsonPipe, NgIf } from '@angular/common';
+import { JsonPipe, NgIf, TitleCasePipe, UpperCasePipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
@@ -17,6 +17,7 @@ import { MatOption, MatSelect, MatSelectChange } from '@angular/material/select'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DateTime } from 'luxon';
 import { SIDE_PAGE_DATA, SIDE_PAGE_REF, SidePageInfo, SidePageRef } from 'ngx-side-page';
+import { distinctUntilChanged } from 'rxjs';
 import { UploadComponent } from '../../../components/upload/upload.component';
 import { UserService } from '../../../core/user/user.service';
 import { VacationsApiService } from '../vacations-api.service';
@@ -49,6 +50,8 @@ import { VacationLookupResponse } from '../vacationsModels';
         MatDivider,
         MatButton,
         UploadComponent,
+        UpperCasePipe,
+        TitleCasePipe,
     ],
     templateUrl: './new-vacation.component.html',
     styleUrl: './new-vacation.component.scss',
@@ -70,6 +73,7 @@ export class NewVacationComponent implements OnInit {
         request_unit: 'day' | 'hour';
         support_document: boolean;
     };
+    totalTime: string;
 
     constructor(
         private fb: FormBuilder,
@@ -84,8 +88,8 @@ export class NewVacationComponent implements OnInit {
             description: ['from API'],
             request_hour_from: ['9'],
             request_hour_to: ['9.5'],
-            date_to: ['2024-11-01'],
-            date_from: ['2024-11-01'],
+            date_to: [DateTime.now().plus({ days: 1 })],
+            date_from: [DateTime.now()],
             file_attachment: [''],
         });
 
@@ -104,12 +108,56 @@ export class NewVacationComponent implements OnInit {
                 console.error(error);
             },
         });
+
+        this.vacationForm.valueChanges
+            .pipe(
+                distinctUntilChanged(
+                    (prev, curr) =>
+                        prev.date_from === curr.date_from &&
+                        prev.date_to === curr.date_to &&
+                        prev.request_hour_from === curr.request_hour_from &&
+                        prev.request_hour_to === curr.request_hour_to
+                )
+            )
+            .subscribe((value) => {
+                debugger;
+                if (value.holiday_status_local.request_unit === 'day') {
+                    if (value.date_from && value.date_to) {
+                        const startDate: DateTime = value.date_from;
+                        const endDate: DateTime = value.date_to;
+                        const duration = endDate.diff(startDate, 'days');
+                        console.log('Relevant fields changed:', duration.days);
+                        this.totalTime = `${duration.days} days`;
+                    }
+                } else {
+                    debugger;
+                    /*      const start = new Date(`1970-01-01T${value.request_hour_from.replace(' ', '')}`);
+                      const end = new Date(`1970-01-01T${value.request_hour_to.replace(' ', '')}`);
+                      const deltaMilliseconds = end.getTime() - start.getTime();
+                      const deltaMinutes = Math.floor(deltaMilliseconds / 60000);
+                      const hours = Math.floor(deltaMinutes / 60);
+                      const minutes = deltaMinutes % 60;
+
+                      this.totalTime = `${hours}:${minutes} Hours`;*/
+                    const delta = Math.abs(Number(value.request_hour_from) - Number(value.request_hour_to));
+                    this.totalTime = delta + ' Hours';
+                }
+            });
     }
 
     submit($event: SubmitEvent) {
         // this.validateForm();
         if (this.vacationForm.invalid) {
             this.openSnackBar('Please fill in all the required fields');
+            return;
+        }
+
+        if (
+            Number(this.totalTime.split(' ')[0]) >
+            Number(this.vacationForm.value['holiday_status_local'].virtual_remaining_leaves)
+        ) {
+            debugger;
+            this.openSnackBar("You don't have enough leaves balance");
             return;
         }
         /*        this.vacationForm.value['file_attachment'] =  (this.vacationForm.value['date_from'] as any[])[0];
@@ -132,7 +180,11 @@ export class NewVacationComponent implements OnInit {
             finalPayload.append('date_from', DateTime.now().toISODate());
             finalPayload.append('date_to', DateTime.now().toISODate());
         }
-        if (this.selectedVacationType.support_document && this.vacationForm.value['file_attachment'] && this.vacationForm.value['file_attachment'].length > 0) {
+        if (
+            this.selectedVacationType.support_document &&
+            this.vacationForm.value['file_attachment'] &&
+            this.vacationForm.value['file_attachment'].length > 0
+        ) {
             const blob = new Blob([this.vacationForm.value['file_attachment'][0]], {
                 type: 'application/octet-stream',
             });
@@ -253,7 +305,7 @@ export class NewVacationComponent implements OnInit {
     }
 
     onVacationTypeChange($event: MatSelectChange) {
-        debugger
+        debugger;
         this.vacationForm.controls['holiday_status_id'].setValue($event.value.id);
         this.selectedVacationType = $event.value;
         console.log($event.value);

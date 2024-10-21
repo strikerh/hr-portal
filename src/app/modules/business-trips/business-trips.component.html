@@ -45,255 +45,277 @@
             </nav>
         </header>
         <div class="py-2 bg-white rounded shadow flex flex-col overflow-x-auto relative">
-            <table *ngIf="tabIndex === 'myTrips'" mat-table [dataSource]="trips" class="table-primary min-h-100 ">
+            <div class="min-h-100">
+                <table *ngIf="tabIndex === 'myTrips'" mat-table [dataSource]="trips" class="table-primary">
 
-                <!--- Note that these columns can be defined in any order.
-                      The actual rendered columns are set as a property on the row definition" -->
+                    <!--- Note that these columns can be defined in any order.
+                          The actual rendered columns are set as a property on the row definition" -->
 
-                <!-- Id Column -->
-                <ng-container matColumnDef="id">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Id </span></th>
-                    <td mat-cell *matCellDef="let element"> {{ element.id }}</td>
-                </ng-container>
+                    <!-- Id Column -->
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Id </span></th>
+                        <td mat-cell *matCellDef="let element"> {{ element.id }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="Sequence">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> # </span></th>
+                        <td mat-cell *matCellDef="let element">  <span class="whitespace-nowrap">{{ element.Sequence }}</span></td>
+                    </ng-container>
 
-                <!-- date_end Column -->
-                <ng-container matColumnDef="date_end">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Date End </span>
-                    </th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap"> {{ element.date_end }} </span></td>
-                </ng-container>
+                    <!-- date_end Column -->
+                    <ng-container matColumnDef="date_end">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Date End </span>
+                        </th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap"> {{ element.date_end }} </span></td>
+                    </ng-container>
 
-                <!-- date_start Column -->
-                <ng-container matColumnDef="date_start">
-                    <th mat-header-cell *matHeaderCellDef><span
-                        class="whitespace-nowrap"> Date Start </span></th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap">{{ element.date_start }} </span></td>
-                </ng-container>
+                    <!-- date_start Column -->
+                    <ng-container matColumnDef="date_start">
+                        <th mat-header-cell *matHeaderCellDef><span
+                            class="whitespace-nowrap"> Date Start </span></th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap">{{ element.date_start }} </span></td>
+                    </ng-container>
 
-                <!-- employee Column -->
-                <ng-container matColumnDef="employee">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Employee </span>
-                    </th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap"> {{ element.employee }}</span></td>
-                </ng-container>
+                    <!-- employee Column -->
+                    <ng-container matColumnDef="employee">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Employee </span>
+                        </th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap"> {{ element.employee }}</span></td>
+                    </ng-container>
 
-                <!-- status Column -->
-                <ng-container matColumnDef="status">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Status </span>
-                    </th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap">{{ element.status }}</span></td>
-                </ng-container>
+                    <!-- status Column -->
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Status </span>
+                        </th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap">{{ element.status | titlecase }}</span></td>
+                    </ng-container>
 
-                <!-- my_action Column -->
-                <ng-container matColumnDef="my_action">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> My Action </span>
-                    </th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap">{{ element.my_action }}</span></td>
-                </ng-container>
+                    <!-- my_action Column -->
+                    <ng-container matColumnDef="my_action">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> My Action </span>
+                        </th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap">{{ element.my_action }}</span></td>
+                    </ng-container>
 
 
-                <!-- approval_cycle_type Column -->
-                <ng-container matColumnDef="approval_cycle_type">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Approval  Cycle Type </span>
-                    </th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap"> {{ element.approval_cycle_type }}</span></td>
-                </ng-container>
+                    <!-- approval_cycle_type Column -->
+                    <ng-container matColumnDef="approval_cycle_type">
+                        <th mat-header-cell *matHeaderCellDef><span
+                            class="whitespace-nowrap"> Approval  Cycle Type </span>
+                        </th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap"> {{ element.approval_cycle_type }}</span></td>
+                    </ng-container>
 
-                <!-- employee_grade Column -->
-                <ng-container matColumnDef="employee_grade">
-                    <th mat-header-cell *matHeaderCellDef><span
-                        class="whitespace-nowrap"> Employee Grade </span></th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap">{{ element.employee_grade }}</span></td>
-                </ng-container>
+                    <!-- employee_grade Column -->
+                    <ng-container matColumnDef="employee_grade">
+                        <th mat-header-cell *matHeaderCellDef><span
+                            class="whitespace-nowrap"> Employee Grade </span></th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap">{{ element.employee_grade }}</span></td>
+                    </ng-container>
 
-                <!-- location_trip Column -->
-                <ng-container matColumnDef="location_trip">
-                    <th mat-header-cell *matHeaderCellDef><span
-                        class="whitespace-nowrap"> Location Trip </span></th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap"> {{ element.location_trip }} </span></td>
-                </ng-container>
+                    <!-- project_id Column -->
+                    <ng-container matColumnDef="project_id">
+                        <th mat-header-cell *matHeaderCellDef><span
+                            class="whitespace-nowrap"> Project </span></th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap">{{ element.project_id }}</span></td>
+                    </ng-container>
 
-                <!-- total_compensation Column -->
-                <ng-container matColumnDef="total_compensation">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Total Compensation </span>
-                    </th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap"> {{ element.total_compensation }} </span></td>
-                </ng-container>
+                    <!-- location_trip Column -->
+                    <ng-container matColumnDef="location_trip">
+                        <th mat-header-cell *matHeaderCellDef><span
+                            class="whitespace-nowrap"> Location Trip </span></th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap"> {{ element.location_trip }} </span></td>
+                    </ng-container>
 
-                <!-- total_days Column -->
-                <ng-container matColumnDef="total_days">
-                    <th mat-header-cell *matHeaderCellDef><span
-                        class="whitespace-nowrap"> Total Days </span></th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap">{{ element.total_days }}</span></td>
-                </ng-container>
+                    <!-- total_compensation Column -->
+                    <ng-container matColumnDef="total_compensation">
+                        <th mat-header-cell *matHeaderCellDef><span
+                            class="whitespace-nowrap"> Total Compensation </span>
+                        </th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap" > {{ element.total_compensation || 0 | number:'1.2-2' }} <small>SAR</small></span></td>
+                    </ng-container>
 
-                <!-- trip_type Column -->
-                <ng-container matColumnDef="trip_type">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Trip Type </span>
-                    </th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap"> {{ element.trip_type }} </span></td>
-                </ng-container>
+                    <!-- total_days Column -->
+                    <ng-container matColumnDef="total_days">
+                        <th mat-header-cell *matHeaderCellDef><span
+                            class="whitespace-nowrap"> Total Days </span></th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap">{{ element.total_days }}</span></td>
+                    </ng-container>
 
-                <!-- request_manager Column -->
-                <ng-container matColumnDef="request_manager">
-                    <th mat-header-cell *matHeaderCellDef><span
-                        class="whitespace-nowrap"> Request Manager </span></th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap">{{ element.request_manager }}</span></td>
-                </ng-container>
+                    <!-- trip_type Column -->
+                    <ng-container matColumnDef="trip_type">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Trip Type </span>
+                        </th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap"> {{ element.trip_type.replaceAll('_', ' ') | titlecase }} </span></td>
+                    </ng-container>
 
-                <!-- request_manager Column -->
-                <ng-container matColumnDef="action" stickyEnd>
-                    <th mat-header-cell *matHeaderCellDef><span
-                        class="whitespace-nowrap">  </span></th>
-                    <td mat-cell *matCellDef="let element">
+                    <!-- request_manager Column -->
+                    <ng-container matColumnDef="request_manager">
+                        <th mat-header-cell *matHeaderCellDef><span
+                            class="whitespace-nowrap"> Request Manager </span></th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap">{{ element.request_manager }}</span></td>
+                    </ng-container>
+
+                    <!-- request_manager Column -->
+                    <ng-container matColumnDef="action" stickyEnd>
+                        <th mat-header-cell *matHeaderCellDef><span
+                            class="whitespace-nowrap">  </span></th>
+                        <td mat-cell *matCellDef="let element">
                         <span class="whitespace-nowrap">
                             <button mat-button>Approve</button> <button mat-button>Reject</button>
                     </span></td>
-                </ng-container>
+                    </ng-container>
 
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
-            </table>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+                </table>
 
-            <table *ngIf="tabIndex === 'needApprove'" mat-table [dataSource]="tripsNeedApproves" class="table-primary min-h-100 relative">
+                <table *ngIf="tabIndex === 'needApprove'" mat-table [dataSource]="tripsNeedApproves"
+                       class="table-primary relative">
 
-                <!--- Note that these columns can be defined in any order.
-                      The actual rendered columns are set as a property on the row definition" -->
+                    <!--- Note that these columns can be defined in any order.
+                          The actual rendered columns are set as a property on the row definition" -->
 
-                <!-- Id Column -->
-                <ng-container matColumnDef="id">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Id </span></th>
-                    <td mat-cell *matCellDef="let element"> {{ element.id }}</td>
-                </ng-container>
+                    <!-- Id Column -->
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Id </span></th>
+                        <td mat-cell *matCellDef="let element"> {{ element.id }}</td>
+                    </ng-container>
 
-                <!-- date_end Column -->
-                <ng-container matColumnDef="date_end">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Date End </span></th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap"> {{ element.date_end | date }} </span></td>
-                </ng-container>
+                    <ng-container matColumnDef="Sequence">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> # </span></th>
+                        <td mat-cell *matCellDef="let element"> {{ element.Sequence }}</td>
+                    </ng-container>
+                    <!-- date_end Column -->
+                    <ng-container matColumnDef="date_end">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Date End </span></th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap"> {{ element.date_end | date }} </span></td>
+                    </ng-container>
 
-                <!-- date_start Column -->
-                <ng-container matColumnDef="date_start">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Date Start </span>
-                    </th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap">{{ element.date_start | date }} </span></td>
-                </ng-container>
+                    <!-- date_start Column -->
+                    <ng-container matColumnDef="date_start">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Date Start </span>
+                        </th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap">{{ element.date_start | date }} </span></td>
+                    </ng-container>
 
-                <!-- employee Column -->
-                <ng-container matColumnDef="employee">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Employee </span></th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap"> {{ element.employee }}</span></td>
-                </ng-container>
+                    <!-- employee Column -->
+                    <ng-container matColumnDef="employee">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Employee </span></th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap"> {{ element.employee }}</span></td>
+                    </ng-container>
 
-                <!-- status Column -->
-                <ng-container matColumnDef="status">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Status </span></th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap">{{ element.status }}</span></td>
-                </ng-container>
-                <!-- my_action Column -->
-                <ng-container matColumnDef="my_action">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> My Action </span>
-                    </th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap">{{ element.my_action }}</span></td>
-                </ng-container>
+                    <!-- status Column -->
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Status </span></th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap">{{ element.status | titlecase }}</span></td>
+                    </ng-container>
+                    <!-- my_action Column -->
+                    <ng-container matColumnDef="my_action">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> My Action </span>
+                        </th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap">{{ element.my_action }}</span></td>
+                    </ng-container>
 
-                <!-- approval_cycle_type Column -->
-                <ng-container matColumnDef="approval_cycle_type">
-                    <th mat-header-cell *matHeaderCellDef><span
-                        class="whitespace-nowrap"> Approval  Cycle Type </span></th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap"> {{ element.approval_cycle_type }}</span></td>
-                </ng-container>
+                    <!-- approval_cycle_type Column -->
+                    <ng-container matColumnDef="approval_cycle_type">
+                        <th mat-header-cell *matHeaderCellDef><span
+                            class="whitespace-nowrap"> Approval  Cycle Type </span></th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap"> {{ element.approval_cycle_type }}</span></td>
+                    </ng-container>
 
-                <!-- employee_grade Column -->
-                <ng-container matColumnDef="employee_grade">
-                    <th mat-header-cell *matHeaderCellDef><span
-                        class="whitespace-nowrap"> Employee Grade </span></th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap">{{ element.employee_grade }}</span></td>
-                </ng-container>
+                    <!-- employee_grade Column -->
+                    <ng-container matColumnDef="employee_grade">
+                        <th mat-header-cell *matHeaderCellDef><span
+                            class="whitespace-nowrap"> Employee Grade </span></th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap">{{ element.employee_grade }}</span></td>
+                    </ng-container>
 
-                <!-- location_trip Column -->
-                <ng-container matColumnDef="location_trip">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Location Trip </span>
-                    </th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap"> {{ element.location_trip }} </span></td>
-                </ng-container>
+                    <!-- location_trip Column -->
+                    <ng-container matColumnDef="location_trip">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Location Trip </span>
+                        </th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap"> {{ element.location_trip }} </span></td>
+                    </ng-container>
 
-                <!-- total_compensation Column -->
-                <ng-container matColumnDef="total_compensation">
-                    <th mat-header-cell *matHeaderCellDef><span
-                        class="whitespace-nowrap"> Total Compensation </span></th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap"> {{ element.total_compensation }} </span></td>
-                </ng-container>
+                    <!-- total_compensation Column -->
+                    <ng-container matColumnDef="total_compensation">
+                        <th mat-header-cell *matHeaderCellDef><span
+                            class="whitespace-nowrap"> Total Compensation </span></th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap" > {{ element.total_compensation || 0 | number:'1.2-2' }} <small>SAR</small></span></td>
+                    </ng-container>
 
-                <!-- total_days Column -->
-                <ng-container matColumnDef="total_days">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Total Days </span>
-                    </th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap">{{ element.total_days }}</span></td>
-                </ng-container>
+                    <!-- total_days Column -->
+                    <ng-container matColumnDef="total_days">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Total Days </span>
+                        </th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap">{{ element.total_days }}</span></td>
+                    </ng-container>
 
-                <!-- trip_type Column -->
-                <ng-container matColumnDef="trip_type">
-                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Trip Type </span>
-                    </th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap"> {{ element.trip_type }} </span></td>
-                </ng-container>
+                    <!-- trip_type Column -->
+                    <ng-container matColumnDef="trip_type">
+                        <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Trip Type </span>
+                        </th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap"> {{ element.trip_type }} </span></td>
+                    </ng-container>
 
-                <!-- request_manager Column -->
-                <ng-container matColumnDef="request_manager">
-                    <th mat-header-cell *matHeaderCellDef><span
-                        class="whitespace-nowrap"> Request Manager </span></th>
-                    <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap">{{ element.request_manager }}</span></td>
-                </ng-container>
+                    <!-- request_manager Column -->
+                    <ng-container matColumnDef="request_manager">
+                        <th mat-header-cell *matHeaderCellDef><span
+                            class="whitespace-nowrap"> Request Manager </span></th>
+                        <td mat-cell *matCellDef="let element"><span
+                            class="whitespace-nowrap">{{ element.request_manager }}</span></td>
+                    </ng-container>
 
-                <!-- request_manager Column -->
-                <ng-container matColumnDef="action" stickyEnd>
-                    <th mat-header-cell *matHeaderCellDef class="bg-inherit "><span
-                        class="whitespace-nowrap">  </span></th>
-                    <td mat-cell *matCellDef="let element" class="bg-inherit">
+                    <!-- request_manager Column -->
+                    <ng-container matColumnDef="action" stickyEnd>
+                        <th mat-header-cell *matHeaderCellDef class="bg-inherit "><span
+                            class="whitespace-nowrap">  </span></th>
+                        <td mat-cell *matCellDef="let element" class="bg-inherit">
                         <span class="whitespace-nowrap flex gap-1" [class.opacity-60]="element.my_action !=='pending'">
                             <button [disabled]="element.my_action !=='pending'"
                                     (click)="doAction('approve', element.id)"
-                                mat-ripple  class="text-white bg-primary text-sm px-3 py-1 rounded-2xl">Approve</button>
+                                    mat-ripple
+                                    class="text-white bg-primary text-sm px-3 py-1 rounded-2xl">Approve</button>
 
-<!--                                [disabled]="element.status !== 'new'" [class.opacity-50]="element.status !== 'new'"-->
+                            <!--                                [disabled]="element.status !== 'new'" [class.opacity-50]="element.status !== 'new'"-->
 
                             <button [disabled]="element.my_action !=='pending'"
-                                (click)="doAction('reject', element.id)"
-                                mat-ripple  class="text-white bg-red-600 text-sm px-3 py-1 rounded-2xl">Reject</button>
+                                    (click)="doAction('reject', element.id)"
+                                    mat-ripple
+                                    class="text-white bg-red-600 text-sm px-3 py-1 rounded-2xl">Reject</button>
                     </span></td>
-                </ng-container>
+                    </ng-container>
 
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
-            </table>
-
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+                </table>
+            </div>
 
         </div>
     </section>

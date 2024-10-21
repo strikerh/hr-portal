@@ -1,4 +1,4 @@
-import { DatePipe, NgIf } from '@angular/common';
+import { DatePipe, DecimalPipe, NgIf, TitleCasePipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatRipple } from '@angular/material/core';
@@ -17,7 +17,7 @@ import { NewBusinessTripComponent } from './new-business-trip/new-business-trip.
 @Component({
     selector: 'app-business-trips',
     standalone: true,
-    imports: [MatButton, MatIcon, MatTabsModule, MatTableModule, NgIf, DatePipe, MatRipple],
+    imports: [MatButton, MatIcon, MatTabsModule, MatTableModule, NgIf, DatePipe, MatRipple, TitleCasePipe, DecimalPipe],
     templateUrl: './business-trips.component.html',
     styleUrl: './business-trips.component.scss',
 })
@@ -25,25 +25,28 @@ export class BusinessTripsComponent implements OnInit {
     trips: Trip[] = [];
     tripsNeedApproves: Trip[];
     displayedColumns1: string[] = [
-        'id',
+        // 'id',
+        'Sequence',
         'date_end',
         'date_start',
         // 'employee',
-        'total_days',
+        // 'total_days',
         // 'approval_cycle_type',
         'total_compensation',
         'status',
         'employee_grade',
         // 'location_trip',
         'trip_type',
-        'request_manager',
+        // 'request_manager',
+        'project_id',
     ];
     displayedColumns2: string[] = [
-        'id',
+        // 'id',
+        'Sequence',
         'employee',
         'date_end',
         'date_start',
-        'total_days',
+        // 'total_days',
         'total_compensation',
         'trip_type',
         'status',
@@ -108,7 +111,6 @@ export class BusinessTripsComponent implements OnInit {
 
     private reloadData() {
         this.businessTripApi.api_get_all_trip_by_employee_id(Number(this.user.employeeId)).subscribe((data) => {
-
             this.trips = data.trips
                 // .map((trip: any)=>{
                 //     return {
@@ -121,11 +123,9 @@ export class BusinessTripsComponent implements OnInit {
         });
 
         this.businessTripApi.api_get_trips_to_approves_by_user_id().subscribe((data) => {
-
-            const g1 = data.trips?.filter((trip) => trip.my_action === 'pending')?.sort((a, b) => b.id - a.id);
-            const g2 = data.trips?.filter((trip) => trip.my_action !== 'pending')?.sort((a, b) => b.id - a.id);
-            this.tripsNeedApproves = [...g1, ...g2]
-
+            const g1 = data.trips?.filter((trip) => trip.my_action === 'pending')?.sort((a, b) => b.id - a.id) || [];
+            const g2 = data.trips?.filter((trip) => trip.my_action !== 'pending')?.sort((a, b) => b.id - a.id) || [];
+            this.tripsNeedApproves = [...g1, ...g2];
 
             // this.tripsNeedApproves = data.trips;
 

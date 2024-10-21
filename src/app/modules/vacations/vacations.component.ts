@@ -1,4 +1,4 @@
-import { DatePipe, NgIf } from '@angular/common';
+import { DatePipe, NgForOf, NgIf, TitleCasePipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatRipple } from '@angular/material/core';
@@ -8,13 +8,12 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SidePageService } from 'ngx-side-page';
 import { firstValueFrom } from 'rxjs';
+import { UploadComponent } from '../../components/upload/upload.component';
 import { UserService } from '../../core/user/user.service';
 import { User } from '../../core/user/user.types';
-import { VacationsApiService } from './vacations-api.service';
-import { vacation } from './vacationsModels';
 import { NewVacationComponent } from './new-vacation/new-vacation.component';
-import { UploadComponent } from '../../components/upload/upload.component';
-
+import { VacationsApiService } from './vacations-api.service';
+import { GetAllLeaveTypesRemainingLeavesDTO, vacation } from './vacationsModels';
 
 @Component({
     selector: 'app-vacations',
@@ -28,7 +27,8 @@ import { UploadComponent } from '../../components/upload/upload.component';
         DatePipe,
         MatRipple,
         UploadComponent,
-
+        NgForOf,
+        TitleCasePipe,
     ],
     templateUrl: './vacations.component.html',
     styleUrl: './vacations.component.scss',
@@ -38,6 +38,7 @@ export class VacationsComponent implements OnInit {
     tripsNeedApproves: vacation[];
     displayedColumns1: string[] = [
         'id',
+        // 'Sequence',
         'start_date',
         'end_date',
         'duration',
@@ -48,6 +49,7 @@ export class VacationsComponent implements OnInit {
     ];
     displayedColumns2: string[] = [
         'id',
+        // 'Sequence',
         'employee_name',
         'start_date',
         'end_date',
@@ -61,6 +63,7 @@ export class VacationsComponent implements OnInit {
     private user: User;
 
     private _snackBar = inject(MatSnackBar);
+    dashboardData: GetAllLeaveTypesRemainingLeavesDTO;
 
     constructor(
         private sidePageService: SidePageService,
@@ -72,10 +75,15 @@ export class VacationsComponent implements OnInit {
         const user = await firstValueFrom(this.userService.user$);
         this.user = user;
         this.reloadData();
+
+        this.vacationApi.get_all_leave_types_remaining_leaves().subscribe((data) => {
+            console.log(data);
+            this.dashboardData = data;
+        });
     }
 
     openNewBusinessTrip() {
-        debugger
+        debugger;
         const ref = this.sidePageService.openSidePage('new-vacation', NewVacationComponent, {
             width: '40%',
             maxWidth: '600px',
@@ -83,7 +91,7 @@ export class VacationsComponent implements OnInit {
 
         ref.afterClosed().subscribe((result) => {
             console.log('The dialog was closed');
-            debugger
+            debugger;
             this.reloadData();
         });
     }
@@ -136,7 +144,6 @@ export class VacationsComponent implements OnInit {
             // const g1 = data.time_off_list?.filter((trip) => trip.my_action === 'pending')?.sort((a, b) => b.id - a.id);
             // const g2 = data.time_off_list?.filter((trip) => trip.my_action !== 'pending')?.sort((a, b) => b.id - a.id);
             // this.tripsNeedApproves = [...g1, ...g2]
-
 
             this.tripsNeedApproves = data.time_off_list;
 

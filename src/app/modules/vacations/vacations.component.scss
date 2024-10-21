@@ -4,9 +4,27 @@
     }
 
     .items {
-
+   /*     #61869d
+        #49b4d5
+        #14ad98
+        #8cc26b;
+        #6175b4;*/
         .item {
-            @apply size-40 bg-amber-500 rounded-2xl p-2 flex flex-col justify-center items-center;
+            @apply size-40  rounded-2xl p-2 flex flex-col justify-center items-center;
+            background-color: #49b4d5;
+            color: #fff;
+            &:nth-child(1) {
+                background-color: #49b4d5
+            }
+            &:nth-child(2) {
+                background-color: #75b577
+            }
+            &:nth-child(3) {
+                background-color: #6175b4
+            }
+            &:nth-child(4) {
+                background-color: #14ad98
+            }
 
             label {
                 @apply font-bold text-center;

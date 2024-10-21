@@ -1,5 +1,5 @@
 <div class="  border-b py-4  text-center">
-    <h1 class="text-xl font-bold"> Request Business Trip</h1>
+    <h1 class="text-xl font-bold"> Request Vacation</h1>
 </div>
 <section class="p-6 overflow-auto">
     <form class="flex flex-col gap-2" [formGroup]="vacationForm" (submit)="submit($event)">
@@ -14,6 +14,12 @@
                     <mat-option [value]="vacationType">{{ vacationType.name }}</mat-option>
                 }
             </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Remaining Leaves</mat-label>
+            <input matInput readonly [value]="(vacationForm.value['holiday_status_local']?.virtual_remaining_leaves || '0')
+         +' '+  ( vacationForm.value['holiday_status_local']?.request_unit | titlecase)">
         </mat-form-field>
 
         <input type="hidden" formControlName="holiday_status_id">
@@ -39,7 +45,6 @@
             }
         </mat-form-field>
 
-
         <div class="flex gap-2" *ngIf="selectedVacationType?.request_unit === 'hour'">
             <mat-form-field class="grow">
                 <mat-label>From</mat-label>
@@ -51,6 +56,7 @@
                     @for (item of lookupResponse?.custom_hours; track $index) {
                         <mat-option [value]="item[0]">{{ item[1] }}</mat-option>
                     }
+
                 </mat-select>
             </mat-form-field>
 
@@ -64,21 +70,24 @@
                 </mat-select>
             </mat-form-field>
         </div>
-    <!--    <mat-form-field
-        >
-            <mat-label>Duration Term</mat-label>
-            <input matInput readonly [value]="(businessTripTerm || 'No Range') +' (' +(durationDelta || 0 ) + ' days)'">
-        </mat-form-field>
--->
+
+        <div>Time Off Period : {{ totalTime }}</div>
+
+        <!--    <mat-form-field
+            >
+                <mat-label>Duration Term</mat-label>
+                <input matInput readonly [value]="(businessTripTerm || 'No Range') +' (' +(durationDelta || 0 ) + ' days)'">
+            </mat-form-field>
+    -->
 
         <mat-divider class="my-2"></mat-divider>
         <app-upload *ngIf="selectedVacationType?.support_document"
-            uploadType="blob"    formControlName="file_attachment" [formGroup]="vacationForm"></app-upload>
+                    uploadType="blob" formControlName="file_attachment" [formGroup]="vacationForm"></app-upload>
 
         <mat-form-field
         >
             <mat-label>Description</mat-label>
-            <textarea matInput  formControlName="description">
+            <textarea matInput formControlName="description">
             </textarea>
         </mat-form-field>
 

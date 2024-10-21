@@ -57,4 +57,5 @@ export class BusinessTripApiService {
     api_get_trips_to_approves_by_user_id() {
         return this._httpClient.get<TripResponse>(this.apiUrl + '/api_get_trips_to_approves_by_user_id');
     }
+
 }

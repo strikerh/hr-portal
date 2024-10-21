@@ -1,16 +1,14 @@
-
 export interface VacationLookupResponse {
-    custom_hours: string[][]
-    time_off_type: TimeOffType[]
+    custom_hours: string[][];
+    time_off_type: TimeOffType[];
 }
 
 export interface TimeOffType {
-    id: number
-    name: string
-    request_unit: string
-    support_document: boolean
+    id: number;
+    name: string;
+    request_unit: string;
+    support_document: boolean;
 }
-
 
 export interface DtoCreateVacationRequest {
     holiday_status_id: number;
@@ -19,7 +17,6 @@ export interface DtoCreateVacationRequest {
     request_hour_to: string;
     date_to: string;
     date_from: string;
-
 }
 
 export interface ApproveLineStatus {
@@ -28,6 +25,15 @@ export interface ApproveLineStatus {
         status: string;
         user_id: number;
         user_name: string;
+    }[];
+}
+
+export interface GetAllLeaveTypesRemainingLeavesDTO {
+    msg: string;
+    leave_types: {
+        id: number;
+        leave_type_name: string;
+        remaining_leaves: number;
     }[];
 }
 

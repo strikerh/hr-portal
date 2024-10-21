@@ -6,7 +6,7 @@ import {
     ApproveLineStatus,
     VacationLookupResponse,
     DtoCreateVacationRequest,
-    TripResponse,
+    TripResponse, GetAllLeaveTypesRemainingLeavesDTO,
 } from './vacationsModels';
 
 
@@ -57,5 +57,9 @@ export class VacationsApiService {
 
     api_get_trips_to_approves_by_user_id() {
         return this._httpClient.get<TripResponse>(this.apiUrl + '/get_all_time_off_can_approve');
+    }
+
+    get_all_leave_types_remaining_leaves() {
+        return this._httpClient.get<GetAllLeaveTypesRemainingLeavesDTO>(this.apiUrl + '/get_all_leave_types_remaining_leaves');
     }
 }

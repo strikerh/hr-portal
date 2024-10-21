@@ -121,13 +121,14 @@ export class NewVacationComponent implements OnInit {
             )
             .subscribe((value) => {
                 debugger;
+
                 if (value.holiday_status_local.request_unit === 'day') {
                     if (value.date_from && value.date_to) {
-                        const startDate: DateTime = value.date_from;
-                        const endDate: DateTime = value.date_to;
+                        const startDate: DateTime = value.date_from.startOf('day');
+                        const endDate: DateTime = value.date_to.endOf('day');
                         const duration = endDate.diff(startDate, 'days');
                         console.log('Relevant fields changed:', duration.days);
-                        this.totalTime = `${duration.days} days`;
+                        this.totalTime = `${duration.days.toFixed(0)} days`;
                     }
                 } else {
                     debugger;
@@ -140,7 +141,7 @@ export class NewVacationComponent implements OnInit {
 
                       this.totalTime = `${hours}:${minutes} Hours`;*/
                     const delta = Math.abs(Number(value.request_hour_from) - Number(value.request_hour_to));
-                    this.totalTime = delta + ' Hours';
+                    this.totalTime = delta.toFixed(2)+ ' Hours';
                 }
             });
     }

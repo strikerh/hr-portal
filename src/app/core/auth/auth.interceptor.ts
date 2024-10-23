@@ -1,12 +1,6 @@
-import {
-    HttpErrorResponse,
-    HttpEvent,
-    HttpHandlerFn,
-    HttpRequest,
-} from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from 'app/core/auth/auth.service';
-import { AuthUtils } from 'app/core/auth/auth.utils';
 import { Observable, catchError, throwError } from 'rxjs';
 
 /**
@@ -15,10 +9,7 @@ import { Observable, catchError, throwError } from 'rxjs';
  * @param req
  * @param next
  */
-export const authInterceptor = (
-    req: HttpRequest<unknown>,
-    next: HttpHandlerFn
-): Observable<HttpEvent<unknown>> => {
+export const authInterceptor = (req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> => {
     const authService = inject(AuthService);
 
     // Clone the request object
@@ -37,10 +28,7 @@ export const authInterceptor = (
         // && !AuthUtils.isTokenExpired(authService.accessToken)
     ) {
         newReq = req.clone({
-            headers: req.headers.set(
-                'authorization',
-                 authService.accessToken
-            ),
+            headers: req.headers.set('authorization', authService.accessToken),
         });
     }
 
@@ -50,10 +38,16 @@ export const authInterceptor = (
             // Catch "401 Unauthorized" responses
             if (error instanceof HttpErrorResponse && error.status === 401) {
                 // Sign out
-                authService.signOut();
+                let flag = true;
+                if (error.url.includes('v1/api/login')) {
+                    flag = false;
+                }
 
+                if (flag) {
+                    authService.signOut();
+                    location.reload();
+                }
                 // Reload the app
-                location.reload();
             }
 
             return throwError(error);

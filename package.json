@@ -8,7 +8,7 @@
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
-        "build": "node updateVersion.js && ng build --configuration=production && tar -czvf dist.tar.gz dist",
+        "build": "node updateVersion.js && ng build --configuration=production && tar -czvf dist.tar.gz dist && git commit -m 'deploy' -a && git push github master",
         "watch": "ng build --watch --configuration development",
         "test": "ng test"
     },

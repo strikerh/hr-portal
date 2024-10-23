@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Path to the environment.ts file
-const envFilePath = path.join(__dirname, 'src/environments/environment.ts');
+const envFilePath = path.join(__dirname, 'src/environments/environment.prod.ts');
 
 // Read the environment.ts file
 fs.readFile(envFilePath, 'utf8', (err, data) => {

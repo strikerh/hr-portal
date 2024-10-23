@@ -1,14 +1,14 @@
 {
     "name": "hr-portal",
     "version": "20.0.0",
-    "description": "Fuse - Angular Admin Template and Starter Project",
-    "author": "https://themeforest.net/user/srcn",
-    "license": "https://themeforest.net/licenses/standard",
+    "description": "Hawsabah Hr Portal",
+    "author": "Hazem Safwat",
+    "license": "MIT",
     "private": true,
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
-        "build": "node updateVersion.js && ng build && tar -czvf dist.tar.gz dist",
+        "build": "node updateVersion.js && ng build --configuration=production && tar -czvf dist.tar.gz dist",
         "watch": "ng build --watch --configuration development",
         "test": "ng test"
     },

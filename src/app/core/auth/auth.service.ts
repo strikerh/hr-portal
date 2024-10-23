@@ -69,7 +69,6 @@ export class AuthService {
             .pipe(
                 switchMap((response: any) => {
                     // Store the access token in the local storage
-                    debugger
                     const data = response.data;
                     this.accessToken = data.access_token;
 

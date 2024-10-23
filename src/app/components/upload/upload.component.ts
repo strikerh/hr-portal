@@ -84,7 +84,6 @@ export class UploadComponent implements ControlValueAccessor, OnInit {
                         },
                     ];
                 }
-debugger
                 this.formGroup.get(this.formControlName).setValue(this.uploadedPaths);
                 this.uploading$sub.next(this.uploading$sub.value.filter((name) => !fileNames.includes(name)));
             });

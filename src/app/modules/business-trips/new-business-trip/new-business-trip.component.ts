@@ -200,7 +200,6 @@ export class NewBusinessTripComponent implements OnInit {
 
         if (!finalPayload['start_date']) finalPayload['start_date'] = DateTime.now().toISODate();
         if (!finalPayload['end_date']) finalPayload['end_date'] = DateTime.now().plus({ days: 1 }).toISODate();
-debugger
         if(this.businessTripForm.value['trip_type_local'] !== 'visit_clients') {
             finalPayload['number_of_trips'] = 0;
         }

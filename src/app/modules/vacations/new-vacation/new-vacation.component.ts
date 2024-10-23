@@ -120,7 +120,6 @@ export class NewVacationComponent implements OnInit {
                 )
             )
             .subscribe((value) => {
-                debugger;
 
                 if (value.holiday_status_local.request_unit === 'day') {
                     if (value.date_from && value.date_to) {
@@ -131,7 +130,6 @@ export class NewVacationComponent implements OnInit {
                         this.totalTime = `${duration.days.toFixed(0)} days`;
                     }
                 } else {
-                    debugger;
                     /*      const start = new Date(`1970-01-01T${value.request_hour_from.replace(' ', '')}`);
                       const end = new Date(`1970-01-01T${value.request_hour_to.replace(' ', '')}`);
                       const deltaMilliseconds = end.getTime() - start.getTime();
@@ -157,7 +155,6 @@ export class NewVacationComponent implements OnInit {
             Number(this.totalTime.split(' ')[0]) >
             Number(this.vacationForm.value['holiday_status_local'].virtual_remaining_leaves)
         ) {
-            debugger;
             this.openSnackBar("You don't have enough leaves balance");
             return;
         }
@@ -306,7 +303,6 @@ export class NewVacationComponent implements OnInit {
     }
 
     onVacationTypeChange($event: MatSelectChange) {
-        debugger;
         this.vacationForm.controls['holiday_status_id'].setValue($event.value.id);
         this.selectedVacationType = $event.value;
         console.log($event.value);

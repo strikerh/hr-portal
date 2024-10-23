@@ -1,5 +1,6 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://50.116.48.108:8069',
+    apiUrl: 'https://sahabah-new.hawsabah.sa',
     // Add other production-specific variables here
+    version: '1.1.21',
 };

@@ -15,7 +15,7 @@
 
                 <div class="item" *ngFor="let type of dashboardData?.leave_types">
                     <label class="-mt-2 mb-2"> {{ type.leave_type_name | titlecase }}</label>
-                    <span>{{ type.remaining_leaves}}</span>
+                    <span class="text-4xl">{{ type.remaining_leaves}}</span>
                 </div>
 
             </div>
@@ -26,6 +26,12 @@
             <h2 class="font-bold text-primary-800 pb-2">Requests Details</h2>
             <nav class="flex gap-2">
                 <button type="button"
+                        class="rounded px-3 py-1 border-b-2 bg-slate-50 cursor-pointer"
+                        (click)="toggleFilter()"
+                >
+                    Filter
+                </button>
+                <button type="button"
                         class="rounded px-3 py-1 border-b-2"
                         [class.bg-green-700]="tabIndex === 'myTrips'"
                         [class.text-white]="tabIndex === 'myTrips'"
@@ -33,19 +39,100 @@
                 >
                     My Requests
                 </button>
-                <button *ngIf="tripsNeedApproves?.length" type="button"
+                <button *ngIf="vacationsNeedApproves?.length" type="button"
                         class="rounded px-3 py-1  border-b-2"
                         [class.bg-green-700]="tabIndex === 'needApprove'"
                         [class.text-white]="tabIndex === 'needApprove'"
                         (click)="tabIndex='needApprove'"
                 >
-                    Trips Need Approves
+                    Vacation Need Approves
                 </button>
             </nav>
         </header>
+        <div class=" w-full flex items-center justify-center z-10 absolute top-0 h-full overflow-auto" *ngIf="filterOpened">
+            <div class="filterBox bg-slate-50 absolute right-10 h-full flex flex-col">
+                <div class="w-fit hover:bg-slate-100 hover:rounded-3xl m-3 cursor-pointer" (click)="toggleFilter()">X</div>
+                <h1 class="w-full font-bold text-center text-4xl border-b-2 p-3">Filter</h1>
+              <form [formGroup]="filterVactionsForm" (submit)="filter()">
+                <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <label class="w-1/3">Id:</label>
+                  <input type="text" class="input-field" [formControlName]="'id'">
+                </div>
+              
+                <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <label class="w-1/3">Range Date:</label>
+                  <mat-form-field class="w-full ml-12">
+                    <mat-date-range-input [rangePicker]="picker">
+                      <input matStartDate formControlName="startDate" placeholder="Start date">
+                      <input matEndDate formControlName="endDate" placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                  
+                    @if (filterVactionsForm.controls.startDate.hasError('matStartDateInvalid')) {
+                      <mat-error>Invalid start date</mat-error>
+                    }
+                    @if (filterVactionsForm.controls.endDate.hasError('matEndDateInvalid')) {
+                      <mat-error>Invalid end date</mat-error>
+                    }
+                  </mat-form-field>
+
+                </div>
+              
+                <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <label class="w-1/3">Employee:</label>
+                  <input type="text" class="input-field" [formControlName]="'employee'">
+                </div>
+              
+                <!-- <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <label class="w-1/3">Total Compensation:</label>
+                  <input type="text" class="input-field" [formControlName]="'total'">
+                  <mat-form-field>
+                    <mat-label>From</mat-label>
+                    <input class="w-18" matInput type="number" [formControlName]="'minTotal'" min="0">
+                  </mat-form-field>
+                  
+                  <mat-form-field>
+                    <mat-label>To</mat-label>
+                    <input class="w-18" matInput type="number" [formControlName]="'maxTotal'">
+                  </mat-form-field>
+                </div> -->
+              
+                <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <label class="w-1/3">Status:</label>
+                  <select class="input-field" [formControlName]="'status'">
+                      <option value="To Approve">To Approve</option>
+                      <option value="validate">Validate</option>
+                      <option value="refuse">Refuse</option>
+                      <option value="confirm">confirm</option>
+
+                  </select>
+                </div>
+              
+                <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <label class="w-1/3">Description:</label>
+                  <input type="text" class="input-field" [formControlName]="'description'">
+                </div>
+                <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <label class="w-1/3">Trip Type:</label>
+                  <select class="input-field" [formControlName]="'type'">
+                      <option *ngFor="let type of lookupResponse.time_off_type" [value]="type.name">{{type.name}}</option>
+                </select>
+            </div>
+       
+              
+                <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <button type="submit" class="btn-primary">Submit</button>
+                  <button type="button" class="btn-primary bg-red-500" (click)="filteredMyRequestData=null;filteredEmployeesData=null;filterVactionsForm.reset()">Clear</button>
+
+                </div>
+            </form>
+              </div>
+              
+        </div>
         <div class="py-2 bg-white rounded shadow flex flex-col overflow-x-auto relative">
             <div class="min-h-100">
-            <table *ngIf="tabIndex === 'myTrips'" mat-table [dataSource]="vacations" class="table-primary  ">
+            <table *ngIf="tabIndex === 'myTrips'" mat-table [dataSource]="filteredMyRequestData || vacations" class="table-primary  ">
 
                 <!--- Note that these columns can be defined in any order.
                       The actual rendered columns are set as a property on the row definition" -->
@@ -162,12 +249,22 @@
                     </span></td>
                 </ng-container>
 
+                <ng-container matColumnDef="cancel" stickyEnd>
+                    <th mat-header-cell *matHeaderCellDef><span
+                        class="whitespace-nowrap"> Cancel</span></th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="whitespace-nowrap"  *ngIf="element.state === 'draft'||element.state === 'To Approve'">
+                            
+                            <button mat-button (click)="cancel_request(element.id)">Cancel</button>
+                    </span></td>
+                </ng-container>
+
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns1;" ></tr>
             </table>
 
-            <table *ngIf="tabIndex === 'needApprove'" mat-table [dataSource]="tripsNeedApproves" class="table-primary  relative">
+            <table *ngIf="tabIndex === 'needApprove'" mat-table [dataSource]="filteredEmployeesData||vacationsNeedApproves" class="table-primary  relative">
 
                 <!--- Note that these columns can be defined in any order.
                       The actual rendered columns are set as a property on the row definition" -->
@@ -311,3 +408,5 @@
         </div>
     </section>
 </div>
+
+

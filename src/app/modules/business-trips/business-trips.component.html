@@ -1,4 +1,4 @@
-<div class="w-full flex flex-col">
+<div #parentContainer class="w-full flex flex-col">
     <header class="w-full flex justify-between p-4 border-b bg-gray-50">
         <h1 class="text-3xl font-bold flex items-center text-primary-900">
             <mat-icon svgIcon="airplane_ticket" class="icon-size-10 text-primary-800 mx-4"></mat-icon>
@@ -27,6 +27,12 @@
             <h2 class="font-bold text-primary-800 pb-2">Business Trip Details</h2>
             <nav class="flex gap-2">
                 <button type="button"
+                        class="rounded px-3 py-1 border-b-2 bg-slate-50 cursor-pointer"
+                        (click)="toggleFilter()"
+                >
+                    Filter
+                </button>
+                <button type="button"
                         class="rounded px-3 py-1 border-b-2"
                         [class.bg-green-700]="tabIndex === 'myTrips'"
                         [class.text-white]="tabIndex === 'myTrips'"
@@ -44,9 +50,96 @@
                 </button>
             </nav>
         </header>
+        <div class=" w-full flex items-center justify-center z-10 absolute top-0 h-full overflow-auto" *ngIf="filterOpened">
+            <div class="filterBox bg-slate-50 absolute right-10 h-full flex flex-col">
+                <div class="w-fit hover:bg-slate-100 hover:rounded-3xl m-3 cursor-pointer" (click)="toggleFilter()">X</div>
+                <h1 class="w-full font-bold text-center text-4xl border-b-2 p-3">Filter</h1>
+              <form [formGroup]="filterForm" (submit)="filter()">
+                <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <label class="w-1/3">Approval Number:</label>
+                  <input type="text" class="input-field" [formControlName]="'approval'">
+                </div>
+              
+                <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <label class="w-1/3">Range Date:</label>
+                  <mat-form-field class="w-full ml-12">
+                    <mat-date-range-input [rangePicker]="picker">
+                      <input  matStartDate formControlName="startDate" placeholder="Start date">
+                      <input matEndDate formControlName="endDate" placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                  
+                    @if (filterForm.controls.startDate.hasError('matStartDateInvalid')) {
+                      <mat-error>Invalid start date</mat-error>
+                    }
+                    @if (filterForm.controls.endDate.hasError('matEndDateInvalid')) {
+                      <mat-error>Invalid end date</mat-error>
+                    }
+                  </mat-form-field>
+
+                </div>
+              
+                <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <label class="w-1/3">Employee:</label>
+                  <input type="text" class="input-field" [formControlName]="'employee'">
+                </div>
+              
+                <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <label class="w-1/3">Total Compensation:</label>
+                  <!-- <input type="text" class="input-field" [formControlName]="'total'"> -->
+                  <mat-form-field>
+                    <mat-label>From</mat-label>
+                    <input class="w-18 ml-1" matInput type="number" [formControlName]="'minTotal'" min="0">
+                  </mat-form-field>
+                  
+                  <mat-form-field>
+                    <mat-label>To</mat-label>
+                    <input class="w-18 ml-1" matInput type="number" [formControlName]="'maxTotal'">
+                  </mat-form-field>
+                </div>
+              
+                <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <label class="w-1/3">Status:</label>
+                  <select class="input-field" [formControlName]="'status'">
+                    <option value="pending">Pending</option>
+                    <option value="new">New</option>
+
+                  </select>
+                </div>
+              
+                <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <label class="w-1/3">Employee Grade:</label>
+                  <input type="text" class="input-field" [formControlName]="'grade'">
+                </div>
+              
+                <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <label class="w-1/3">Trip Type:</label>
+                  <select class="input-field" [formControlName]="'type'">
+                      <option value="short_term">Short Term</option>
+                      <option value="medium_term">Medium Term</option>
+                      <option value="long_term">Long Term</option>
+                      <option value="visit_clients">Visit Clients</option>
+
+                </select>
+            </div>
+              
+                <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <label class="w-1/3">Project:</label>
+                  <input type="text" class="input-field" [formControlName]="'project'">
+                </div>
+              
+                <div class="flex w-full items-center justify-evenly p-4 bg-white border-b-2">
+                  <button type="submit" class="btn-primary">Submit</button>
+                  <button type="button" class="btn-primary bg-red-500" (click)="filteredMyRequestData=null;filteredEmployeeData=null;filterForm.reset()">Clear</button>
+
+                </div>
+            </form>
+              </div>
+        </div>
         <div class="py-2 bg-white rounded shadow flex flex-col overflow-x-auto relative">
             <div class="min-h-100">
-                <table *ngIf="tabIndex === 'myTrips'" mat-table [dataSource]="trips" class="table-primary">
+                <table *ngIf="tabIndex === 'myTrips'" mat-table [dataSource]="filteredMyRequestData||trips" class="table-primary">
 
                     <!--- Note that these columns can be defined in any order.
                           The actual rendered columns are set as a property on the row definition" -->
@@ -56,6 +149,7 @@
                         <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Id </span></th>
                         <td mat-cell *matCellDef="let element"> {{ element.id }}</td>
                     </ng-container>
+                    
                     <ng-container matColumnDef="Sequence">
                         <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> # </span></th>
                         <td mat-cell *matCellDef="let element">  <span class="whitespace-nowrap">{{ element.Sequence }}</span></td>
@@ -180,10 +274,10 @@
 
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns1;" class="hover:cursor-pointer hover:bg-indigo-600 hover:text-gray-50" (click)="openMoreInfo(row.id)"></tr>
                 </table>
 
-                <table *ngIf="tabIndex === 'needApprove'" mat-table [dataSource]="tripsNeedApproves"
+                <table *ngIf="tabIndex === 'needApprove'" mat-table [dataSource]="filteredEmployeeData||tripsNeedApproves"
                        class="table-primary relative">
 
                     <!--- Note that these columns can be defined in any order.
@@ -298,14 +392,14 @@
                         <td mat-cell *matCellDef="let element" class="bg-inherit">
                         <span class="whitespace-nowrap flex gap-1" [class.opacity-60]="element.my_action !=='pending'">
                             <button [disabled]="element.my_action !=='pending'"
-                                    (click)="doAction('approve', element.id)"
+                                    (click)="doAction('approve', element.id); $event.stopPropagation()"
                                     mat-ripple
                                     class="text-white bg-primary text-sm px-3 py-1 rounded-2xl">Approve</button>
 
                             <!--                                [disabled]="element.status !== 'new'" [class.opacity-50]="element.status !== 'new'"-->
 
                             <button [disabled]="element.my_action !=='pending'"
-                                    (click)="doAction('reject', element.id)"
+                                    (click)="doAction('reject', element.id); $event.stopPropagation()"
                                     mat-ripple
                                     class="text-white bg-red-600 text-sm px-3 py-1 rounded-2xl">Reject</button>
                     </span></td>
@@ -313,10 +407,83 @@
 
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+                    <tr  mat-row *matRowDef="let row; columns: displayedColumns2;" class="hover:cursor-pointer hover:bg-indigo-600 hover:text-gray-50" (click)="openMoreInfo(row.id)"></tr>
                 </table>
             </div>
 
         </div>
     </section>
 </div>
+
+<div #wrapper class="wrapper w-full flex items-center justify-center z-10 absolute top-0 h-full overflow-auto" (click)="toggle()" *ngIf="moreInfoWrapperOpen">
+    <div class="w-80 max-w-sm overflow-auto bg-white shadow-lg rounded-lg border border-gray-200 max-h-128">
+        <h3 class="text-xl font-bold text-gray-700 p-4">Trip Details</h3>
+        
+        <div class="w-full mb-2 p-2 border-b-2 flex ">
+          <span class="font-semibold text-gray-600 w-40">Sequence:</span> 
+          <span class="text-gray-800 ml-2">{{ moreInfoWrapperData.Sequence }}</span>
+        </div>
+        
+        <div class="w-full mb-2 p-2 border-b-2 flex ">
+          <span class="font-semibold text-gray-600 w-40">Accommodation Paid:</span> 
+          <span class="text-gray-800">{{ moreInfoWrapperData.accommodation_paid_by_company || 'N/A' }}</span>
+        </div>
+        
+        <div class="w-full mb-2 p-2 border-b-2 flex ">
+          <span class="font-semibold text-gray-600 w-40">Car Provided:</span> 
+          <span class="text-gray-800">{{ moreInfoWrapperData.car_provided || 'N/A' }}</span>
+        </div>
+        
+        <div class="w-full mb-2 p-2 border-b-2 flex ">
+          <span class="font-semibold text-gray-600 w-40">Start Date:</span> 
+          <span class="text-gray-800">{{ moreInfoWrapperData.date_start }}</span>
+        </div>
+        
+        <div class="w-full mb-2 p-2 border-b-2 flex ">
+          <span class="font-semibold text-gray-600 w-40">End Date:</span> 
+          <span class="text-gray-800">{{ moreInfoWrapperData.date_end }}</span>
+        </div>
+        
+        <div class="w-full mb-2 p-2 border-b-2 flex ">
+          <span class="font-semibold text-gray-600 w-40">Distance:</span> 
+          <span class="text-gray-800">{{ moreInfoWrapperData.distance }}</span>
+        </div>
+        
+        <div class="w-full mb-2 p-2 border-b-2 flex ">
+          <span class="font-semibold text-gray-600 w-40">Employee:</span> 
+          <span class="text-gray-800">{{ moreInfoWrapperData.employee }}</span>
+        </div>
+       
+        <div class="w-full mb-2 p-2 border-b-2 flex ">
+          <span class="font-semibold text-gray-600 w-40">Project Name:</span> 
+          <span class="text-gray-800">{{ moreInfoWrapperData.project_id || "N/A" }}</span>
+        </div>
+        
+        <div class="w-full mb-2 p-2 border-b-2 flex ">
+          <span class="font-semibold text-gray-600 w-40">Status:</span> 
+          <span class="text-gray-800">{{ moreInfoWrapperData.status }}</span>
+        </div>
+        
+        <div class="w-full mb-2 p-2 border-b-2 flex ">
+          <span class="font-semibold text-gray-600 w-40">Trip Type:</span> 
+          <span class="text-gray-800">{{ moreInfoWrapperData.trip_type }}</span>
+        </div>
+        <div class="w-full mb-2 p-2 border-b-2 flex ">
+            <span class="font-semibold text-gray-600 w-40">International Trip:</span> 
+            <span class="text-gray-800">{{ moreInfoWrapperData.international_trip || 'N/A'}}</span>
+          </div>
+          <div class="w-full mb-2 p-2 border-b-2 flex ">
+            <span class="font-semibold text-gray-600 w-40" >Request Manager:</span> 
+            <span class="text-gray-800">{{ moreInfoWrapperData.request_manager || 'N/A' }}</span>
+          </div>
+          <div class="w-full mb-2 p-2 border-b-2 flex ">
+            <span class="font-semibold text-gray-600 w-40" >Total Compensation	:</span> 
+            <span class="text-gray-800">{{ moreInfoWrapperData.total_compensation || 0 | number:'1.2-2' }} <small>SAR</small></span>
+          </div>
+          <div class="flex justify-center">
+          </div>
+      </div>
+      
+    </div>
+
+

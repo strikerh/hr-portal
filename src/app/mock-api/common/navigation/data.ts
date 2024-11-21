@@ -37,7 +37,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
             icon : 'emoji_people',
             link : '/regnation'
         },
-      /*  {
+      /*      {
             id   : 'iqama',
             title: 'Iqama',
             type : 'basic',

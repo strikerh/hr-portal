@@ -1,4 +1,4 @@
-import { DatePipe, NgForOf, NgIf, TitleCasePipe } from '@angular/common';
+import { DatePipe, DecimalPipe, NgForOf, NgIf, TitleCasePipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatRipple } from '@angular/material/core';
@@ -13,29 +13,48 @@ import { UserService } from '../../core/user/user.service';
 import { User } from '../../core/user/user.types';
 import { NewVacationComponent } from './new-vacation/new-vacation.component';
 import { VacationsApiService } from './vacations-api.service';
-import { GetAllLeaveTypesRemainingLeavesDTO, vacation } from './vacationsModels';
+import { GetAllLeaveTypesRemainingLeavesDTO, vacation, VacationLookupResponse } from './vacationsModels';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Trip } from '../business-trips/businessTripModels';
+import { MatDatepickerModule, MatDatepickerToggle, MatDateRangeInput, MatDateRangePicker } from '@angular/material/datepicker';
+import { DateTime } from 'luxon';
 
 @Component({
     selector: 'app-vacations',
     standalone: true,
-    imports: [
-        MatButton,
-        MatIcon,
-        MatTabsModule,
-        MatTableModule,
-        NgIf,
-        DatePipe,
-        MatRipple,
-        UploadComponent,
-        NgForOf,
-        TitleCasePipe,
-    ],
+    // imports: [
+    //     MatButton,
+    //     MatIcon,
+    //     MatTabsModule,
+    //     MatTableModule,
+    //     NgIf,
+    //     DatePipe,
+    //     MatRipple,
+    //     UploadComponent,
+    //     NgForOf,
+    //     TitleCasePipe,
+    //     ReactiveFormsModule,
+    //     FormsModule,
+    //     MatDatepickerModule,     
+    //     MatDateRangeInput,
+    //     MatDatepickerToggle,
+    //     MatDateRangePicker,
+  
+    // ],
+    imports: [MatButton, MatIcon, MatTabsModule, MatTableModule, NgIf, DatePipe, MatRipple, TitleCasePipe, DecimalPipe,  MatDatepickerModule,        MatDateRangeInput,
+        MatDatepickerToggle,
+        MatDateRangePicker,
+    ReactiveFormsModule,
+    FormsModule,
+    NgForOf,
+    
+],
     templateUrl: './vacations.component.html',
     styleUrl: './vacations.component.scss',
 })
 export class VacationsComponent implements OnInit {
     vacations: vacation[] = [];
-    tripsNeedApproves: vacation[];
+    vacationsNeedApproves: vacation[]= [];
     displayedColumns1: string[] = [
         'id',
         // 'Sequence',
@@ -43,9 +62,10 @@ export class VacationsComponent implements OnInit {
         'end_date',
         'duration',
         'description',
-        // 'employee_name',
+        'employee_name',
         'state',
         'time_off_type',
+        'cancel'
     ];
     displayedColumns2: string[] = [
         'id',
@@ -64,24 +84,68 @@ export class VacationsComponent implements OnInit {
 
     private _snackBar = inject(MatSnackBar);
     dashboardData: GetAllLeaveTypesRemainingLeavesDTO;
+    filterOpened:boolean=false;
+    filterVactionsForm:FormGroup;
+    
+    toggleFilter() {
+        this.filterOpened=!this.filterOpened;
+    }
+    filteredMyRequestData:vacation[];
+    filteredEmployeesData:vacation[];
 
     constructor(
+        private fb: FormBuilder,
         private sidePageService: SidePageService,
         private vacationApi: VacationsApiService,
         private userService: UserService
     ) {}
-
+    currentDate = Date.now();
+    lookupResponse: VacationLookupResponse = {} as VacationLookupResponse;
     async ngOnInit(): Promise<void> {
         const user = await firstValueFrom(this.userService.user$);
         this.user = user;
         this.reloadData();
 
         this.vacationApi.get_all_leave_types_remaining_leaves().subscribe((data) => {
-            console.log(data);
+            console.log('dashborad',data);
             this.dashboardData = data;
         });
-    }
+        this.filterVactionsForm=this.fb.group({
+            id:[],
+            startDate:[],
+            endDate:[],
+            employee:[],
+            total:[],
+            status:[],
+            description:[],
+            type:[],
+            maxTotal:[],
+            minTotal:[]
+        })
 
+
+        this.vacationApi.fetchCreateTripLookup().subscribe({
+            next: (response) => {
+                this.lookupResponse = {
+                    ...this.lookupResponse,
+                    ...response,
+                };
+                console.log(this.lookupResponse);
+            },
+            error: (error) => {
+                console.error(error);
+            },
+        });
+    
+    }
+    filter(){
+        if (this.tabIndex == 'myTrips') {
+            this.filteredMyRequestData = this.vacations.filter(this.filterMethod.bind(this)); 
+          } else {
+            this.filteredEmployeesData = this.vacationsNeedApproves.filter(this.filterMethod.bind(this)); 
+          }          
+      this.toggleFilter();
+    }
     openNewBusinessTrip() {
         debugger;
         const ref = this.sidePageService.openSidePage('new-vacation', NewVacationComponent, {
@@ -94,8 +158,46 @@ export class VacationsComponent implements OnInit {
             debugger;
             this.reloadData();
         });
+       
     }
-
+   filterMethod(item:vacation){
+    const filters = this.filterVactionsForm.value;
+        if (filters.id && Number(item.id) !== Number(filters.id)) {
+            return false;
+          }
+      
+          if (filters.startDate && new Date(item.start_date) < new Date(filters.startDate)) {
+            return false;
+          }
+      
+          if (filters.endDate && new Date(item.end_date) > new Date(filters.endDate)) {
+            return false;
+          }
+      
+          if (filters.employee && !item.employee_name.toLowerCase().includes(filters.employee.toLowerCase())) {
+            return false;
+          }
+          if (filters.minTotal && item.duration < filters.minTotal) {
+            return false;
+          }
+          
+          if (filters.maxTotal && item.duration > filters.maxTotal) {
+            return false;
+          }
+          if (filters.status && item.state.toLowerCase() !== filters.status.toLowerCase()) {
+            return false;
+          }
+      
+          if (filters.description && !item.description.toLowerCase().includes(filters.description.toLowerCase())) {
+            return false;
+          }
+      
+          if (filters.type && !item.time_off_type.toLowerCase().includes(filters.type.toLowerCase())) {
+            return false;
+          }
+      
+          return true; // If all conditions pass
+        };
     doAction(approve: 'approve' | 'reject', trip_id: number) {
         if (approve === 'approve') {
             this.vacationApi.approveTrip(trip_id).subscribe(
@@ -126,9 +228,23 @@ export class VacationsComponent implements OnInit {
             duration: 5000,
         });
     }
+    cancel_request(time_off_request_id: number){
+        let data={
+            'request_id':time_off_request_id,
+            'reason':"personal"
+        }
+this.vacationApi.cancel_request(data).subscribe(()=>{
+    
+this.vacations=this.vacations.filter((item)=>item.id===time_off_request_id?false:true);
+},(error)=>{
+    this.openSnackBar(error.error.error)
+}
 
+)
+    }
+    employeeVacationData:vacation;
     private reloadData() {
-        this.vacationApi.api_get_all_trip_by_employee_id().subscribe((data) => {
+        this.vacationApi.api_get_all_vacation_by_employee_id().subscribe((data) => {
             this.vacations = data.time_off_list
                 /*    .map((vacation: any)=>{
                     return {
@@ -140,14 +256,18 @@ export class VacationsComponent implements OnInit {
             console.log(data);
         });
 
-        this.vacationApi.api_get_trips_to_approves_by_user_id().subscribe((data) => {
+        this.vacationApi.api_get_vacation_to_approves_by_user_id().subscribe((data) => {
             // const g1 = data.time_off_list?.filter((trip) => trip.my_action === 'pending')?.sort((a, b) => b.id - a.id);
             // const g2 = data.time_off_list?.filter((trip) => trip.my_action !== 'pending')?.sort((a, b) => b.id - a.id);
             // this.tripsNeedApproves = [...g1, ...g2]
 
-            this.tripsNeedApproves = data.time_off_list;
+            this.vacationsNeedApproves = data.time_off_list;
 
-            console.log('tripsNeedApproves', data);
+            console.log('tripsNeedApproves', this.vacationsNeedApproves);
         });
+//         this.vacationApi.get_team_remaining_leaves().subscribe((data)=>{
+// this.employeeVacationData=data;
+// console.log(data)
+//         })
     }
 }

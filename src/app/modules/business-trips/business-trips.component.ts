@@ -59,7 +59,6 @@ export class BusinessTripsComponent implements OnInit {
             return false;
           }
 
-            console.log(new Date(item.date_start).getFullYear(),new Date(filters.startDate).getFullYear())
 
             if (filters.startDate) {
                 const itemStartDate = new Date(item.date_start);

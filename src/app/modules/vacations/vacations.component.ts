@@ -166,13 +166,39 @@ export class VacationsComponent implements OnInit {
             return false;
           }
       
-          if (filters.startDate && new Date(item.start_date) < new Date(filters.startDate)) {
-            return false;
+          if (filters.startDate) {
+            const itemStartDate = new Date(item.start_date);
+            const filterStartDate = new Date(filters.startDate);
+          
+            // Compare day, month, and year
+            if (
+              itemStartDate.getFullYear() < filterStartDate.getFullYear() ||
+              (itemStartDate.getFullYear() === filterStartDate.getFullYear() &&
+                (itemStartDate.getMonth() < filterStartDate.getMonth() ||
+                  (itemStartDate.getMonth() === filterStartDate.getMonth() &&
+                    itemStartDate.getDate() < filterStartDate.getDate())))
+            ) {
+              return false;
+            }
           }
-      
-          if (filters.endDate && new Date(item.end_date) > new Date(filters.endDate)) {
-            return false;
+          
+          if (filters.endDate) {
+            const itemEndDate = new Date(item.end_date);
+            const filterEndDate = new Date(filters.endDate);
+          
+            // Compare day, month, and year
+            if (
+              itemEndDate.getFullYear() > filterEndDate.getFullYear() ||
+              (itemEndDate.getFullYear() === filterEndDate.getFullYear() &&
+                (itemEndDate.getMonth() > filterEndDate.getMonth() ||
+                  (itemEndDate.getMonth() === filterEndDate.getMonth() &&
+                    itemEndDate.getDate() > filterEndDate.getDate())))
+            ) {
+              return false;
+            }
           }
+          
+  
       
           if (filters.employee && !item.employee_name.toLowerCase().includes(filters.employee.toLowerCase())) {
             return false;

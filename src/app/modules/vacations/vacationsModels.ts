@@ -43,6 +43,7 @@ export interface TripResponse {
 }
 
 export interface vacation {
+    time_off_list: any;
     description: string;
     duration: string;
     employee_name: string;
@@ -52,3 +53,4 @@ export interface vacation {
     state: string;
     time_off_type: string;
 }
+

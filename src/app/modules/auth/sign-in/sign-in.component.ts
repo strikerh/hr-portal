@@ -38,7 +38,7 @@ import { AuthService } from 'app/core/auth/auth.service';
     ],
 })
 export class AuthSignInComponent implements OnInit {
-    @ViewChild('signInNgForm') signInNgForm: NgForm;
+    // @ViewChild('signInNgForm') signInNgForm: NgForm;
 
     alert: { type: FuseAlertType; message: string } = {
         type: 'success',
@@ -88,13 +88,11 @@ export class AuthSignInComponent implements OnInit {
         if (this.signInForm.invalid) {
             return;
         }
-
         // Disable the form
         this.signInForm.disable();
 
         // Hide the alert
         this.showAlert = false;
-
         // Sign in
         this._authService.signIn(this.signInForm.value).subscribe(
             () => {
@@ -106,17 +104,17 @@ export class AuthSignInComponent implements OnInit {
                     this._activatedRoute.snapshot.queryParamMap.get(
                         'redirectURL'
                     ) || '/signed-in-redirect';
-
-                // Navigate to the redirect url
-                this._router.navigateByUrl(redirectURL);
-            },
-            (response) => {
+                    
+                    // Navigate to the redirect url
+                    this._router.navigateByUrl(redirectURL);
+                },
+                (response) => {
                 // Re-enable the form
                 this.signInForm.enable();
-
+                this.signInForm.reset();
                 // Reset the form
-                this.signInNgForm.resetForm();
-
+                // this.signInNgForm.resetForm();
+               
                 // Set the alert
                 this.alert = {
                     type: 'error',

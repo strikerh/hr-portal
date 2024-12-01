@@ -93,7 +93,17 @@
 
 
         <div class="flex justify-end">
-            <button type="submit" mat-raised-button color="primary"> Submit</button>
+            <button [disabled]="buttonDisabled" type="submit" mat-raised-button color="primary">
+                <span *ngIf="!buttonDisabled">Submit</span>
+               
+                <mat-progress-spinner 
+                 [diameter]="24"
+                [mode]="'indeterminate'"
+                 *ngIf="buttonDisabled">
+                </mat-progress-spinner>
+                
+            </button>
+          
         </div>
 
 
@@ -101,3 +111,16 @@
 
 
 </section>
+
+
+<div *ngIf="showError" class="fixed inset-0 flex items-center justify-center z-50">
+    <div class="bg-red-600 text-white p-4 rounded shadow-lg max-w-sm">
+      <p class="font-bold">Error!</p>
+      <p>{{errorInfo.error}}</p>
+      <button 
+        (click)="closeAlert()" 
+        class="mt-2 bg-white text-red-500 px-4 py-2 rounded hover:bg-gray-100">
+        Close
+      </button>
+    </div>
+  </div>

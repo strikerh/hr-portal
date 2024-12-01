@@ -22,6 +22,8 @@ import { UploadComponent } from '../../../components/upload/upload.component';
 import { UserService } from '../../../core/user/user.service';
 import { VacationsApiService } from '../vacations-api.service';
 import { VacationLookupResponse } from '../vacationsModels';
+import { MatDialog } from '@angular/material/dialog';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
     selector: 'app-new-vacation',
@@ -52,6 +54,7 @@ import { VacationLookupResponse } from '../vacationsModels';
         UploadComponent,
         UpperCasePipe,
         TitleCasePipe,
+        MatProgressSpinner
     ],
     templateUrl: './new-vacation.component.html',
     styleUrl: './new-vacation.component.scss',
@@ -85,11 +88,11 @@ export class NewVacationComponent implements OnInit {
         this.vacationForm = this.fb.group({
             holiday_status_local: [null],
             holiday_status_id: [1],
-            description: ['from API'],
+            description: [''],
             request_hour_from: ['9'],
             request_hour_to: ['9.5'],
-            date_to: [DateTime.now().plus({ days: 1 })],
-            date_from: [DateTime.now()],
+            date_to: [''],
+            date_from: [''],
             file_attachment: [''],
         });
 
@@ -99,7 +102,7 @@ export class NewVacationComponent implements OnInit {
                     ...this.lookupResponse,
                     ...response,
                 };
-                console.log(response);
+                console.log(this.lookupResponse);
                 this.selectedVacationType = this.lookupResponse.time_off_type[0] as any;
                 this.vacationForm.controls['holiday_status_local'].setValue(this.lookupResponse.time_off_type[0]);
                 this.vacationForm.controls['holiday_status_id'].setValue(this.lookupResponse.time_off_type[0].id);
@@ -108,6 +111,9 @@ export class NewVacationComponent implements OnInit {
                 console.error(error);
             },
         });
+        this.vacationApi.get_all_leave_types_remaining_leaves().subscribe((data)=>{
+console.log(data)
+        })
 
         this.vacationForm.valueChanges
             .pipe(
@@ -120,6 +126,7 @@ export class NewVacationComponent implements OnInit {
                 )
             )
             .subscribe((value) => {
+                // debugger;
 
                 if (value.holiday_status_local.request_unit === 'day') {
                     if (value.date_from && value.date_to) {
@@ -130,6 +137,7 @@ export class NewVacationComponent implements OnInit {
                         this.totalTime = `${duration.days.toFixed(0)} days`;
                     }
                 } else {
+                    // debugger;
                     /*      const start = new Date(`1970-01-01T${value.request_hour_from.replace(' ', '')}`);
                       const end = new Date(`1970-01-01T${value.request_hour_to.replace(' ', '')}`);
                       const deltaMilliseconds = end.getTime() - start.getTime();
@@ -144,17 +152,19 @@ export class NewVacationComponent implements OnInit {
             });
     }
 
+    buttonDisabled:boolean=false;
     submit($event: SubmitEvent) {
         // this.validateForm();
         if (this.vacationForm.invalid) {
             this.openSnackBar('Please fill in all the required fields');
             return;
         }
-
+this.buttonDisabled=true;
         if (
             Number(this.totalTime.split(' ')[0]) >
             Number(this.vacationForm.value['holiday_status_local'].virtual_remaining_leaves)
         ) {
+            // debugger;
             this.openSnackBar("You don't have enough leaves balance");
             return;
         }
@@ -194,12 +204,30 @@ export class NewVacationComponent implements OnInit {
 
         this.vacationApi.createTripRequest(finalPayload).subscribe((value) => {
             if (value) {
+                console.log(value)
                 this.openSnackBar(value.msg);
                 this.refs.close();
+                this.buttonDisabled=false
             }
-        });
+        },
+        (error)=>{
+            this.handleError(error.error);
+            this.buttonDisabled=false
+
+        }
+    );
+    }
+    showError:boolean = false;
+    errorInfo:string;
+    handleError(error: any): void {
+      this.showError = true;
+      this.errorInfo=error;
+
     }
 
+    closeAlert(): void {
+      this.showError = false;
+    }
     private validateForm() {
         this.vacationForm.markAllAsTouched();
         const val = this.vacationForm.value;
@@ -303,9 +331,10 @@ export class NewVacationComponent implements OnInit {
     }
 
     onVacationTypeChange($event: MatSelectChange) {
+        // debugger;
         this.vacationForm.controls['holiday_status_id'].setValue($event.value.id);
         this.selectedVacationType = $event.value;
-        console.log($event.value);
+        console.log($event);
         if ($event.value === 'visit_clients') {
             this.vacationForm.controls['trip_type'].setValue($event.value);
             this.vacationForm.controls['start_date'].reset();

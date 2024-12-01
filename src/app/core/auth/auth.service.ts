@@ -60,6 +60,7 @@ export class AuthService {
         if (this._authenticated) {
             return throwError('User is already logged in.');
         }
+        
         return this._httpClient
             .post(this.apiUrl + '/login', {
                 db: 'Hawsaba17',
@@ -87,7 +88,9 @@ export class AuthService {
 
                     // Return a new observable with the response
                     return of(response);
-                })
+                }
+            
+            )
              /*   catchError(() =>{
 
                     this.accessToken = '80156ca8d911e63a22efb2fedb82de89e90e0e88';

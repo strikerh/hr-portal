@@ -40,6 +40,8 @@ export interface TripResponse {
 }
 
 export interface Trip {
+    project_id: any;
+    Sequence:string,
     id: number;
     date_end: string;
     date_start: string;
@@ -53,5 +55,6 @@ export interface Trip {
     total_days:number;
     trip_type:string;
     request_manager:string;
+    project:string
 
 }

@@ -20,6 +20,7 @@ import { SIDE_PAGE_DATA, SIDE_PAGE_REF, SidePageInfo, SidePageRef } from 'ngx-si
 import { UserService } from '../../../core/user/user.service';
 import { BusinessTripApiService } from '../business-trip-api.service';
 import { CreateTripLookupResponse } from '../businessTripModels';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
     selector: 'app-new-vacation',
@@ -37,7 +38,6 @@ import { CreateTripLookupResponse } from '../businessTripModels';
         MatDateRangePicker,
         ReactiveFormsModule,
         MatHint,
-
         MatFormFieldModule,
         MatDatepickerModule,
         FormsModule,
@@ -47,11 +47,13 @@ import { CreateTripLookupResponse } from '../businessTripModels';
         MatCheckbox,
         MatDivider,
         MatButton,
+        MatProgressSpinner
     ],
     templateUrl: './new-business-trip.component.html',
     styleUrl: './new-business-trip.component.scss',
 })
 export class NewBusinessTripComponent implements OnInit {
+
     businessTripForm: FormGroup;
     tripLookupResponse: CreateTripLookupResponse = {
         projects: [],
@@ -74,6 +76,8 @@ export class NewBusinessTripComponent implements OnInit {
         private userService: UserService,
         private businessTripApi: BusinessTripApiService
     ) {}
+    
+    business_tripData=localStorage.getItem("business_trip");
 
     ngOnInit() {
         this.businessTripForm = this.fb.group({
@@ -95,6 +99,7 @@ export class NewBusinessTripComponent implements OnInit {
             number_of_trips: [1],
         });
 
+
         this.businessTripApi.fetchCreateTripLookup().subscribe({
             next: (response) => {
                 this.tripLookupResponse = {
@@ -112,8 +117,20 @@ export class NewBusinessTripComponent implements OnInit {
             this.businessTripForm.controls['employee_id'].setValue(user.employeeId);
             console.log(user);
         });
+        if(this.business_tripData){
+            this._snackBar.open('You have draft here is the pre', 'ok', {
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+                duration: 5000,
+                panelClass: ['bg-red-500', 'mat-primary'],
+                politeness: 'polite',
+            });
+            this.businessTripForm.setValue(JSON.parse(this.business_tripData));
+        }
     }
-
+    saveBusinessTrip() {
+        localStorage.setItem("business_trip",JSON.stringify(this.businessTripForm.value));
+    }
     openSnackBar(message: string, action: string = 'ok') {
         this._snackBar.open(message, action, {
             horizontalPosition: 'center',
@@ -149,7 +166,8 @@ export class NewBusinessTripComponent implements OnInit {
                 // }, 100);
             } else if (value['trip_type_local'] === 'business_trip') {
                 if (startDate && endDate) {
-                    this.durationDelta = Math.abs(endDate.diff(startDate, 'days').days);
+                    this.durationDelta = Math.abs(endDate.diff(startDate, 'days').days)+1;
+                   
                     if (this.durationDelta <= 0) {
                         this.businessTripForm.controls['start_date'].setErrors({
                             endDateError: 'End date should be greater than start date',
@@ -183,14 +201,15 @@ export class NewBusinessTripComponent implements OnInit {
             this.businessTripForm.controls['trip_type'].setValue($event.value);
         }
     }
-
+buttonDisabled:boolean=false;
     submit($event: SubmitEvent) {
         this.validateForm();
         if (this.businessTripForm.invalid) {
             this.openSnackBar('Please fill in all the required fields');
             return;
         }
-
+        this.buttonDisabled=true;
+console.log(this.businessTripForm)
         const finalPayload = { ...this.businessTripForm.value };
         finalPayload['end_date'] = (this.businessTripForm.value['end_date'] as DateTime)?.toISODate();
         finalPayload['start_date'] = (this.businessTripForm.value['start_date'] as DateTime)?.toISODate();
@@ -204,13 +223,34 @@ export class NewBusinessTripComponent implements OnInit {
             finalPayload['number_of_trips'] = 0;
         }
         delete finalPayload['trip_type_local'];
+        console.log(finalPayload);
         this.businessTripApi.createTripRequest(finalPayload).subscribe((value) => {
+            console.log(value)
+            this.buttonDisabled=false;
+            if(this.business_tripData){
+                localStorage.removeItem("business_trip")
+            }
             if (value) {
                 this.refs.close();
             }
-        });
+        },(error)=>{
+            this.buttonDisabled=false;
+            this.handleError(error.error)
+        }
+    
+    );
     }
-
+    showError:boolean = false;
+    errorInfo:string;
+    handleError(error: any): void {
+      this.showError = true;
+      this.errorInfo=error;
+      
+    }
+    
+    closeAlert(): void {
+      this.showError = false;
+    }
     private validateForm() {
         this.businessTripForm.markAllAsTouched();
         const val = this.businessTripForm.value;

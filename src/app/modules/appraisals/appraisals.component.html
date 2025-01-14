@@ -3,7 +3,7 @@
     <header class="w-full flex justify-between p-4 border-b bg-gray-50">
       <h1 class="text-3xl font-bold flex items-center text-primary-900">
         <mat-icon svgIcon="mat_solid:speaker_notes" class="icon-size-10 text-primary-800 mx-4"></mat-icon>
-        Vacations
+        Appraisal
       </h1>
     </header>
     <section class="details p-6 flex flex-col">
@@ -292,7 +292,7 @@
         <th mat-header-cell *matHeaderCellDef><span
             class="whitespace-nowrap">Date</span></th>
         <td mat-cell *matCellDef="let element"><span
-            class="whitespace-nowrap">{{ element.date }}</span></td>
+            class="whitespace-nowrap">{{ element.date | date }}</span></td>
     </ng-container>
         <!-- request_manager Column -->
         <!-- <ng-container matColumnDef="action" stickyEnd>

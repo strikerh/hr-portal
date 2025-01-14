@@ -268,6 +268,7 @@ this.vacations=this.vacations.filter((item)=>item.id===time_off_request_id?false
     }
     employeeVacationData:vacation;
     private reloadData() {
+        debugger;
         this.vacationApi.api_get_all_vacation_by_employee_id().subscribe((data) => {
             this.vacations = data.time_off_list
                 /*    .map((vacation: any)=>{

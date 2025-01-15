@@ -51,6 +51,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon : 'airplane_ticket',
         link : '/business-trips'
     },
+    {
+        id   : 'appraisal',
+        title: 'Appraisal',
+        type : 'basic',
+        icon : 'speaker_notes',
+        link : '/appraisal'
+    },
     // {
     //     id   : 'expense',
     //     title: 'Expense',

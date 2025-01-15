@@ -1,0 +1,330 @@
+<div class="w-full flex flex-col h-full" *ngIf="!veiwPageOpen">
+    <!-- Header -->
+    <header class="w-full flex justify-between p-4 border-b bg-gray-50">
+      <h1 class="text-3xl font-bold flex items-center text-primary-900">
+        <mat-icon svgIcon="mat_solid:speaker_notes" class="icon-size-10 text-primary-800 mx-4"></mat-icon>
+        Appraisal
+      </h1>
+    </header>
+    <section class="details p-6 flex flex-col">
+    <header class="flex justify-between items-end mb-2">
+      <h2 class="font-bold text-primary-800 pb-2">Appraisals Details</h2>
+      <nav class="flex gap-2">
+          <!-- <button type="button"
+                  class="rounded px-3 py-1 border-b-2 bg-slate-50 cursor-pointer"
+                  (click)="toggleFilter()"
+          >
+              Filter
+          </button> -->
+          <button type="button"
+                  class="rounded px-3 py-1 border-b-2"
+                  [class.bg-green-700]="filter === 'my'"
+                  [class.text-white]="filter === 'my'"
+                  (click)="filter='my'"
+          >
+              My Appraisal
+          </button>
+          <button type="button"
+                  class="rounded px-3 py-1  border-b-2"
+                  [class.bg-green-700]="filter === 'team'"
+                  [class.text-white]="filter === 'team'"
+                  (click)="filter='team'"
+          >
+              My team Appraisal
+          </button>
+      </nav>
+  </header>
+    <!-- Main Section -->
+    <div class="py-2 bg-white rounded shadow flex flex-col overflow-x-auto relative">
+      <div class="min-h-100">
+      <table *ngIf="filter === 'my'" mat-table [dataSource]="myAppraisals" class="table-primary  ">
+
+          <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+
+          <!-- Id Column -->
+          <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Id </span></th>
+              <td mat-cell *matCellDef="let element"> {{ element.id }}</td>
+          </ng-container>
+
+<!-- 
+          <ng-container matColumnDef="Sequence">
+              <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> # </span></th>
+              <td mat-cell *matCellDef="let element"> {{ element.Sequence }}</td>
+          </ng-container>
+
+          <!-- date_end Column
+          <ng-container matColumnDef="end_date">
+              <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Date End </span>
+              </th>
+              <td mat-cell *matCellDef="let element"><span
+                  class="whitespace-nowrap"> {{ element.end_date }} </span></td>
+          </ng-container> -->
+
+          <!-- date_start Column -->
+          <!-- <ng-container matColumnDef="start_date">
+              <th mat-header-cell *matHeaderCellDef><span
+                  class="whitespace-nowrap"> Date Start </span></th>
+              <td mat-cell *matCellDef="let element"><span
+                  class="whitespace-nowrap">{{ element.start_date }} </span></td>
+          </ng-container> -->
+
+          <!-- employee Column -->
+          <ng-container matColumnDef="Name">
+              <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Employee </span>
+              </th>
+              <td mat-cell *matCellDef="let element"><span
+                  class="whitespace-nowrap"> {{ element.employee_id[1] }}</span></td>
+          </ng-container>
+
+          <!-- total_compensation Column -->
+          <!-- <ng-container matColumnDef="duration">
+              <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Total Compensation </span>
+              </th>
+              <td mat-cell *matCellDef="let element"><span
+                  class="whitespace-nowrap"> {{ element.duration }} </span></td>
+          </ng-container> -->
+
+
+          <!-- status Column -->
+          <ng-container matColumnDef="state">
+              <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Status </span>
+              </th>
+              <td mat-cell *matCellDef="let element"><span
+                  class="whitespace-nowrap">{{ element.state }}</span></td>
+          </ng-container>
+
+          <!-- approval_cycle_type Column -->
+          <!-- <ng-container matColumnDef="approval_cycle_type">
+              <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Approval  Cycle Type </span>
+              </th>
+              <td mat-cell *matCellDef="let element"><span
+                  class="whitespace-nowrap"> {{ element.approval_cycle_type }}</span></td>
+          </ng-container> -->
+
+          <!-- description Column -->
+          <!-- <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef><span
+                  class="whitespace-nowrap"> description </span></th>
+              <td mat-cell *matCellDef="let element"><span
+                  class="whitespace-nowrap">{{ element.description }}</span></td>
+          </ng-container> -->
+
+          <!-- time_off_type Column -->
+          <!-- <ng-container matColumnDef="time_off_type">
+              <th mat-header-cell *matHeaderCellDef><span
+                  class="whitespace-nowrap"> Time Off Type </span></th>
+              <td mat-cell *matCellDef="let element"><span
+                  class="whitespace-nowrap"> {{ element.time_off_type }} </span></td>
+          </ng-container> -->
+
+
+          <!-- total_days Column -->
+      
+
+          <!-- trip_type Column -->
+          <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap">Type </span>
+              </th>
+              <td mat-cell *matCellDef="let element"><span
+                  class="whitespace-nowrap"> {{ element.type }} </span></td>
+          </ng-container>
+
+          <!-- request_manager Column -->
+          <ng-container matColumnDef="manager">
+              <th mat-header-cell *matHeaderCellDef><span
+                  class="whitespace-nowrap"> Manager </span></th>
+              <td mat-cell *matCellDef="let element"><span
+                  class="whitespace-nowrap">{{ element.managerDetails[0].name }}</span></td>
+          </ng-container>
+          <ng-container matColumnDef="result">
+            <th mat-header-cell *matHeaderCellDef><span
+                class="whitespace-nowrap"> Result </span></th>
+            <td mat-cell *matCellDef="let element"><span
+                class="whitespace-nowrap">{{ element.result }}</span></td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef><span
+                class="whitespace-nowrap">Date</span></th>
+            <td mat-cell *matCellDef="let element"><span
+                class="whitespace-nowrap">{{ element.date | date }}</span></td>
+        </ng-container>
+          <!-- request_manager Column -->
+          <!-- <ng-container matColumnDef="action" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef><span
+                  class="whitespace-nowrap">  </span></th>
+              <td mat-cell *matCellDef="let element">
+                  <span class="whitespace-nowrap">
+                      <button mat-button>Approve</button> <button mat-button>Reject</button>
+              </span></td>
+          </ng-container>
+
+          <ng-container matColumnDef="cancel" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef><span
+                  class="whitespace-nowrap"> Cancel</span></th>
+              <td mat-cell *matCellDef="let element">
+                  <span class="whitespace-nowrap"  *ngIf="element.state === 'draft'||element.state === 'To Approve'">
+                      
+                      <button mat-button (click)="cancel_request(element.id)">Cancel</button>
+              </span></td>
+          </ng-container> -->
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns1;"class="hover:cursor-pointer hover:bg-indigo-600 hover:text-gray-50" (click)="veiwAppraisalMethod(row.id)" ></tr>
+      </table>
+
+      <table *ngIf="filter === 'team'" mat-table [dataSource]="teamApprisals" class="table-primary  ">
+
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Id Column -->
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Id </span></th>
+            <td mat-cell *matCellDef="let element"> {{ element.id }}</td>
+        </ng-container>
+
+<!-- 
+        <ng-container matColumnDef="Sequence">
+            <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> # </span></th>
+            <td mat-cell *matCellDef="let element"> {{ element.Sequence }}</td>
+        </ng-container>
+
+        <!-- date_end Column
+        <ng-container matColumnDef="end_date">
+            <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Date End </span>
+            </th>
+            <td mat-cell *matCellDef="let element"><span
+                class="whitespace-nowrap"> {{ element.end_date }} </span></td>
+        </ng-container> -->
+
+        <!-- date_start Column -->
+        <!-- <ng-container matColumnDef="start_date">
+            <th mat-header-cell *matHeaderCellDef><span
+                class="whitespace-nowrap"> Date Start </span></th>
+            <td mat-cell *matCellDef="let element"><span
+                class="whitespace-nowrap">{{ element.start_date }} </span></td>
+        </ng-container> -->
+
+        <!-- employee Column -->
+        <ng-container matColumnDef="Name">
+            <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Employee </span>
+            </th>
+            <td mat-cell *matCellDef="let element"><span
+                class="whitespace-nowrap"> {{ element.employee_id[1] }}</span></td>
+        </ng-container>
+
+        <!-- total_compensation Column -->
+        <!-- <ng-container matColumnDef="duration">
+            <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Total Compensation </span>
+            </th>
+            <td mat-cell *matCellDef="let element"><span
+                class="whitespace-nowrap"> {{ element.duration }} </span></td>
+        </ng-container> -->
+
+
+        <!-- status Column -->
+        <ng-container matColumnDef="state">
+            <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Status </span>
+            </th>
+            <td mat-cell *matCellDef="let element"><span
+                class="whitespace-nowrap">{{ element.state }}</span></td>
+        </ng-container>
+
+        <!-- approval_cycle_type Column -->
+        <!-- <ng-container matColumnDef="approval_cycle_type">
+            <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Approval  Cycle Type </span>
+            </th>
+            <td mat-cell *matCellDef="let element"><span
+                class="whitespace-nowrap"> {{ element.approval_cycle_type }}</span></td>
+        </ng-container> -->
+
+        <!-- description Column -->
+        <!-- <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef><span
+                class="whitespace-nowrap"> description </span></th>
+            <td mat-cell *matCellDef="let element"><span
+                class="whitespace-nowrap">{{ element.description }}</span></td>
+        </ng-container> -->
+
+        <!-- time_off_type Column -->
+        <!-- <ng-container matColumnDef="time_off_type">
+            <th mat-header-cell *matHeaderCellDef><span
+                class="whitespace-nowrap"> Time Off Type </span></th>
+            <td mat-cell *matCellDef="let element"><span
+                class="whitespace-nowrap"> {{ element.time_off_type }} </span></td>
+        </ng-container> -->
+
+
+        <!-- total_days Column -->
+        <!-- <ng-container matColumnDef="total_days">
+            <th mat-header-cell *matHeaderCellDef><span
+                class="whitespace-nowrap"> Total Days </span></th>
+            <td mat-cell *matCellDef="let element"><span
+                class="whitespace-nowrap">{{ element.total_days }}</span></td>
+        </ng-container> -->
+
+        <!-- trip_type Column -->
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap">Type </span>
+            </th>
+            <td mat-cell *matCellDef="let element"><span
+                class="whitespace-nowrap"> {{ element.type }} </span></td>
+        </ng-container>
+
+        <!-- request_manager Column -->
+        <ng-container matColumnDef="manager">
+            <th mat-header-cell *matHeaderCellDef><span
+                class="whitespace-nowrap"> Manager </span></th>
+            <td mat-cell *matCellDef="let element"><span
+                class="whitespace-nowrap">{{ element.managerDetails[0].name }}</span></td>
+        </ng-container>
+        <ng-container matColumnDef="result">
+          <th mat-header-cell *matHeaderCellDef><span
+              class="whitespace-nowrap"> Result </span></th>
+          <td mat-cell *matCellDef="let element"><span
+              class="whitespace-nowrap">{{ element.result }}</span></td>
+      </ng-container>
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef><span
+            class="whitespace-nowrap">Date</span></th>
+        <td mat-cell *matCellDef="let element"><span
+            class="whitespace-nowrap">{{ element.date | date }}</span></td>
+    </ng-container>
+        <!-- request_manager Column -->
+        <!-- <ng-container matColumnDef="action" stickyEnd>
+            <th mat-header-cell *matHeaderCellDef><span
+                class="whitespace-nowrap">  </span></th>
+            <td mat-cell *matCellDef="let element">
+                <span class="whitespace-nowrap">
+                    <button mat-button>Approve</button> <button mat-button>Reject</button>
+            </span></td>
+        </ng-container>
+
+        <ng-container matColumnDef="cancel" stickyEnd>
+            <th mat-header-cell *matHeaderCellDef><span
+                class="whitespace-nowrap"> Cancel</span></th>
+            <td mat-cell *matCellDef="let element">
+                <span class="whitespace-nowrap"  *ngIf="element.state === 'draft'||element.state === 'To Approve'">
+                    
+                    <button mat-button (click)="cancel_request(element.id)">Cancel</button>
+            </span></td>
+        </ng-container> -->
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns1;"class="hover:cursor-pointer hover:bg-indigo-600 hover:text-gray-50" (click)="veiwAppraisalMethod(row.id)" ></tr>
+    </table>
+      </div>
+
+  </div>
+  </section>
+  </div>
+  <veiw-appraisal style="width: 100%;" *ngIf="veiwPageOpen && viewAppraisal" [data]="viewAppraisal"></veiw-appraisal>
+
+  
+  
+

@@ -1,0 +1,50 @@
+<form class="flex flex-col gap-2" [formGroup]="businessCardForm" (ngSubmit)="submit()">
+    <mat-form-field>
+        <mat-label>English Name</mat-label>
+        <input type="text" matInput formControlName="en_name">
+        <!-- Error message for 'en_name' -->
+        <mat-error *ngIf="businessCardForm.controls['en_name'].hasError('required')">
+            This field is required
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Arabic Name</mat-label>
+        <input type="text" matInput formControlName="ar_name">
+        <!-- Error message for 'ar_name' -->
+        <mat-error *ngIf="businessCardForm.controls['ar_name'].hasError('required')">
+            This field is required
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Mobile</mat-label>
+        <input type="text" matInput formControlName="mobile">
+        <!-- Error message for 'mobile' -->
+        <mat-error *ngIf="businessCardForm.controls['mobile'].hasError('required')">
+            This field is required
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Job Position</mat-label>
+        <input type="text" matInput formControlName="job_position">
+        <!-- Error message for 'job_position' -->
+        <mat-error *ngIf="businessCardForm.controls['job_position'].hasError('required')">
+            This field is required
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Other Details</mat-label>
+        <input type="text" matInput formControlName="other_details">
+        <!-- Error message for 'other_details' -->
+        <mat-error *ngIf="businessCardForm.controls['other_details'].hasError('required')">
+            This field is required
+        </mat-error>
+    </mat-form-field>
+
+    <button type="submit" mat-raised-button color="primary">
+        <span>Submit</span>
+    </button>
+</form>

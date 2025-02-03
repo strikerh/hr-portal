@@ -1,0 +1,44 @@
+<form class="flex flex-col gap-2" [formGroup]="salarySlipForm" (ngSubmit)="submit()">
+    <mat-form-field>
+        <mat-label>Date:</mat-label>
+        <mat-select [formControlName]="'Date'">
+            @for (item of months; track $index) {
+                <mat-option [value]="item">{{item}}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>ID:</mat-label>
+        <input matInput type="text" [formControlName]="'ID'">
+        @if (salarySlipForm.controls['ID'].hasError('required')) {
+            <mat-error>This filed is required</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>IBAN:</mat-label>
+        <input matInput type="text" [formControlName]="'IBAN'">
+        @if (salarySlipForm.controls['IBAN'].hasError('required')) {
+            <mat-error>This filed is required</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Passport:</mat-label>
+        <input matInput type="text" [formControlName]="'PASS'">
+        @if (salarySlipForm.controls['PASS'].hasError('required')) {
+            <mat-error>This filed is required</mat-error>
+        }
+    </mat-form-field>
+
+    <button type="submit" mat-raised-button color="primary">
+        <span >Submit</span>
+       
+        <!-- <mat-progress-spinner 
+         [diameter]="24"
+        [mode]="'indeterminate'"
+         *ngIf="buttonDisabled">
+        </mat-progress-spinner> -->
+        
+    </button>
+</form>

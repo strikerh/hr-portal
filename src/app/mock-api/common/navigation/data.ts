@@ -58,6 +58,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon : 'speaker_notes',
         link : '/appraisal'
     },
+    {
+        id   : 'employeeRequest',
+        title: 'EmployeeRequest',
+        type : 'basic',
+        icon : 'assignment_ind',
+        link : '/employee-request'
+    },
     // {
     //     id   : 'expense',
     //     title: 'Expense',

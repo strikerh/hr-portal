@@ -1,0 +1,122 @@
+<form class="flex flex-col gap-2" [formGroup]="salaryClearanceForm" (ngSubmit)="submitForm()">
+    <!--0 trip_type -->
+      <div class="mb-4">
+          <!-- Label -->
+          <mat-label class="block text-sm font-medium text-gray-700 mb-2">Chamber of Commerce</mat-label>
+        
+          <!-- Radio Buttons -->
+          <mat-radio-group
+            formControlName="chamber_of_commerce"
+            aria-label="Chamber of Commerce"
+            class="flex gap-2"
+          >
+            <mat-radio-button [value]="true" class="flex">
+              <span>Yes</span>
+            </mat-radio-button>
+            <mat-radio-button [value]="false" class="flex items-center">
+              <span>No</span>
+            </mat-radio-button>
+          </mat-radio-group>
+        
+          <!-- Conditional Note -->
+          @if (salaryClearanceForm.controls['chamber_of_commerce'].value === true) {
+            <div class="mt-2 text-sm text-red-700 bg-red-50 p-2 rounded-md">
+              *Note: There will be a fee of 35 SR.
+            </div>
+          }
+        
+          <!-- Validation Error -->
+          @if (salaryClearanceForm.controls['chamber_of_commerce'].hasError('required')) {
+            <mat-error class="text-sm text-red-600 mt-1">This field is required</mat-error>
+          }
+        </div>
+
+            <div>
+            <!-- <mat-form-field> -->
+            <mat-label class="block text-sm font-medium text-gray-700 mb-2">Language of the certificate</mat-label>
+            <mat-radio-group  class="flex gap-2" formControlName="language" aria-label="Chamber of Commerce">
+              <mat-radio-button [value]="'ar'">Arabic</mat-radio-button>
+              <mat-radio-button [value]="'en'">English</mat-radio-button>
+            </mat-radio-group>
+            <br>
+            @if (salaryClearanceForm.controls['language'].hasError('required')) {
+              <mat-error>This field is required</mat-error>
+            }
+        <!-- </mat-form-field> -->
+          </div>
+
+                    <mat-form-field>
+            <mat-label>Holiday Type</mat-label>
+            <mat-select formControlName="entityType">
+                <mat-option [value]="'specific'">Specific entity</mat-option>
+                <mat-option [value]="'whom'">Whom It may concern</mat-option>
+            </mat-select>
+        </mat-form-field>
+        @if (salaryClearanceForm.controls['entityType'].value==='specific') {
+        <div class="flex flex-col gap-2">
+            <mat-form-field appearance="outline">
+              <mat-label>Entity</mat-label>
+              <input matInput type="text" formControlName="entity">
+              @if (salaryClearanceForm.controls['entity'].hasError('required')) {
+              <mat-error>
+                This field is required
+              </mat-error>}
+            </mat-form-field>
+          </div>
+    }
+    
+            <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium text-gray-700">
+              Do you want the salary breakdown to be detailed or presented in a summarized form?
+            </label>
+            <mat-form-field appearance="outline">
+              <mat-select formControlName="salary_summarized">
+                <mat-option [value]="'detailed'">Detailed</mat-option>
+                <mat-option [value]="'summarized'">Summarized form</mat-option>
+              </mat-select>
+              @if (salaryClearanceForm.controls['salary_summarized'].hasError('required')) {
+                <mat-error>This field is required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          
+          <div>
+            <!-- <mat-form-field> -->
+            <mat-label class="block text-sm font-medium text-gray-700 mb-2">Will it be addressed to a bank?</mat-label>
+            <mat-radio-group  class="flex gap-2" formControlName="addressed_to_bank" aria-label="Chamber of Commerce">
+              <mat-radio-button [value]="true">Yes</mat-radio-button>
+              <mat-radio-button [value]="false">No</mat-radio-button>
+            </mat-radio-group>
+            <br>
+
+            @if (salaryClearanceForm.controls['addressed_to_bank'].hasError('required')) {
+              <mat-error>This field is required</mat-error>
+            }
+
+            <ng-container *ngIf="salaryClearanceForm.get('addressed_to_bank')?.value">
+              <ng-container>
+                <mat-label>IBAN certificate</mat-label>
+                <app-upload uploadType="blob" formControlName="IBAN_certificate"></app-upload>
+              </ng-container>
+            
+              <ng-container *ngIf="isFileUploaded('IBAN_certificate')">
+                <mat-label>National residence</mat-label>
+                <app-upload uploadType="blob" formControlName="national_residence"></app-upload>
+              </ng-container>
+            
+              <ng-container *ngIf="isFileUploaded('national_residence')">
+                <mat-label>Passport</mat-label>
+                <app-upload uploadType="blob" formControlName="passport"></app-upload>
+              </ng-container>
+            </ng-container>
+            
+            
+            
+              
+
+        <!-- </mat-form-field> -->
+          </div>
+
+        <button mat-raised-button color="primary" type="submit">Save</button>
+
+</form>

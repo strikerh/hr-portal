@@ -1,0 +1,50 @@
+<form class="flex flex-col gap-2" [formGroup]="updateEmployeeData" (ngSubmit)="submit()">
+<mat-form-field>
+    <mat-label>
+        Data want to change
+    </mat-label>
+    <input type="text" matInput [formControlName]="'name_of_data'">
+    @if (updateEmployeeData.controls['name_of_data'].hasError('required')) {
+        <mat-error>This filed is required</mat-error>
+    }
+</mat-form-field>
+
+<mat-form-field>
+    <mat-label>
+        Old data
+    </mat-label>
+    <input type="text" matInput [formControlName]="'old'">
+    @if (updateEmployeeData.controls['old'].hasError('required')) {
+        <mat-error>This filed is required</mat-error>
+    }
+</mat-form-field>
+
+<mat-form-field>
+    <mat-label>
+        New data
+    </mat-label>
+    <input type="text" matInput [formControlName]="'new'">
+    @if (updateEmployeeData.controls['new'].hasError('required')) {
+        <mat-error>This filed is required</mat-error>
+    }
+</mat-form-field>
+
+
+    <mat-label>
+        Attachment
+    </mat-label>
+    <app-upload
+    uploadType="blob" formControlName="file" [formGroup]="updateEmployeeData"></app-upload>
+   
+    <button type="submit" mat-raised-button color="primary">
+        <span >Submit</span>
+       
+        <!-- <mat-progress-spinner 
+         [diameter]="24"
+        [mode]="'indeterminate'"
+         *ngIf="buttonDisabled">
+        </mat-progress-spinner> -->
+        
+    </button>
+
+</form>

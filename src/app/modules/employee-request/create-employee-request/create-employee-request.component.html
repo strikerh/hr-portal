@@ -1,0 +1,33 @@
+<div class="text-center border-b py-4">
+<span class="text-xl font-bold"> Create Request</span>
+</div>
+<section class="p-6 overflow-auto">
+    <form class="flex flex-col gap-2" [formGroup]="requestForm">
+        <!--0 trip_type -->
+        <mat-form-field>
+            <mat-label>Holiday Type</mat-label>
+            <mat-select formControlName="requestType" (valueChange)="changeRequestType($event)">
+
+                @for (requestType of requestTypes; track $index) {
+                    <mat-option [value]="requestType.name">{{ requestType.name }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+@if (selectedRequest==='Salary Clearance') {
+<app-salary-clearance-form (formSubmitted)="handleFormSubmission($event)"></app-salary-clearance-form>
+}
+@if (selectedRequest==='Salary Slip') {
+<app-salary-slip (formSubmited)="handleFormSubmission($event)"></app-salary-slip>
+}
+@if (selectedRequest==='Business Card') {
+<app-business-card-form (formSubmited)="handleFormSubmission($event)"></app-business-card-form>
+}
+@if (selectedRequest==='Define Job') {
+<app-define-job (formSubmitted)="handleFormSubmission($event)"></app-define-job>
+}
+@if (selectedRequest==='Update Data') {
+    <app-update-employee-data (formSubmitted)="handleFormSubmission($event)"></app-update-employee-data>
+}
+
+    </form>
+</section>

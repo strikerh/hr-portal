@@ -78,6 +78,7 @@ export const appRoutes: Route[] = [
             {path: 'business-trips', loadChildren: () => import('app/modules/business-trips/business-trips.routes')},
             {path: 'vacations', loadChildren: () => import('app/modules/vacations/vacations.routes')},
             {path: 'appraisal', loadChildren: () => import('app/modules/appraisals/appraisal.routes')},
+            {path: 'employee-request', loadChildren: () => import('app/modules/employee-request/enmployee-request.routes')},
     ] 
     }
 ];

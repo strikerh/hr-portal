@@ -1,0 +1,111 @@
+<!-- <p>salary-clearance works!</p> -->
+<div class="w-full flex flex-col" >
+
+    <header class="w-full flex justify-between p-4 border-b bg-gray-50">
+        <h1 class="text-3xl font-bold flex items-center text-primary-900">
+          <span class="cursor-pointer m-2 flex items-center justify-center" (click)="closeView()"><mat-icon svgIcon="arrow_back_ios"></mat-icon></span>
+          <span>Salary Clearance</span>
+        </h1>
+    </header>
+     <!-- <header class="w-full flex justify-between p-4 border-b">
+        <h1 class="text-3xl font-bold flex items-center text-primary-900">
+            <span class="cursor-pointer mr-4" (click)="closeView()"><</span>Define job
+        </h1>
+    </header>
+     -->
+     <section class="details p-6 flex flex-col">
+        <header class="flex justify-between items-end mb-2">
+            <h2 class="font-bold text-primary-800 pb-2">Requests Details</h2>
+        </header>
+
+    <div class="grid grid-cols-3 gap-4 mb-4">
+        <div class="p-4 text-center text-white rounded-lg font-medium"
+         [ngClass]="request.request_status === 'new'
+          ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'"
+         >Step 1: Submission</div>
+        <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700"
+        [ngClass]="request.request_status === 'hr_review'? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'">Step 2: HR</div>
+        <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700" >Step 3: Approval</div>
+    </div>
+    <div class="bg-white p-9 rounded-lg flex flex-col gap-2">
+        <div class="pt-3">
+            <p class="text-lg font-medium text-gray-700">Employee Name:</p>
+            <p class="text-gray-600">{{request.employee_name}}</p>
+        </div>
+        
+        <div class="border-t pt-3">
+            <p class="text-lg font-medium text-gray-700">Chamber of Commerce:</p>
+            <p class="text-gray-600">{{request.salary_certificate_attested}}</p>
+        </div>
+        
+        <div class="border-t pt-3">
+            <p class="text-lg font-medium text-gray-700">Language:</p>
+            <p class="text-gray-600">{{request.certificate_language}}</p>
+        </div>
+        
+        <div class="border-t pt-3">
+            <p class="text-lg font-medium text-gray-700">Do you want it addressed to a specific entity, or "Whom it may concern"?</p>
+            <div class="flex items-center gap-x-4">
+                <label class="text-gray-600">
+                    <input [disabled]="true" type="radio" name="entity" value="Specific Entity" [checked]="request.salary_addressed_to==='specific'">
+                    Specific Entity
+                </label>
+                <label class="text-gray-600">
+                    <input [disabled]="true" type="radio" name="entity" value="Whom it may concern" [checked]="request.salary_addressed_to==='general'">
+                    Whom it may concern
+                </label>
+            </div>
+        </div>
+        <div class="border-t pt-3" *ngIf="request.salary_addressed_to==='specific'">
+            <p class="text-lg font-medium text-gray-700">Entity:</p>
+            <p class="text-gray-600">{{request.entity_name}}</p>
+        </div>
+        <div class="border-t pt-3">
+            <p class="text-lg font-medium text-gray-700">Do you want the salary breakdown to be detailed or summarized?</p>
+            <div class="flex items-center gap-x-4">
+                <label class="text-gray-600">
+                    <input [disabled]="true" type="radio" name="breakdown" value="Detailed" [checked]="request.salary_breakdown_type==='detailed'">
+                    Detailed
+                </label>
+                <label class="text-gray-600">
+                    <input [disabled]="true" type="radio" name="breakdown" value="Summarized" [checked]="request.salary_breakdown_type==='summarized'">
+                    Summarized
+                </label>
+            </div>
+        </div>
+        <div class="border-t pt-3">
+            <p class="text-lg font-medium text-gray-700">Will it be addressed to a bank? (Salary Fixation Needed)</p>
+            <p class="text-gray-600">{{request.addressed_to_bank}}</p>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-8 mt-4 border-t pt-5">
+            <div *ngFor="let attachment of attachments" class="max-w-xs w-full p-4 border rounded-lg shadow-md">
+                <p class="text-lg font-semibold text-gray-800">{{ attachment.name }} ({{ attachment.mimetype }})</p>
+                
+                <!-- View Button -->
+                <div class="flex justify-evenly">
+                    <button 
+                    (click)="viewAttachment(attachment.url)" 
+                    mat-button 
+                    class="mt-2 px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300"
+                    >
+                    View
+                </button>
+                
+                <!-- Download Button -->
+                <a 
+                [href]="getFullUrl(attachment.url)" 
+                download="{{ attachment.name }}" 
+                target="_blank"
+                class="mt-2 inline-block px-4 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-300"
+                >
+                <button mat-button class="w-full">Download</button>
+            </a>
+        </div>
+    </div>
+</div>
+</div>
+    </section>
+    
+    
+</div>

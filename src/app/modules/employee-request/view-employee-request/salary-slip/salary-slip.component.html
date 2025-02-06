@@ -1,0 +1,54 @@
+<!-- <p>salary-clearance works!</p> -->
+<div class="w-full flex flex-col" >
+
+    <header class="w-full flex justify-between p-4 border-b bg-gray-50">
+        <h1 class="text-3xl font-bold flex items-center text-primary-900">
+          <span class="cursor-pointer m-2 flex items-center justify-center" (click)="closeView()"><mat-icon svgIcon="arrow_back_ios"></mat-icon></span>
+          <span>Salary slip</span>
+        </h1>
+    </header>
+    <section class="details p-6 flex flex-col">
+
+        <header class="flex justify-between items-end mb-2">
+          <h2 class="font-bold text-primary-800 pb-2">Requests Details</h2>
+      </header>
+    <div class="grid grid-cols-3 gap-4 mb-4">
+        <div class="p-4 text-center text-white rounded-lg font-medium"
+         [ngClass]="request.request_status === 'new'
+          ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'"
+         >Step 1: Submission</div>
+        <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700"
+        [ngClass]="request.request_status === 'hr_review'? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'">Step 2: HR</div>
+        <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700" >Step 3: Approval</div>
+    </div>
+    <div class="bg-white p-9 rounded-lg flex flex-col gap-2">
+
+    <div class="pt-3">
+        <p class="text-lg font-medium text-gray-700">Employee Name:</p>
+        <p class="text-gray-600">{{request.employee_name}}</p>
+    </div>
+
+    <div class="border-t pt-3">
+        <p class="text-lg font-medium text-gray-700">requested salary date:</p>
+        <p class="text-gray-600">{{request.requested_salary_date }}</p>
+    </div>
+
+    <div class="border-t pt-3">
+        <p class="text-lg font-medium text-gray-700">Id number:</p>
+        <p class="text-gray-600">{{request.id_no}}</p>
+    </div>
+
+   
+    <div class="border-t pt-3">
+        <p class="text-lg font-medium text-gray-700">IBAN:</p>
+        <p class="text-gray-600">{{request.iban_no}}</p>
+    </div>
+
+    <div class="border-t pt-3">
+        <p class="text-lg font-medium text-gray-700">Passport number:</p>
+        <p class="text-gray-600">{{request.pass_no}}</p>
+    </div>
+    </div>
+</section>
+</div>
+

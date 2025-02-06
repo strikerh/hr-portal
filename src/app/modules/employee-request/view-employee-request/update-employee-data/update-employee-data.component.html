@@ -1,0 +1,72 @@
+<!-- <p>salary-clearance works!</p> -->
+<div class="w-full flex flex-col" >
+
+  <header class="w-full flex justify-between p-4 border-b bg-gray-50">
+    <h1 class="text-3xl font-bold flex items-center text-primary-900">
+      <span class="cursor-pointer m-2flex items-center justify-center" (click)="closeView()"><mat-icon svgIcon="arrow_back_ios"></mat-icon></span>
+      <span>Update User Data</span>
+    </h1>
+</header>
+
+<section class="details p-6 flex flex-col">
+
+  <header class="flex justify-between items-end mb-2">
+    <h2 class="font-bold text-primary-800 pb-2">Requests Details</h2>
+</header>
+
+    <div class="grid grid-cols-3 gap-4 mb-4">
+        <div class="p-4 text-center text-white rounded-lg font-medium"
+         [ngClass]="request.request_status === 'new'
+          ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'"
+         >Step 1: Submission</div>
+        <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700"
+        [ngClass]="request.request_status === 'hr_review'? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'">Step 2: HR</div>
+        <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700" >Step 3: Approval</div>
+    </div>
+    
+    <div class="bg-white p-9 rounded-lg flex flex-col gap-2">
+
+    <div class="pt-3">
+        <p class="text-lg font-medium text-gray-700">Employee Name:</p>
+        <p class="text-gray-600">{{request.employee_name}}</p>
+    </div>
+
+    <table class="w-full border-collapse border-t pt-3 border-gray-300">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="border border-gray-300 px-4 py-2">Data want to update</th>
+            <th class="border border-gray-300 px-4 py-2">Old Data</th>
+            <th class="border border-gray-300 px-4 py-2">New Data</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of request.updated_data; let i = index" class="border">
+            <td class="border text-center border-gray-300 px-4 py-2">{{ item.field_name }}</td>
+            <td class="border text-center border-gray-300 px-4 py-2">{{ item.old_data }}</td>
+            <td class="border text-center border-gray-300 px-4 py-2">{{ item.new_data }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+       <div class="flex flex-wrap justify-center gap-8 mt-4 border-t pt-5">
+        <div *ngFor="let attachment of attachments" class="max-w-xs w-full p-4 border rounded-lg shadow-md">
+          <p class="text-lg font-semibold text-gray-800">{{ attachment.name }} ({{ attachment.mimetype }})</p>
+          
+          <!-- View Button -->
+           <div class="flex justify-evenly">
+          <!-- Download Button -->
+          <a 
+            [href]="attachment.url" 
+            download="{{ attachment.name }}" 
+            target="_blank"
+            class="mt-2 inline-block px-4 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-300"
+          >
+            <button mat-button class="w-full">Download</button>
+          </a>
+        </div>
+        </div>
+      </div>
+     </div>
+    </section>
+</div>
+

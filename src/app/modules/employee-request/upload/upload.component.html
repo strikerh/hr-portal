@@ -1,0 +1,29 @@
+<div class="file-upload flex flex-col items-center space-y-3">
+    <!-- File Input -->
+    <input type="file" (change)="onFileChange($event)" class="hidden" #fileInput />
+    
+    <button type="button" (click)="fileInput.click()" class="px-4 py-2 bg-blue-600 text-white rounded-lg">
+        Upload File
+    </button>
+
+    <!-- Preview Section -->
+    <div *ngIf="previewUrl" class="relative mt-2">
+        <img *ngIf="previewUrl" [src]="previewUrl" alt="Preview" class="w-32 h-32 object-cover rounded-md border" />
+        <button (click)="removeFile()" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
+            ✕
+        </button>
+    </div>
+
+    <div *ngIf="selectedFile && !previewUrl" class="relative">
+              <div class="max-w-sm w-full bg-white p-6 shadow-lg rounded-lg border border-gray-200">
+            <!-- Simulate a Document (Square Box) with Image or Icon Inside -->
+            <div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
+              <span class="text-gray-500">Document</span>
+            </div>
+          </div>
+          
+          <button (click)="removeFile()" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
+            ✕
+        </button>
+    </div>
+</div>

@@ -8,31 +8,61 @@ import { DatePipe, NgIf } from '@angular/common';
 import { MatHeaderRowDef, MatTableModule } from '@angular/material/table';
 import { MatTabBody } from '@angular/material/tabs';
 import { MatRipple } from '@angular/material/core';
+import { ViewEmployeeRequestComponent } from "./view-employee-request/view-employee-request.component";
+import { ViewRequestService } from './view-request.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogFormComponent } from './dialog/dialog.component';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-employee-request',
   standalone: true,
-  imports: [MatIcon,MatButton,NgIf,MatHeaderRowDef,MatTableModule,DatePipe,MatRipple],
+  imports: [MatIcon, MatButton, NgIf, MatHeaderRowDef, MatTableModule, DatePipe, MatRipple, ViewEmployeeRequestComponent,MatSnackBarModule],
   templateUrl: './employee-request.component.html',
   styleUrl: './employee-request.component.scss'
 })
 export class EmployeeRequestComponent implements OnInit {
     employeeRequests: any[] = [];
-
+    requestNeedsAprroves:any[]=[]
     displayedColumns1: string[] = [
-        // 'id',
-        // 'Sequence',
+        'id',
+        'Sequence',
         'date',
         'type',
         'status',
-        // 'Note',
+        'Note',
+        'action'
+    ];
+    displayedColumns2: string[] = [
+        'id',
+        'Sequence',
+        'date',
+        'type',
+        'status',
+        'note',
         'action'
     ];
     tabIndex:'my'|'team'='my'
-  constructor(private sidePageService: SidePageService , private api:EmployeeRequestService ){}
+    isOpenView:boolean=false;
+    selectedType:any;
+    selectedRequest:any;
+  constructor(private sidePageService: SidePageService , private api:EmployeeRequestService,private view:ViewRequestService,private dialog: MatDialog,private snackBar: MatSnackBar ){}
+ 
+  showAlert(message) {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000, // Auto close after 3 seconds
+      verticalPosition: 'top', // 'top' or 'bottom'
+      horizontalPosition: 'center', // 'start', 'center', 'end', 'left', 'right'
+      panelClass: ['custom-snackbar'], // Add custom CSS class if needed
+    });
+  }
 
   ngOnInit(): void {
+    this.view.isOpen$.subscribe((value)=>{
+      this.isOpenView=value
+    })
     this.getEmployeeRequest()
+    this.getRequestNeedApproves()
   }
 
    openCreateEmployeeRequest() {
@@ -49,30 +79,93 @@ export class EmployeeRequestComponent implements OnInit {
         });
        
     }
+   async updateInfo(value){
+      let data={
+        ...value
+      }
+        const response: any = await this.api.getAttchemnt(value.id).toPromise(); // Convert Observable to Promise
+        if (response.attachments) {
+          data = { ...data, documents: response.attachments };
+        }
+console.log(data)    
+
+      const ref = this.sidePageService.openSidePage('create-employee-request', CreateEmployeeRequestComponent, {
+        width: '40%',
+        maxWidth: '600px',
+        data:data
+      });
+      ref.afterClosed().subscribe((result) => {
+        console.log('The dialog was closed');
+        this.getEmployeeRequest()
+
+    });
+
+    }
     getEmployeeRequest(){
         this.api.getEmployeeRequest().subscribe({
             next:(response:any)=>{
-                console.log(response)
-                let employeeRequests: any[] = [];
-
-                Object.entries(response.emp_request).forEach(([requestType, requests]: any) => {
-                  if (requests && requests.length > 0) {
-                    requests.forEach((request: any) => {
-                      employeeRequests.push({
-                        requestType,
-                        requestDate: request.request_date,
-                        requestStatus: request.request_status,
-                        request
-                      });
-                    });
-                  }
-                });
-          
-                // Ensure that Angular is aware of the changes by setting a new reference
-                this.employeeRequests = [...employeeRequests];
-
-      console.log(this.employeeRequests);   
+                this.employeeRequests = response.emp_request;
+                console.log(this.employeeRequests)
              }
         })
+    }
+    getRequestNeedApproves(){
+this.api.getRequestNeedApproves().subscribe({
+  next:(response:any)=>{
+    this.requestNeedsAprroves=response.requests
+    console.log(this.requestNeedsAprroves)
+  }
+})
+    }
+    openView(value){
+        this.selectedRequest=value
+        this.view.setOpen(true);
+    }
+    showPopup = false; // Controls the visibility of the popup
+    message:string;
+    updateRequestStatus(action:string,id:string){
+      if(action==='rejected'){
+        const dialogRef = this.dialog.open(DialogFormComponent, {
+          width: '400px',
+          data: {message: ''}, // Pass initial data if needed
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result) {
+            let data={
+              request_status:action,
+              reject_reason:result.message
+            }
+            this.api.updateRequestStatus(data,id).subscribe({
+              next:(response)=>{
+                this.showAlert("Done"+" "+ action)
+                this.getEmployeeRequest()
+                this.getRequestNeedApproves()
+              }
+            })
+          } else {
+            console.log('Dialog closed without form submission');
+          }
+        });
+    
+      }
+      else{
+      let data={
+        request_status:action,
+      }
+      this.api.updateRequestStatus(data,id).subscribe({
+        next:(response)=>{
+          this.showAlert("Done"+" "+action)
+          this.getEmployeeRequest()
+          this.getRequestNeedApproves()
+        }
+      })
+    }
+  }
+    openPopup(){
+      this.showPopup=true
+
+    }   
+     closePopup(){
+      this.showPopup=false
     }
 }

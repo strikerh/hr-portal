@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
@@ -33,14 +33,21 @@ import { UploadComponent } from 'app/components/upload/upload.component';
 export class DefineJobComponent implements OnInit {
   defineJobForm: FormGroup;
   @Output() formSubmitted=new EventEmitter<any>();
+  @Input() data:any
   constructor(private _formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
    this.defineJobForm=this._formBuilder.group({
-    date:['',Validators.required],
-    position:['',Validators.required],
+    Joining_Date:['',Validators.required],
+    job_position:['',Validators.required],
     description:['',Validators.required],
    }) 
+   if(this.data){
+    this.defineJobForm.get('Joining_Date').setValue(this.data.Joining_Date);
+    this.defineJobForm.get('job_position').setValue(this.data.job_position);
+    this.defineJobForm.get('description').setValue(this.data.description);
+
+   }
   }
   submit(){
     if(this.defineJobForm.valid){

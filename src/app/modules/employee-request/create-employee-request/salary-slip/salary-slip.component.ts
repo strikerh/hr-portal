@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
@@ -32,30 +32,39 @@ import { UploadComponent } from 'app/components/upload/upload.component';
 export class SalarySlipComponent implements OnInit{
   salarySlipForm:FormGroup;
 
-  months = [
-    "January",   // index 0 represents month 1
-    "February",  // index 1 represents month 2
-    "March",     // index 2 represents month 3
-    "April",     // index 3 represents month 4
-    "May",       // index 4 represents month 5
-    "June",      // index 5 represents month 6
-    "July",      // index 6 represents month 7
-    "August",    // index 7 represents month 8
-    "September", // index 8 represents month 9
-    "October",   // index 9 represents month 10
-    "November",  // index 10 represents month 11
-    "December"   // index 11 represents month 12
+   months = [
+    { short: "jan", full: "January" },
+    { short: "feb", full: "February" },
+    { short: "mar", full: "March" },
+    { short: "apr", full: "April" },
+    { short: "may", full: "May" },
+    { short: "jun", full: "June" },
+    { short: "jul", full: "July" },
+    { short: "aug", full: "August" },
+    { short: "sep", full: "September" },
+    { short: "oct", full: "October" },
+    { short: "nov", full: "November" },
+    { short: "dec", full: "December" }
   ];
   
+  
   @Output() formSubmited =new EventEmitter<any>();
+  @Input() data:any;
   constructor(private _formBuilder:FormBuilder){}
   ngOnInit(): void {
     this.salarySlipForm=this._formBuilder.group({
-      Date:['January',Validators.required],
-      ID:['',Validators.required],
-      IBAN:['',Validators.required],
-      PASS:['',Validators.required],
+      requested_salary_date:['January',Validators.required],
+      id_no:['',Validators.required],
+      iban_no:['',Validators.required],
+      pass_no:['',Validators.required],
     })
+    
+    if(this.data){
+      this.salarySlipForm.get('requested_salary_date').setValue(this.data.requested_salary_date);
+      this.salarySlipForm.get('id_no').setValue(this.data.id_no);
+      this.salarySlipForm.get('iban_no').setValue(this.data.iban_no);
+      this.salarySlipForm.get('pass_no').setValue(this.data.pass_no);
+    }
   }
   submit(){
     if(this.salarySlipForm.valid){

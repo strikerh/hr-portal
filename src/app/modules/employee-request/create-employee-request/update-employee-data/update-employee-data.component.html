@@ -3,8 +3,8 @@
     <mat-label>
         Data want to change
     </mat-label>
-    <input type="text" matInput [formControlName]="'name_of_data'">
-    @if (updateEmployeeData.controls['name_of_data'].hasError('required')) {
+    <input type="text" matInput [formControlName]="'field_name'">
+    @if (updateEmployeeData.controls['field_name'].hasError('required')) {
         <mat-error>This filed is required</mat-error>
     }
 </mat-form-field>
@@ -13,8 +13,8 @@
     <mat-label>
         Old data
     </mat-label>
-    <input type="text" matInput [formControlName]="'old'">
-    @if (updateEmployeeData.controls['old'].hasError('required')) {
+    <input type="text" matInput [formControlName]="'old_data'">
+    @if (updateEmployeeData.controls['old_data'].hasError('required')) {
         <mat-error>This filed is required</mat-error>
     }
 </mat-form-field>
@@ -23,19 +23,76 @@
     <mat-label>
         New data
     </mat-label>
-    <input type="text" matInput [formControlName]="'new'">
-    @if (updateEmployeeData.controls['new'].hasError('required')) {
+    <input type="text" matInput [formControlName]="'new_data'">
+    @if (updateEmployeeData.controls['new_data'].hasError('required')) {
         <mat-error>This filed is required</mat-error>
     }
 </mat-form-field>
 
 
-    <mat-label>
+    <!-- <mat-label>
         Attachment
-    </mat-label>
-    <app-upload
+    </mat-label> -->
+    <!-- <app-upload
     uploadType="blob" formControlName="file" [formGroup]="updateEmployeeData"></app-upload>
-   
+    -->
+
+    <table class="w-full border-collapse border border-gray-300">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="border border-gray-300 px-4 py-2">Data want to update</th>
+            <th class="border border-gray-300 px-4 py-2">Old Data</th>
+            <th class="border border-gray-300 px-4 py-2">New Data</th>
+            <th class="border border-gray-300 px-4 py-2">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of updated_data; let i = index" class="border">
+            <td class="border border-gray-300 px-4 py-2">{{ item.field_name }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ item.old_data }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ item.new_data }}</td>
+            <td class="border border-gray-300 px-4 py-2 text-center">
+              <button (click)="deleteRow(i)" class="px-3 py-1 bg-red-500 text-white rounded">
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      
+      <button type="button" class="w-full rounded-xl bg-amber-500 h-11" (click)="addRow()">
+        <span >Save</span>
+        
+        <!-- <mat-progress-spinner 
+        [diameter]="24"
+        [mode]="'indeterminate'"
+        *ngIf="buttonDisabled">
+      </mat-progress-spinner> -->
+      
+    </button>
+    
+    <ng-container>
+        <ng-container>
+          <mat-label>Attachemnt</mat-label>
+          <app-upload-request *ngIf="!documents" (fileSelected)="handleFile($event)"></app-upload-request>
+          
+          <div *ngIf="documents && documents[0]" class="relative">
+            <a [href]="documents && documents[0].url" target="_blank">
+              <div class="w-full h-15 bg-slate-300 flex items-center justify-center">
+                Download Attacment
+              </div>
+            </a>
+            <button type="button" (click)="removeAttachment(documents[0].id);$event.stopPropagation()" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
+              ✕
+          </button>
+          </div>
+          
+        </ng-container>
+      </ng-container>
+      
+
+
     <button type="submit" mat-raised-button color="primary">
         <span >Submit</span>
        

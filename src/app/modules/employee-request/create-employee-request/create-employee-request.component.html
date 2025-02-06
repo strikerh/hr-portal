@@ -5,28 +5,29 @@
     <form class="flex flex-col gap-2" [formGroup]="requestForm">
         <!--0 trip_type -->
         <mat-form-field>
-            <mat-label>Holiday Type</mat-label>
-            <mat-select formControlName="requestType" (valueChange)="changeRequestType($event)">
+            <mat-label>Request Type</mat-label>
+            <mat-select formControlName="requestType" (valueChange)="changeRequestType($event)" >
 
                 @for (requestType of requestTypes; track $index) {
                     <mat-option [value]="requestType.name">{{ requestType.name }}</mat-option>
                 }
             </mat-select>
         </mat-form-field>
+
 @if (selectedRequest==='Salary Clearance') {
-<app-salary-clearance-form (formSubmitted)="handleFormSubmission($event)"></app-salary-clearance-form>
+<app-salary-clearance-form [data]="oldData" (formSubmitted)="handleFormSubmission($event)"></app-salary-clearance-form>
 }
 @if (selectedRequest==='Salary Slip') {
-<app-salary-slip (formSubmited)="handleFormSubmission($event)"></app-salary-slip>
+<app-salary-slip [data]="oldData" (formSubmited)="handleFormSubmission($event)"></app-salary-slip>
 }
 @if (selectedRequest==='Business Card') {
-<app-business-card-form (formSubmited)="handleFormSubmission($event)"></app-business-card-form>
+<app-business-card-form [data]="oldData" (formSubmited)="handleFormSubmission($event)"></app-business-card-form>
 }
 @if (selectedRequest==='Define Job') {
-<app-define-job (formSubmitted)="handleFormSubmission($event)"></app-define-job>
+<app-define-job [data]="oldData" (formSubmitted)="handleFormSubmission($event)"></app-define-job>
 }
 @if (selectedRequest==='Update Data') {
-    <app-update-employee-data (formSubmitted)="handleFormSubmission($event)"></app-update-employee-data>
+    <app-update-employee-data [data]="oldData" (formSubmitted)="handleFormSubmission($event)"></app-update-employee-data>
 }
 
     </form>

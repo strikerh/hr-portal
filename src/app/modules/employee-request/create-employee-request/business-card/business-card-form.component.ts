@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
@@ -37,6 +37,7 @@ import { NgIf } from '@angular/common';
 export class BusinessCardFormComponent implements OnInit {
   businessCardForm:FormGroup;
   @Output() formSubmited=new EventEmitter<any>();
+  @Input() data:any;
   constructor(private _formBuilder:FormBuilder){}
   ngOnInit(): void {
     this.businessCardForm=this._formBuilder.group({
@@ -46,6 +47,14 @@ export class BusinessCardFormComponent implements OnInit {
       job_position:['',Validators.required],
       other_details:['',Validators.required]
     })
+    console.log(this.data )
+    if(this.data){
+      this.businessCardForm.get('en_name')?.setValue(this.data.en_name);
+      this.businessCardForm.get('ar_name')?.setValue(this.data.ar_name);
+      this.businessCardForm.get('mobile')?.setValue(this.data.mobile);
+      this.businessCardForm.get('job_position')?.setValue(this.data.job_position);
+      this.businessCardForm.get('other_details')?.setValue(this.data.other_details);
+    }
   }
   submit(){
     if(this.businessCardForm.valid){

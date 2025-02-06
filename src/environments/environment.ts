@@ -3,5 +3,5 @@ export const environment = {
     // apiUrl: 'https://sahabah-new.hawsabah.sa',
     apiUrl: 'http://50.116.48.108:8069',
     // Add other development-specific variables here
-    version: '1.1.23',
+    version: '1.1.35',
 };

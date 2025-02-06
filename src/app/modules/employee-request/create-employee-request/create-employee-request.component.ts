@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
@@ -44,11 +44,16 @@ export class CreateEmployeeRequestComponent implements OnInit {
     requestForm:FormGroup;
     requestTypes: { name: string,key:string }[] = [];
     selectedRequest='Business Card'
+    oldData:any;
+    // oldData:any;
   constructor(private form: FormBuilder,private api:EmployeeRequestService) { }
   ngOnInit(): void {
+ 
     this.requestForm = this.form.group({
       requestType: [this.selectedRequest],
     })
+
+
     this.api.getRequestLookup().subscribe({
       next:(response:any)=>{
         console.log(response)
@@ -59,6 +64,16 @@ export class CreateEmployeeRequestComponent implements OnInit {
 
       }
     })
+
+    if(this.data.data){
+      this.oldData=this.data.data
+      this.selectedRequest=this.oldData.approval_type;
+      this.requestForm.get('requestType').setValue(this.selectedRequest)
+      console.log(this.selectedRequest)
+      
+      // this.requestForm.get('requestType').setValue('Business Card')
+      this.requestForm.get('requestType').disable()
+      }
   }
 
   changeRequestType(value):void{
@@ -73,18 +88,53 @@ entityValidator(control: AbstractControl) {
     return null;
   }
 
+
   handleFormSubmission(value){
+    const { documents, ...filteredData } = value;
+    console.log(documents)
+    console.log(filteredData)
+
 let data={
-  ...value,
+  ...filteredData,
   approval_type:this.requestTypes.find((m)=>m.name===this.selectedRequest).key
 }
-console.log(data)
+if(this.oldData){
+  this.api.updateEmployeeRequest(data,this.oldData.id).subscribe({
+    next:(response)=>{    
+      this.refs.close()
+    }
+  })
+  return
+}
+console.log(filteredData)
+
+let files=[]
+if(data.hasFile){
+  documents.forEach((doc)=>{
+    files.push(doc);
+  })
+}
+
 this.api.createEmployeeRequest(data).subscribe({
-  next:(response)=>{
-    console.log("done")
+  next:(response:any)=>{
+    if(files.length>0){
+      files.forEach((doc)=>{
+        let file=doc.file? doc.file:doc
+        this.api.uploadAttchment(file, response.employee_request.id).subscribe({
+          next: () => {
+            console.log('File uploaded successfully');
+          },
+          error: (err) => {
+            console.error('File upload failed:', err);
+          },
+        });
+      })
+    }
+    console.log(response)
     this.refs.close()
   }
 })
-  }
+  
+}
     
 }

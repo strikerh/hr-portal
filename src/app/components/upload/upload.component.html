@@ -1,5 +1,5 @@
-<input type="file" id="images" class="hidden" (change)="onFileSelected($event)" multiple accept="image/*">
-<label for="images">
+<input type="file" [id]="'images'+formControlName" class="hidden" (change)="onFileSelected($event)" multiple accept="image/*">
+<label [for]="'images'+formControlName">
     <!--        <mat-label class="font-medium">Images</mat-label>-->
     <div
         class="border-dashed cursor-pointer border rounded border-primary-200 bg-gray-100 min-h-10 w-full flex flex-col py-4 items-center justify-center m-1">

@@ -94,6 +94,7 @@ console.log(data)
         maxWidth: '600px',
         data:data
       });
+      
       ref.afterClosed().subscribe((result) => {
         console.log('The dialog was closed');
         this.getEmployeeRequest()

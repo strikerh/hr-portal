@@ -26,9 +26,9 @@
           }
         
           <!-- Validation Error -->
-          @if (salaryClearanceForm.controls['salary_certificate_attested'].hasError('required')) {
+          <!-- @if (salaryClearanceForm.controls['salary_certificate_attested'].hasError('required')) {
             <mat-error class="text-sm text-red-600 mt-1">This field is required</mat-error>
-          }
+          } -->
         </div>
 
             <div>
@@ -39,9 +39,9 @@
               <mat-radio-button [value]="'en'">English</mat-radio-button>
             </mat-radio-group>
             <br>
-            @if (salaryClearanceForm.controls['certificate_language'].hasError('required')) {
+            <!-- @if (salaryClearanceForm.controls['certificate_language'].hasError('required')) {
               <mat-error>This field is required</mat-error>
-            }
+            } -->
         <!-- </mat-form-field> -->
           </div>
 
@@ -89,14 +89,14 @@
             </mat-radio-group>
             <br>
 
-            @if (salaryClearanceForm.controls['addressed_to_bank'].hasError('required')) {
+            <!-- @if (salaryClearanceForm.controls['addressed_to_bank'].hasError('required')) {
               <mat-error>This field is required</mat-error>
-            }
+            } -->
 
             <ng-container *ngIf="salaryClearanceForm.get('addressed_to_bank')?.value">
               <div formArrayName="documents">
                 <ng-container *ngFor="let doc of documentsArray.controls; let i = index" [formGroupName]="i">
-                  <mat-label>{{ doc.get('type')?.value }}</mat-label>
+                  <mat-label>{{ doc.get('type')?.value.replace('_',' ') }}</mat-label>
                   <app-upload-request *ngIf="!(documents && documents[doc.get('type').value])" (fileSelected)="handleFile($event, i)"></app-upload-request>
                   
                   <div *ngIf="documents[doc.get('type').value]" class="relative flex items-center justify-center">

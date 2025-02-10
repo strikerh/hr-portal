@@ -46,12 +46,12 @@ export class SalaryClearanceFormComponent implements OnInit {
     constructor(private form: FormBuilder,private api:EmployeeRequestService) { }
   ngOnInit(): void {
     this.salaryClearanceForm = this.form.group({
-      salary_certificate_attested: [false, Validators.required],
-      certificate_language: ['ar', Validators.required],
-      salary_addressed_to: ['general', Validators.required],
-      entity_name: ['', this.entityValidator.bind(this)],
-      salary_breakdown_type: ['detailed', Validators.required],
-      addressed_to_bank: [false, Validators.required],
+      salary_certificate_attested: [null, Validators.required],
+      certificate_language: [null, Validators.required],
+      salary_addressed_to: [null, Validators.required],
+      entity_name: [null, this.entityValidator.bind(this)],
+      salary_breakdown_type: [null, Validators.required],
+      addressed_to_bank: [null, Validators.required],
       documents: this.form.array([
         this.createDocumentGroup('IBAN_certificate'),
         this.createDocumentGroup('national_residence'),
@@ -64,6 +64,12 @@ export class SalaryClearanceFormComponent implements OnInit {
         this.updateDocumentsValidators(value);
       }
     });
+
+    this.salaryClearanceForm.get("salary_addressed_to")?.valueChanges.subscribe((value)=>{
+      console.log(value)
+  this.entityValid(value)
+  this.salaryClearanceForm.updateValueAndValidity()
+    })
 
     console.log(this.data)
     if(this.data){
@@ -143,12 +149,32 @@ export class SalaryClearanceFormComponent implements OnInit {
   }
   
   entityValidator(control: AbstractControl) {
-    const entityType = this.salaryClearanceForm?.get('entityType')?.value;
+    const entityType = this.salaryClearanceForm?.get('salary_addressed_to')?.value;
     if (entityType === 'specific' && !control.value) {
       return { required: true };
     }
     return null;
   }
+
+  entityValid(value: string) {
+    const entityType = this.salaryClearanceForm.get('entity_name');
+    
+    if (!entityType) {
+      console.error("entityType control is missing in the form group");
+      return; // Prevent further execution if the control is missing
+    }
+  
+    if (value==='specific') {
+      console.log("done");
+      entityType.addValidators([Validators.required]);
+    } else {
+      console.log("not done");
+      entityType.clearValidators();
+    }
+  
+    entityType.updateValueAndValidity(); // Important to revalidate the field
+  }
+  
 
 
   submitForm(){

@@ -88,7 +88,7 @@
                     <th mat-header-cell *matHeaderCellDef><span
                         class="whitespace-nowrap"> Note </span></th>
                     <td mat-cell *matCellDef="let element">
-                        <span class="whitespace-nowrap" *ngIf="element.reject_reason">{{ element.reject_reason }}</span></td>
+                        <span class="whitespace-nowrap" [innerHTML]="element.reject_reason" *ngIf="element.reject_reason"></span></td>
                 </ng-container>
 
 
@@ -166,7 +166,7 @@
                     <th mat-header-cell *matHeaderCellDef><span
                         class="whitespace-nowrap"> Note </span></th>
                     <td mat-cell *matCellDef="let element">
-                        <span class="whitespace-nowrap" *ngIf="element.reject_reason">{{ element.reject_reason }}</span></td>
+                        <span class="whitespace-nowrap" *ngIf="element.reject_reason">{{ extractText(element.reject_reason) }}</span></td>
                 </ng-container>
 
 

@@ -40,7 +40,7 @@ export class DefineJobComponent implements OnInit {
    this.defineJobForm=this._formBuilder.group({
     Joining_Date:['',Validators.required],
     job_position:['',Validators.required],
-    description:['',Validators.required],
+    description:[''],
    }) 
    if(this.data){
     this.defineJobForm.get('Joining_Date').setValue(this.data.Joining_Date);

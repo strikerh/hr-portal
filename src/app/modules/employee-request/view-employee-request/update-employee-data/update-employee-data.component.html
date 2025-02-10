@@ -53,7 +53,15 @@
           <p class="text-lg font-semibold text-gray-800">{{ attachment.name }} ({{ attachment.mimetype }})</p>
           
           <!-- View Button -->
+
            <div class="flex justify-evenly">
+              <button 
+              (click)="viewAttachment(attachment.url)" 
+              mat-button 
+              class="mt-2 px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300"
+              >
+              View
+          </button>
           <!-- Download Button -->
           <a 
             [href]="attachment.url" 

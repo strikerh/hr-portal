@@ -29,10 +29,9 @@ ngOnInit(): void {
 }
 
 viewAttachment(url: string) {
-  window.open(this.getFullUrl(url), '_blank');
+  window.open(this.getFullUrl(url).split('?')[0], '_blank');
 }
 
-// Get full URL for the file
 getFullUrl(url: string): string {
   return `${environment.apiUrl}${url}`;
 }

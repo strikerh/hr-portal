@@ -43,7 +43,7 @@ export class CreateEmployeeRequestComponent implements OnInit {
     readonly refs: SidePageRef<CreateEmployeeRequestComponent> = inject(SIDE_PAGE_REF);
     requestForm:FormGroup;
     requestTypes: { name: string,key:string }[] = [];
-    selectedRequest='Business Card'
+    selectedRequest=null
     oldData:any;
     // oldData:any;
   constructor(private form: FormBuilder,private api:EmployeeRequestService) { }

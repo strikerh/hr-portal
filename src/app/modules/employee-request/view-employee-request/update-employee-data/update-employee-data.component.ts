@@ -27,6 +27,9 @@ export class UpdateEmployeeDataComponent implements OnInit{
       }
     })
   }
+  viewAttachment(url: string) {
+    window.open(url.split('?')[0], '_blank');
+  }
   closeView(){
     this.veiw.setOpen(false)
   }

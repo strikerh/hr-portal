@@ -1,6 +1,6 @@
 <form class="flex flex-col gap-2" [formGroup]="defineJobForm" (ngSubmit)="submit()">
     <mat-form-field>
-        <mat-label>Choose a date</mat-label>
+        <mat-label>Joining date</mat-label>
         <input matInput [matDatepicker]="picker" [formControlName]="'Joining_Date'">
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>

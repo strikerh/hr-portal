@@ -25,7 +25,7 @@
          >Step 1: Submission</div>
         <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700"
         [ngClass]="request.request_status === 'hr_review'? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'">Step 2: HR</div>
-        <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700" >Step 3: Approval</div>
+        <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700">Step 3: Approval</div>
     </div>
     <div class="bg-white p-9 rounded-lg flex flex-col gap-2">
         <div class="pt-3">
@@ -35,7 +35,7 @@
         
         <div class="border-t pt-3">
             <p class="text-lg font-medium text-gray-700">Chamber of Commerce:</p>
-            <p class="text-gray-600">{{request.salary_certificate_attested}}</p>
+            <p class="text-gray-600">{{request.salary_certificate_attested ? 'yes':'no'}}</p>
         </div>
         
         <div class="border-t pt-3">
@@ -75,7 +75,7 @@
         </div>
         <div class="border-t pt-3">
             <p class="text-lg font-medium text-gray-700">Will it be addressed to a bank? (Salary Fixation Needed)</p>
-            <p class="text-gray-600">{{request.addressed_to_bank}}</p>
+            <p class="text-gray-600">{{request.addressed_to_bank  ? 'yes':'no'}}</p>
         </div>
 
         <div class="flex flex-wrap justify-center gap-8 mt-4 border-t pt-5">

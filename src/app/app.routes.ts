@@ -79,6 +79,9 @@ export const appRoutes: Route[] = [
             {path: 'vacations', loadChildren: () => import('app/modules/vacations/vacations.routes')},
             {path: 'appraisal', loadChildren: () => import('app/modules/appraisals/appraisal.routes')},
             {path: 'employee-request', loadChildren: () => import('app/modules/employee-request/enmployee-request.routes')},
+            {path: 'insurance', loadChildren: () => import('app/modules/insurance/insurance.routes')},
+            {path: 'resignation', loadChildren: () => import('app/modules/resignation/resignation.routes')},
+            {path: 'overtime', loadChildren: () => import('app/modules/overtime/overtime.routes')},
     ] 
     }
 ];

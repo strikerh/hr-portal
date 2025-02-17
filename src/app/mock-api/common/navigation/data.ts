@@ -65,6 +65,27 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon : 'assignment_ind',
         link : '/employee-request'
     },
+    {
+        id   : 'insurance',
+        title: 'Insurance',
+        type : 'basic',
+        icon : 'health_and_safety',
+        link : '/insurance'
+    },
+    {
+        id   : 'resignation',
+        title: 'Resignation',
+        type : 'basic',
+        icon : 'door_back',
+        link : '/resignation'
+    },
+    {
+        id   : 'overtime',
+        title: 'Overtime',
+        type : 'basic',
+        icon : 'nightlight',
+        link : '/overtime'
+    },
     // {
     //     id   : 'expense',
     //     title: 'Expense',

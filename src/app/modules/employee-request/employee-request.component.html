@@ -72,7 +72,7 @@
                     <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Status </span>
                     </th>
                     <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap">{{ element.request_status }}</span></td>
+                        class="whitespace-nowrap">{{ getStatus(element.request_status) }}</span></td>
                 </ng-container>
 
 
@@ -150,7 +150,7 @@
                     <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Status </span>
                     </th>
                     <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap">{{ element.request_status }}</span></td>
+                        class="whitespace-nowrap">{{ getStatus(element.request_status) }}</span></td>
                 </ng-container>
 
 

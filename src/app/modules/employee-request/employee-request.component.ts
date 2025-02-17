@@ -65,6 +65,14 @@ export class EmployeeRequestComponent implements OnInit {
     this.getRequestNeedApproves()
   }
 
+  changeStatus(element: any) {
+    if (element.request_status === 'HR review') {
+      element.request_status = 'Direct manager';
+    } else if (element.request_status === 'Direct manager') {
+      element.request_status = 'HR review';
+    }
+  }
+  
    openCreateEmployeeRequest() {
     console.log("done")
         const ref = this.sidePageService.openSidePage('create-employee-request', CreateEmployeeRequestComponent, {
@@ -175,4 +183,16 @@ this.api.getRequestNeedApproves().subscribe({
      closePopup(){
       this.showPopup=false
     }
+    
+    getStatus(value){
+      if(value=='hr_review'){
+        return 'HR Review'
+      }
+      else if(value == 'direct_manager'){
+        return 'Direct Manager'
+      }
+      else{
+        return value
+      }
+              }
 }

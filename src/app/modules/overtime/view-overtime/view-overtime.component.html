@@ -65,6 +65,50 @@
         </tbody>
       </table>
 
+
+      <table class="min-w-180 m-auto mt-6 table-auto bg-gray-50 border border-gray-300 shadow-sm rounded-lg" *ngIf="salaryInfo">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="px-4 py-2 text-sm text-gray-600 font-medium">type</th>
+            <th class="px-4 py-2 text-sm text-gray-600 font-medium">Total salary</th>
+            <th class="px-4 py-2 text-sm text-gray-600 font-medium">Wage</th>
+            <th class="px-4 py-2 text-sm text-gray-600 font-medium">Working hour per day</th>
+            <th class="px-4 py-2 text-sm text-gray-600 font-medium">Over time amount from total salary</th>
+            <th class="px-4 py-2 text-sm text-gray-600 font-medium">Over time amount from wage</th>
+            <th class="px-4 py-2 text-sm text-gray-600 font-medium">Amount per hour</th>
+            <th class="px-4 py-2 text-sm text-gray-600 font-medium">Number of hours</th>
+            <th class="px-4 py-2 text-sm text-gray-600 font-medium">Total to be paid</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-t border-gray-300">
+            <td class="px-4 py-2 text-sm text-gray-700">Working Day</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ salaryInfo.total_salary | number:'1.2-2'}}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ salaryInfo.wage | number:'1.2-2'}}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ salaryInfo.working_hour_per_day | number:'1.0-2'}}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ overtimeAmountFromToatlSalaryDay | number:'1.2-2'}}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ overtimeAmountFromWageDay | number:'1.2-2'}}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ amountPerHourDay | number:'1.2-2'}}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ totalOvertimeHoursDay | number:'1.2-2'}}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ totalPaidForWorkingDay | number:'1.2-2' }}</td>
+          </tr>
+          <tr class="border-t border-gray-300">
+            <td class="px-4 py-2 text-sm text-gray-700">Holiday</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ salaryInfo.total_salary | number:'1.2-2'}}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ salaryInfo.wage | number:'1.2-2' }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ salaryInfo.working_hour_per_day | number:'1.0-2' }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ overtimeAmountFromToatlSalaryHoliday | number:'1.2-2' }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ overtimeAmountFromWageHoliday | number:'1.2-2' }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ amountPerHourHoliday | number:'1.2-2'  }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ totalOvertimeHoursHoliday | number:'1.2-2' }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ totalPaidForWorkingHoliday | number:'1.2-2' }}</td>
+          </tr>
+          <tr class="mt-3 border-t border-gray-300">
+            <th colspan="8">Totla paid {{(totalPaidForWorkingDay+totalPaidForWorkingHoliday)|number:'1.2-2'}} </th>
+          </tr>
+        </tbody>
+      </table>
+
     <div class="flex flex-wrap justify-center gap-8 mt-4 border-t pt-5">
       <div *ngFor="let attachment of files" class="max-w-xs w-full p-4 border rounded-lg shadow-md">
           <p class="text-lg font-semibold text-gray-800">{{ attachment.name }} ({{ attachment.mimetype }})</p>

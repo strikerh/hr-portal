@@ -94,7 +94,27 @@
       }
       }
 
-      <app-upload formControlName="file" uploadType="blob" [formGroup]="insureacneForm"></app-upload>
+      <app-upload formControlName="file" uploadType="blob" [formGroup]="insureacneForm" *ngIf="attchments?.length <= 0"></app-upload>
+      <div class="relative w-full" *ngIf="attchments?.length > 0">
+        <a 
+          class="w-full bg-slate-800 h-10 flex items-center justify-center text-white cursor-pointer rounded-lg shadow-md hover:bg-slate-700 transition" 
+          [href]="fullAttachmentUrl(attchments[0].url)" 
+          download
+        >
+          Download Attachment
+        </a>
+        <button 
+          type="button" 
+          class="absolute -top-2 -right-2 bg-white text-black w-6 h-6 flex items-center justify-center rounded-full shadow-md hover:bg-slate-50 transition-transform transform hover:scale-110" 
+          (click)="removeAttachments(attchments[0])"
+        >
+          ✖
+        </button>
+      </div>
+      
+    
+    
+
       @if(this.insureacneForm.get('approval_type')?.value != 'update_insurance_type'){
         <mat-form-field>
             <mat-label>Name</mat-label>

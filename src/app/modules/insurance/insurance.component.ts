@@ -113,6 +113,29 @@ ref.afterClosed().subscribe((value)=>{
       })
     }
   }
+
+   async updateInfo(value){
+        let data={
+          ...value
+        }
+          const response: any = await this.api.getAttchemnt(value.id).toPromise(); // Convert Observable to Promise
+          if (response.attachments) {
+            data = { ...data, documents: response.attachments };
+          }
+  console.log(data)    
+  
+        const ref = this.sidePageSerivce.openSidePage('create-employee-request', NewInsuranceComponent, {
+          width: '40%',
+          maxWidth: '600px',
+          data:data
+        });
+        
+        ref.afterClosed().subscribe((result) => {
+          console.log('The dialog was closed');
+          this.getEmployeeRequest()
+  
+      });
+    }
 getEmployeeRequest(){
   this.api.getEmployeeRequests().subscribe((data:any)=>{
     this.employeeRequest=data.emp_request

@@ -54,6 +54,7 @@ ngOnInit(): void {
       this.getRequestNeedApproves()
     }
   })
+ 
 }
 getEmployeeRequest(){
 this.api.getEmployeeRequest().subscribe({

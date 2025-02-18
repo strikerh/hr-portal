@@ -22,5 +22,9 @@ export class OvertimeService{
     updateRequestStatus(data:any,id:string){
         return this._httpClient.patch(this.apiUrl+'/update_request_status/'+id,data);
     }
+    getSalaryInfo(){
+        return this._httpClient.get(this.apiUrl+'/get_user_salary');
+
+    }
         
 }

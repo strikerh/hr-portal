@@ -12,6 +12,7 @@ import { forEach } from 'lodash';
 import { SIDE_PAGE_DATA, SIDE_PAGE_REF, SidePageInfo, SidePageRef } from 'ngx-side-page';
 import { CreateEmployeeRequestComponent } from 'app/modules/employee-request/create-employee-request/create-employee-request.component';
 import { AfterCloseSidePageService } from 'app/core/services/after-close-side-page.service';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-new-insurance',
@@ -24,7 +25,9 @@ export class NewInsuranceComponent implements OnInit {
 insureacneForm:FormGroup;
 selecteForm:string
 familyChangeList: any[] = [];
-oldData:any
+updateData:any
+attchments:any[];
+attachmentsToRemove:any[]=[];
 readonly data: SidePageInfo<CreateEmployeeRequestComponent> = inject(SIDE_PAGE_DATA);
 readonly refs: SidePageRef<CreateEmployeeRequestComponent> = inject(SIDE_PAGE_REF);
 
@@ -45,11 +48,28 @@ this.insureacneForm=this._formBuilder.group({
 this.prepareForm();
 
 if(this.data.data){
-  this.oldData=this.data.data
-  this.selecteForm=this.oldData.approval_type;
+  this.updateData=this.data.data
+  this.selecteForm=this.updateData.approval_type.toLowerCase().replace(/\s+/g, "_");;
   this.insureacneForm.get('approval_type').setValue(this.selecteForm)
-  console.log(this.selecteForm)
-  // this.requestForm.get('requestType').setValue('Business Card')
+  this.insureacneForm.get('approval_type').disable()
+  this.insureacneForm.get('for_whom').setValue(this.updateData.for_whom);
+  this.insureacneForm.get('family_member_name').setValue(this.updateData.family_member_name);
+  this.insureacneForm.get('old_type').setValue(this.updateData.old_type);
+  this.insureacneForm.get('new_type').setValue(this.updateData.new_type);
+  this.insureacneForm.get('relative_type').setValue(this.updateData.relative_type);
+  this.insureacneForm.get('relative').setValue(this.updateData.relative);
+  this.insureacneForm.get('member_name').setValue(this.updateData.member_name);
+  this.insureacneForm.get('description').setValue(this.updateData.description);
+  if(this.updateData.change_family_list){
+  this.familyChangeList=this.updateData.change_family_list;
+  }
+  this.api.getAttchemnt(this.updateData.id).subscribe({
+    next:(response:any)=>{
+      console.log(response)
+      this.attchments=response.attachments
+      console.log(this.attchments)
+    }
+  })
   }
 
 }
@@ -117,8 +137,12 @@ deleteRow(item: any) {
   this.familyChangeList = this.familyChangeList.filter(data => data !== item);
 }
 
+ fullAttachmentUrl(value): string {
+  return `${environment.apiUrl}${value}`;
+}
 
 submit(){
+  if(!this.updateData){
   if(this.insureacneForm.get('approval_type')?.value==='update_insurance_type' && this.insureacneForm.get('for_whom')?.value==='family'){
   if(this.familyChangeList.length>0){
     let data={
@@ -128,7 +152,7 @@ submit(){
       "description":this.insureacneForm.get('description')?.value
     }
     let files=this.insureacneForm.get('file').value
-
+    
     this.api.createEmployeeRequest(data).subscribe({
       next: (response:any) => {
         if(files){
@@ -136,6 +160,8 @@ submit(){
           this.api.uploadAttchment(file,response.employee_request['id']).subscribe({
             next: (response) => {
               console.log(response);
+              this.reload.setValue(true)
+              this.refs.close()
             },
             error: (error) => {
               console.log(error);
@@ -143,13 +169,16 @@ submit(){
           })
         })
         }
+        this.reload.setValue(true)
+
       },
       error: (error) => {
         console.log(error);
       },  
     })
+  
   }
-  }
+}
 
   else if(this.insureacneForm.valid){
 let data=this.insureacneForm.value
@@ -162,6 +191,8 @@ this.api.createEmployeeRequest(data).subscribe({
       this.api.uploadAttchment(file,response.employee_request['id']).subscribe({
         next: (response) => {
           console.log(response);
+          this.reload.setValue(true)
+          this.refs.close()
         },
         error: (error) => {
           console.log(error);
@@ -169,14 +200,98 @@ this.api.createEmployeeRequest(data).subscribe({
       })
     })
     }
+    else{
     this.reload.setValue(true)
-  },
+    this.refs.close()
+
+  }
+},
   error: (error) => {
     console.log(error);
   },  
 })
+}
+}
+else if(this.updateData){
+  console.log(this.familyChangeList.length)
+  if(this.attachmentsToRemove.length>0){
+    this.api.deleteAttchemnt(this.attachmentsToRemove[0].id).subscribe((responses)=>{
+    })
+  }
+  if(this.insureacneForm.get('approval_type')?.value==='update_insurance_type' && this.insureacneForm.get('for_whom')?.value==='family'){
+
+  if(this.familyChangeList.length>0){
+    let data={
+      "approval_type":this.insureacneForm.get('approval_type')?.value,
+      "for_whom":this.insureacneForm.get('for_whom')?.value,
+      "change_family_list":this.familyChangeList,
+      "description":this.insureacneForm.get('description')?.value
+    }
+    let files=this.insureacneForm.get('file').value
+    this.api.updateEmployeeRequest(data,this.updateData.id).subscribe((response:any)=>{
+      console.log(response)
+      if(files){
+        forEach(files,(file)=>{
+        this.api.uploadAttchment(file,this.updateData['id']).subscribe({
+          next: (response) => {
+            console.log(response);
+            this.reload.setValue(true)
+            this.refs.close()
+          },
+          error: (error) => {
+            console.log(error);
+          },  
+        })
+      })
+      }
+      this.reload.setValue(true)
+      this.refs.close()
+    })
+  }
+}
+  else if(this.insureacneForm.valid){
+    let data=this.insureacneForm.value
+    let files=this.insureacneForm.get('file').value || []
+    console.log(this.insureacneForm.get('file').value)
+    debugger
+    this.api.updateEmployeeRequest(data,this.updateData.id).subscribe({
+      next: (response:any) => {
+        console.log(response)
+        console.log('out file')
+        if(files.length>0){
+          console.log('in file')
+          forEach(files,(file)=>{
+            this.api.uploadAttchment(file,this.updateData['id']).subscribe({
+              next: (response) => {
+                console.log(response);
+                this.reload.setValue(true)
+                this.refs.close()
+              },
+              error: (error) => {
+                console.log(error);
+              },  
+            })
+          })
+          
+        }
+        else{
+          console.log('out if file')
+          this.reload.setValue(true)
+          this.refs.close()
+        }
+        
+  }
+})
 
 }
+}
+
+}
+
+removeAttachments(value){
+  this.attchments=null;
+  this.attachmentsToRemove.push(value)
+  console.log(this.attachmentsToRemove)
 }
 
 }

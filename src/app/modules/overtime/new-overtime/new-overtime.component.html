@@ -12,6 +12,29 @@
         </mat-form-field>
 
         <mat-form-field>
+          <mat-label>Overtime Type</mat-label>
+          <mat-select [formControlName]="'overtime_type'">
+                  <mat-option [value]="'administrator'">Administrator</mat-option>
+                  <mat-option [value]="'project'">Project</mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      @if(this.overtimeForm.get('overtime_type').value==='project') {
+        <mat-form-field>
+            <mat-label>Project</mat-label>
+            <mat-select [formControlName]="'project_id'">
+                @for (item of project; track $index) {
+                    <mat-option [value]="item.id">{{item.name}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+    }
+       
+
+     
+
+
+        <mat-form-field>
             <mat-label>Overtime date</mat-label>
             <input matInput [matDatepicker]="picker" [formControlName]="'overtime_date'">
             <mat-hint>MM/DD/YYYY</mat-hint>
@@ -32,7 +55,7 @@
           
 
         <mat-form-field>
-            <mat-label>Taks</mat-label>
+            <mat-label>Task</mat-label>
             <input matInput type="text" [formControlName]="'task'">
         </mat-form-field>
 
@@ -42,31 +65,16 @@
         </mat-form-field>
 
         <mat-form-field>
-            <mat-label>Overtime Type</mat-label>
-            <mat-select [formControlName]="'overtime_type'">
-                    <mat-option [value]="'administrator'">Administrator</mat-option>
-                    <mat-option [value]="'project'">Project</mat-option>
-            </mat-select>
-        </mat-form-field>
+          <mat-label>Overtime days</mat-label>
+          <mat-select [formControlName]="'day_type'">
+                  <mat-option [value]="'workday'">Workday</mat-option>
+                  <mat-option [value]="'holiday'">Holiday</mat-option>
+          </mat-select>
+      </mat-form-field>
 
-        @if(this.overtimeForm.get('overtime_type').value==='project') {
-        <mat-form-field>
-            <mat-label>Project</mat-label>
-            <mat-select [formControlName]="'project_id'">
-                @for (item of project; track $index) {
-                    <mat-option [value]="item.id">{{item.name}}</mat-option>
-                }
-            </mat-select>
-        </mat-form-field>
-    }
-        <mat-form-field>
-            <mat-label>Overtime days</mat-label>
-            <mat-select [formControlName]="'day_type'">
-                    <mat-option [value]="'workday'">Workday</mat-option>
-                    <mat-option [value]="'holiday'">Holiday</mat-option>
-            </mat-select>
-        </mat-form-field>
+       
 
+        
         <div class="overflow-x-auto" *ngIf="overtimeList.length > 0">
             <table class="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
               <thead>
@@ -74,8 +82,6 @@
                   <th class="py-3 px-6 text-left">Date</th>
                   <th class="py-3 px-6 text-left">Duration</th>
                   <th class="py-3 px-6 text-left">Task</th>
-                  <th class="py-3 px-6 text-left">Overtime Type</th>
-                  <th class="py-3 px-6 text-left">Project</th>
                   <th class="py-3 px-6 text-left">Day Type</th>
                   <th class="py-3 px-6 text-left">Note</th>
                   <th class="py-3 px-6 text-center">Action</th>
@@ -86,8 +92,6 @@
                   <td class="py-3 px-6">{{ item.overtime_date | date:'yyyy-MM-dd' }}</td>
                   <td class="py-3 px-6">{{ item.overtime_duration }}</td>
                   <td class="py-3 px-6">{{ item.task }}</td>
-                  <td class="py-3 px-6">{{ item.overtime_type }}</td>
-                  <td class="py-3 px-6">{{ item.project_id }}</td>
                   <td class="py-3 px-6">{{ item.day_type }}</td>
                   <td class="py-3 px-6">{{ item.note }}</td>
                   <td class="py-3 px-6 text-center">

@@ -33,9 +33,17 @@
         <div class="bg-white p-9 rounded-lg flex flex-col gap-2">
   
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-      <div>
+      <div class="col-span-2">
         <strong class="text-gray-600">Employee:</strong>
         <p class="text-gray-800">{{ request.employee_name || 'N/A' }}</p>
+      </div>
+      <div>
+        <strong class="text-gray-600">Overtime type:</strong>
+        <p class="text-gray-800">{{ request.overtime_type || 'N/A' }}</p>
+      </div>
+      <div *ngIf="request.project_id">
+        <strong class="text-gray-600">Project:</strong>
+        <p class="text-gray-800">{{ getProjectName(request.project_id) }}</p>
       </div>
     </div>
     <!-- Display change family list if 'for_whom' is 'family' -->
@@ -47,9 +55,7 @@
             <th class="px-4 py-2 text-sm text-gray-600 font-medium">Note</th>
             <th class="px-4 py-2 text-sm text-gray-600 font-medium">Overtime date</th>
             <th class="px-4 py-2 text-sm text-gray-600 font-medium">Overtime duration</th>
-            <th class="px-4 py-2 text-sm text-gray-600 font-medium">Overtime type</th>
-            <th class="px-4 py-2 text-sm text-gray-600 font-medium">Project</th>
-            <th class="px-4 py-2 text-sm text-gray-600 font-medium">Tasks</th>
+            <th class="px-4 py-2 text-sm text-gray-600 font-medium">Task</th>
           </tr>
         </thead>
         <tbody>
@@ -58,9 +64,7 @@
             <td class="px-4 py-2 text-sm text-gray-700">{{ item.note }}</td>
             <td class="px-4 py-2 text-sm text-gray-700">{{ item.overtime_date }}</td>
             <td class="px-4 py-2 text-sm text-gray-700">{{ item.overtime_duration }}</td>
-            <td class="px-4 py-2 text-sm text-gray-700">{{ item.overtime_type }}</td>
-            <td class="px-4 py-2 text-sm text-gray-700">{{ getProjectName(item.project_id) }}</td>
-            <td class="px-4 py-2 text-sm text-gray-700">{{ item.tasks }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ item.task }}</td>
           </tr>
         </tbody>
       </table>

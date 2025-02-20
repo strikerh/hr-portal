@@ -49,36 +49,36 @@
         <p class="text-gray-800">{{ request.for_whom || 'N/A' }}</p>
       </div>
   
-      <div>
+      <div *ngIf="request.family_member_name">
         <strong class="text-gray-600">Family Member Name:</strong>
         <p class="text-gray-800">{{ request.family_member_name || 'N/A' }}</p>
       </div>
   
-      <div>
+      <div *ngIf="request.old_type">
         <strong class="text-gray-600">Old Type:</strong>
         <p class="text-gray-800">{{ request.old_type || 'N/A' }}</p>
       </div>
   
-      <div>
+      <div *ngIf="request.new_type">
         <strong class="text-gray-600">New Type:</strong>
         <p class="text-gray-800">{{ request.new_type || 'N/A' }}</p>
       </div>
   
-      <div>
+      <div *ngIf="request.relative_type">
         <strong class="text-gray-600">Relative Type:</strong>
         <p class="text-gray-800">{{ request.relative_type || 'N/A' }}</p>
       </div>
   
-      <div>
+      <div *ngIf="request.relative">
         <strong class="text-gray-600">Relative:</strong>
         <p class="text-gray-800">{{ request.relative || 'N/A' }}</p>
       </div>
-      <div>
+      <div *ngIf="request.member_name">
         <strong class="text-gray-600">Member Name:</strong>
         <p class="text-gray-800">{{ request.member_name || 'N/A' }}</p>
       </div>
   
-      <div>
+      <div *ngIf="request.description">
         <strong class="text-gray-600">Description:</strong>
         <p class="text-gray-800">{{ request.description || 'N/A' }}</p>
       </div>

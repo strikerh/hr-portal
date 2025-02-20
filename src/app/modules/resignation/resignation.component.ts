@@ -88,7 +88,8 @@ this.api.getEmployeeRequests().subscribe((data:any)=>{
       console.log(this.requestNeedApproves)
     })
   }
-   updateRequestStatus(action:string,id:string){
+   updateRequestStatus(action:string,status:string,id:string){
+
         if(action==='rejected'){
           const dialogRef = this.dialog.open(DialogFormComponent, {
             width: '400px',
@@ -114,6 +115,19 @@ this.api.getEmployeeRequests().subscribe((data:any)=>{
       
         }
         else if(action==='approved'){
+          if(status=='department_manager' || status==='project_manager'){
+            let data={
+              request_status:action,
+            }
+            this.api.updateRequestStatus(data,id).subscribe({
+              next:(response)=>{
+               this.showAlert("Request "+action)
+               this.getEmployeeRequest()
+               this.getRequestNeedApproves()
+              }
+            })
+          }
+          else{
           const dialogRef = this.dialog.open(DialogDateFormComponent, {
             width: '400px',
             data: {message: ''}, // Pass initial data if needed
@@ -136,7 +150,7 @@ this.api.getEmployeeRequests().subscribe((data:any)=>{
             }
           });
       
-        }
+        }}
         else{
         let data={
           request_status:action,

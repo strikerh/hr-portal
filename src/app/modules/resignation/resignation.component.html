@@ -71,7 +71,7 @@
                     <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Status </span>
                     </th>
                     <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap">{{ getStatus(element.request_status)}}</span></td>
+                        class="whitespace-nowrap">{{ element.request_status_value}}</span></td>
                 </ng-container>
     
     
@@ -149,7 +149,7 @@
                     <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Status </span>
                     </th>
                     <td mat-cell *matCellDef="let element"><span
-                        class="whitespace-nowrap">{{ getStatus(element.request_status)}}</span></td>
+                        class="whitespace-nowrap">{{ element.request_status_value}}</span></td>
                 </ng-container>
     
     
@@ -184,8 +184,8 @@
                         class="whitespace-nowrap">  </span></th>
                     <td mat-cell *matCellDef="let element">
                         <span class="whitespace-nowrap">
-                        <button class="hover:bg-green-800 w-20 text-white p-2 rounded-lg mr-3 bg-green-700" *ngIf="element.request_status != 'rejected' && element.request_status !='approved'&& element.request_status !='department_manager' " (click)="updateRequestStatus('approved',element.id);$event.stopPropagation()">Approve</button>
-                        <button class="hover:bg-red-800 w-20 text-white p-2 rounded-lg bg-red-700" *ngIf="element.request_status != 'rejected' && element.request_status != 'approved' && element.request_status !='department_manager'" (click)="updateRequestStatus('rejected',element.id);$event.stopPropagation()">Reject</button>
+                        <button class="hover:bg-green-800 w-20 text-white p-2 rounded-lg mr-3 bg-green-700" *ngIf="element.request_status != 'rejected' && element.request_status !='approved' " (click)="updateRequestStatus('approved',element.request_status,element.id);$event.stopPropagation()">Approve</button>
+                        <button class="hover:bg-red-800 w-20 text-white p-2 rounded-lg bg-red-700" *ngIf="element.request_status != 'rejected' && element.request_status != 'approved'" (click)="updateRequestStatus('rejected',element.request_status,element.id);$event.stopPropagation()">Reject</button>
                     </span>
                 </td>
                 </ng-container>

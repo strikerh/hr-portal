@@ -46,22 +46,22 @@
         <p class="text-gray-800">{{ request.resignation_type || 'N/A' }}</p>
       </div>
   
-      <div>
+      <div *ngIf="request.resignation_reason">
         <strong class="text-gray-600">Resignation Reason:</strong>
         <p class="text-gray-800">{{ request.resignation_reason  || 'N/A' }}</p>
       </div>
   
-      <div>
+      <div *ngIf="request.last_date">
         <strong class="text-gray-600">Last Date:</strong>
         <p class="text-gray-800">{{ request.last_date  || 'N/A' }}</p>
       </div>
   
-      <div>
+      <div *ngIf="request.termination_reason">
         <strong class="text-gray-600">Termination Reason:</strong>
         <p class="text-gray-800">{{ request.termination_reason  || 'N/A' }}</p>
       </div>
   
-      <div>
+      <div *ngIf="request.other_reason">
         <strong class="text-gray-600">Other Reason:</strong>
         <p class="text-gray-800">{{ request.other_reason  || 'N/A' }}</p>
       </div>

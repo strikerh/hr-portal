@@ -111,6 +111,7 @@ export class NewVacationComponent implements OnInit {
             },
         });
         this.vacationApi.get_all_leave_types_remaining_leaves().subscribe((data)=>{
+            console.log(data)
 console.log(data)
         })
 
@@ -126,7 +127,7 @@ console.log(data)
             )
             .subscribe((value) => {
                 // debugger;
-
+                console.log(value)
                 if (value.holiday_status_local.request_unit === 'day') {
                     if (value.date_from && value.date_to) {
                         const startDate: DateTime = value.date_from.startOf('day');
@@ -145,8 +146,10 @@ console.log(data)
                       const minutes = deltaMinutes % 60;
 
                       this.totalTime = `${hours}:${minutes} Hours`;*/
+
                     const delta = Math.abs(Number(value.request_hour_from) - Number(value.request_hour_to));
                     this.totalTime = delta.toFixed(2)+ ' Hours';
+                    console.log(this.totalTime)
                 }
             });
     }

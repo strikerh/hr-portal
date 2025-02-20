@@ -73,11 +73,14 @@ export class NewOvertimeComponent implements OnInit{
   })
   }
   addToList(){
-    const { approval_type, ...overtimeData } = this.overtimeForm.value;
+    const { approval_type,overtime_type,project_id, ...overtimeData } = this.overtimeForm.value;
     overtimeData.overtime_date = overtimeData.overtime_date.toISOString().split('T')[0];;
+
     this.overtimeList.push(overtimeData);
     this.overtimeForm.reset({
-      approval_type: this.requestType
+      approval_type: this.requestType,
+      overtime_type:overtime_type,
+      project_id:project_id
   });
   }
   changeRequestType(value){
@@ -94,11 +97,15 @@ export class NewOvertimeComponent implements OnInit{
   }
 
   submit(){
+    console.log(this.overtimeList)
     if(this.overtimeList.length>0){
-      let data={
-        "approval_type":this.requestType,
-        overtime_list:this.overtimeList
-      }
+      let formData = this.overtimeForm.value;
+      let data = {
+        "approval_type": formData.approval_type,
+        "project_id": formData.project_id ?? null, // Ensuring it stays null if not provided
+        "overtime_type": formData.overtime_type,
+        "overtime_list":this.overtimeList
+        }
       if(this.updateData){
         console.log("doen")
         this.api.updateEmployeeRequest(data,this.updateData.id).subscribe((response)=>{

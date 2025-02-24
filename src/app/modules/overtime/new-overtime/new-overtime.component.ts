@@ -56,9 +56,12 @@ export class NewOvertimeComponent implements OnInit{
     })
 
     if(this.data.data){
+      console.log(this.data.data)
       this.overtimeForm.get('approval_type').setValue('overtime')
       this.updateData=this.data.data
       this.overtimeForm.get('approval_type').disable()
+      this.overtimeForm.get('overtime_type').setValue(this.data.data.overtime_type)
+      this.overtimeForm.get('project_id').setValue(this.data.data.project_id)
       this.overtimeList=this.data.data.overtime_list
     }
   }
@@ -100,6 +103,7 @@ export class NewOvertimeComponent implements OnInit{
     console.log(this.overtimeList)
     if(this.overtimeList.length>0){
       let formData = this.overtimeForm.value;
+      console.log(formData)
       let data = {
         "approval_type": formData.approval_type,
         "project_id": formData.project_id ?? null, // Ensuring it stays null if not provided

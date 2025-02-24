@@ -88,7 +88,7 @@ this.api.getEmployeeRequests().subscribe((data:any)=>{
       console.log(this.requestNeedApproves)
     })
   }
-   updateRequestStatus(action:string,status:string,id:string){
+   updateRequestStatus(action:string,id:string,status:string){
 
         if(action==='rejected'){
           const dialogRef = this.dialog.open(DialogFormComponent, {
@@ -119,6 +119,8 @@ this.api.getEmployeeRequests().subscribe((data:any)=>{
             let data={
               request_status:action,
             }
+            console.log(id)
+
             this.api.updateRequestStatus(data,id).subscribe({
               next:(response)=>{
                this.showAlert("Request "+action)

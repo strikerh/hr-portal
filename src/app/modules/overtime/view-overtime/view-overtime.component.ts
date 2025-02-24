@@ -34,7 +34,7 @@ ngOnInit(): void {
     }
   })
 
-  this.api.getSalaryInfo().subscribe(({
+  this.api.getSalaryInfo(this.request.employee_id).subscribe(({
     next:(response)=>{
       console.log(response)
       this.salaryInfo=response

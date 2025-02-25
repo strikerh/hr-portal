@@ -25,7 +25,7 @@ import { fuseAnimations } from '@fuse/animations';
 })
 export class ResignationComponent implements OnInit{
 
-  
+
   employeeRequest:any[]=[]
   requestNeedApproves:any[]=[]
   tabIndex:'my'|'team'='my'
@@ -74,12 +74,12 @@ this.view.isOpen$.subscribe((value)=>{
       maxWidth:'600px'
     });
 
-    ref.afterClosed().subscribe((data)=>{
+    ref.beforeClosed().subscribe((data)=>{
       console.log('ezz')
     })
   }
   getEmployeeRequest(){
-this.api.getEmployeeRequests().subscribe((data:any)=>{  
+this.api.getEmployeeRequests().subscribe((data:any)=>{
   this.employeeRequest=data.emp_request
 })
   }
@@ -114,7 +114,7 @@ this.api.getEmployeeRequests().subscribe((data:any)=>{
               console.log('Dialog closed without form submission');
             }
           });
-      
+
         }
         else if(action==='approved'){
           if(status=='department_manager' || status==='project_manager'){
@@ -153,7 +153,7 @@ this.api.getEmployeeRequests().subscribe((data:any)=>{
               console.log('Dialog closed without form submission');
             }
           });
-      
+
         }}
         else{
         let data={
@@ -164,7 +164,7 @@ this.api.getEmployeeRequests().subscribe((data:any)=>{
             this.showAlert("Request "+action)
             this.getEmployeeRequest()
             // this.getRequestNeedApproves()
-  
+
           }
         })
       }
@@ -181,20 +181,20 @@ this.api.getEmployeeRequests().subscribe((data:any)=>{
             if (response.attachments) {
               data = { ...data, documents: response.attachments };
             }
-    console.log(data)    
-    
+    console.log(data)
+
           const ref = this._sidePageService.openSidePage('create-employee-request', NewResignationComponent, {
             width: '40%',
             maxWidth: '600px',
             data:data
           });
-          
+
           ref.afterClosed().subscribe((result) => {
             console.log('The dialog was closed');
             this.getEmployeeRequest()
-    
+
         });
-    
+
         }
 
         getStatus(value){

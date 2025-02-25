@@ -7,7 +7,6 @@
 
  @for (sidePage of sidePages; track sidePage?.key) {
   @if (sidePage.options.position === 'end') {
-    <h1>ezz</h1>
     <lib-page
     class="fixed  top-0 bottom-0  bg-white flex flex-col shadow-lg"
     style="inset-Inline-End: 0%;"
@@ -20,7 +19,6 @@
       [sidePage]="sidePage"></lib-page>
     }
     @if (sidePage.options.position === 'start') {
-    <h1>ezz</h1>
     <lib-page
       style="inset-Inline-start: 0%;"
       class="fixed  top-0 bottom-0  bg-white flex flex-col  shadow-lg"

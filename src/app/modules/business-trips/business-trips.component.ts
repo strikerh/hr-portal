@@ -15,131 +15,138 @@ import { Trip } from './businessTripModels';
 import { NewBusinessTripComponent } from './new-business-trip/new-business-trip.component';
 import { MatDatepickerModule, MatDatepickerToggle, MatDateRangeInput, MatDateRangePicker } from '@angular/material/datepicker';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatFormField } from '@angular/material/form-field';
 
 @Component({
     selector: 'app-business-trips',
     standalone: true,
-    imports: [MatButton, MatIcon, MatTabsModule, MatTableModule, NgIf, DatePipe, MatRipple, TitleCasePipe, DecimalPipe,  MatDatepickerModule,        MatDateRangeInput,
+    imports: [
+        MatButton,
+        MatIcon,
+        MatTabsModule,
+        MatTableModule,
+        NgIf,
+        DatePipe,
+        MatRipple,
+        TitleCasePipe,
+        DecimalPipe,
+        MatDatepickerModule,
+        MatDateRangeInput,
         MatDatepickerToggle,
         MatDateRangePicker,
-    ReactiveFormsModule,
-    FormsModule,
-],
+        ReactiveFormsModule,
+        FormsModule,
+        MatFormField,
+    ],
     templateUrl: './business-trips.component.html',
     styleUrl: './business-trips.component.scss',
 })
 export class BusinessTripsComponent implements OnInit {
-
-
     trips: Trip[] = [];
     tripsNeedApproves: Trip[];
-    moreInfoWrapperOpen:boolean=false;
-    moreInfoWrapperData={}
-    filterOpened:boolean=false;
-    filterForm:FormGroup;
-    filteredMyRequestData:Trip[];
-    filteredEmployeeData:Trip[];
+    moreInfoWrapperOpen: boolean = false;
+    moreInfoWrapperData: any = {};
+    filterOpened: boolean = false;
+    filterForm: FormGroup;
+    filteredMyRequestData: Trip[];
+    filteredEmployeeData: Trip[];
 
     toggleFilter() {
-        this.filterOpened=!this.filterOpened;
+        this.filterOpened = !this.filterOpened;
     }
-    filter(){
- if(this.tabIndex=='myTrips'){
-      this.filteredMyRequestData = this.trips.filter(this.filterMethod.bind(this));
-      console.log()
+    filter() {
+        if (this.tabIndex == 'myTrips') {
+            this.filteredMyRequestData = this.trips.filter(this.filterMethod.bind(this));
+            console.log();
+        } else {
+            this.filteredEmployeeData = this.tripsNeedApproves.filter(this.filterMethod.bind(this));
+        }
+        this.toggleFilter();
     }
-    else{ 
-        this.filteredEmployeeData = this.tripsNeedApproves.filter(this.filterMethod.bind(this));
- }
-      this.toggleFilter();
-    }
-   filterMethod(item:Trip) {
+    filterMethod(item: Trip) {
         const filters = this.filterForm.value;
         if (filters.approval && !item.Sequence.toLowerCase().includes(filters.approval.toLowerCase())) {
             return false;
-          }
+        }
 
+        if (filters.startDate) {
+            const itemStartDate = new Date(item.date_start);
+            const filterStartDate = new Date(filters.startDate);
 
-            if (filters.startDate) {
-                const itemStartDate = new Date(item.date_start);
-                const filterStartDate = new Date(filters.startDate);
-              
-                // Compare day, month, and year
-                if (
-                  itemStartDate.getFullYear() < filterStartDate.getFullYear() ||
-                  (itemStartDate.getFullYear() === filterStartDate.getFullYear() &&
+            // Compare day, month, and year
+            if (
+                itemStartDate.getFullYear() < filterStartDate.getFullYear() ||
+                (itemStartDate.getFullYear() === filterStartDate.getFullYear() &&
                     (itemStartDate.getMonth() < filterStartDate.getMonth() ||
-                      (itemStartDate.getMonth() === filterStartDate.getMonth() &&
-                        itemStartDate.getDate() < filterStartDate.getDate())))
-                ) {
-                  return false;
-                }
-              }
-              
-              if (filters.endDate) {
-                const itemEndDate = new Date(item.date_end);
-                const filterEndDate = new Date(filters.endDate);
-              
-                // Compare day, month, and year
-                if (
-                  itemEndDate.getFullYear() > filterEndDate.getFullYear() ||
-                  (itemEndDate.getFullYear() === filterEndDate.getFullYear() &&
+                        (itemStartDate.getMonth() === filterStartDate.getMonth() &&
+                            itemStartDate.getDate() < filterStartDate.getDate())))
+            ) {
+                return false;
+            }
+        }
+
+        if (filters.endDate) {
+            const itemEndDate = new Date(item.date_end);
+            const filterEndDate = new Date(filters.endDate);
+
+            // Compare day, month, and year
+            if (
+                itemEndDate.getFullYear() > filterEndDate.getFullYear() ||
+                (itemEndDate.getFullYear() === filterEndDate.getFullYear() &&
                     (itemEndDate.getMonth() > filterEndDate.getMonth() ||
-                      (itemEndDate.getMonth() === filterEndDate.getMonth() &&
-                        itemEndDate.getDate() > filterEndDate.getDate())))
-                ) {
-                  return false;
-                }
-              }
-              
-      
-          if (filters.employee && !item.employee.toLowerCase().includes(filters.employee.toLowerCase())) {
+                        (itemEndDate.getMonth() === filterEndDate.getMonth() &&
+                            itemEndDate.getDate() > filterEndDate.getDate())))
+            ) {
+                return false;
+            }
+        }
+
+        if (filters.employee && !item.employee.toLowerCase().includes(filters.employee.toLowerCase())) {
             return false;
-          }
-          if (filters.minTotal && item.total_compensation < filters.minTotal) {
+        }
+        if (filters.minTotal && item.total_compensation < filters.minTotal) {
             return false;
-          }
-          
-          if (filters.maxTotal && item.total_compensation > filters.maxTotal) {
+        }
+
+        if (filters.maxTotal && item.total_compensation > filters.maxTotal) {
             return false;
-          }
-          if (filters.status && item.status.toLowerCase() !== filters.status.toLowerCase()) {
+        }
+        if (filters.status && item.status.toLowerCase() !== filters.status.toLowerCase()) {
             return false;
-          }
-      
-          if (filters.grade && !item.employee_grade.toLowerCase().includes(filters.grade.toLowerCase())) {
+        }
+
+        if (filters.grade && !item.employee_grade.toLowerCase().includes(filters.grade.toLowerCase())) {
             return false;
-          }
-      
-          if (filters.type && !item.trip_type.toLowerCase().includes(filters.type.toLowerCase())) {
+        }
+
+        if (filters.type && !item.trip_type.toLowerCase().includes(filters.type.toLowerCase())) {
             return false;
-          }
-      
-          if (filters.project && !item.project_id.toLowerCase().includes(filters.project.toLowerCase())) {
+        }
+
+        if (filters.project && !item.project_id.toLowerCase().includes(filters.project.toLowerCase())) {
             return false;
-          }
-      
-          return true; // If all conditions pass
-        };
-    openMoreInfo(id:number){
-        if(this.tabIndex=='myTrips'){
-            this.moreInfoWrapperData=this.trips.find(x=>x.id==id);
-}
-        else{
-            this.moreInfoWrapperData=this.tripsNeedApproves.find(x=>x.id==id);
+        }
+
+        return true; // If all conditions pass
+    }
+    openMoreInfo(id: number) {
+        if (this.tabIndex == 'myTrips') {
+            this.moreInfoWrapperData = this.trips.find((x) => x.id == id);
+        } else {
+            this.moreInfoWrapperData = this.tripsNeedApproves.find((x) => x.id == id);
         }
         setTimeout(() => {
             const wrapperElement = document.querySelector('.wrapper');
             if (wrapperElement) {
-              // Scroll the wrapper element into view with smooth scrolling
-              wrapperElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Scroll the wrapper element into view with smooth scrolling
+                wrapperElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
-          }, 0);
-          
-this.moreInfoWrapperOpen=true;
+        }, 0);
+
+        this.moreInfoWrapperOpen = true;
     }
-    toggle(){
-        this.moreInfoWrapperOpen=!this.moreInfoWrapperOpen;
+    toggle() {
+        this.moreInfoWrapperOpen = !this.moreInfoWrapperOpen;
     }
     displayedColumns1: string[] = [
         // 'id',
@@ -172,7 +179,7 @@ this.moreInfoWrapperOpen=true;
         'employee_grade',
         'location_trip',
         'action',
-        'request_manager'
+        'request_manager',
     ];
     displayedColumns3 = [
         'id',
@@ -189,8 +196,8 @@ this.moreInfoWrapperOpen=true;
         'total_days',
         'trip_type',
         'request_manager',
-        'action'
-      ];
+        'action',
+    ];
     tabIndex: 'needApprove' | 'myTrips' = 'myTrips';
     private user: User;
 
@@ -203,19 +210,19 @@ this.moreInfoWrapperOpen=true;
     ) {}
 
     async ngOnInit(): Promise<void> {
-        this.filterForm=this.fb.group({
-            approval:[],
-            startDate:[],
-            endDate:[],
-            employee:[],
-            total:[],
-            status:[],
-            grade:[],
-            type:[],
-            project:[],
-            maxTotal:[],
-            minTotal:[]
-        })
+        this.filterForm = this.fb.group({
+            approval: [],
+            startDate: [],
+            endDate: [],
+            employee: [],
+            total: [],
+            status: [],
+            grade: [],
+            type: [],
+            project: [],
+            maxTotal: [],
+            minTotal: [],
+        });
         const user = await firstValueFrom(this.userService.user$);
         this.user = user;
         this.reloadData();
@@ -266,12 +273,12 @@ this.moreInfoWrapperOpen=true;
                 //     };
                 // }).
                 ?.sort((a, b) => b.id - a.id);
-                console.log('Displayed Columns:', this.displayedColumns3);
-                console.log('Trips:', data);
+            console.log('Displayed Columns:', this.displayedColumns3);
+            console.log('Trips:', data);
         });
-     
+
         this.businessTripApi.api_get_trips_to_approves_by_user_id().subscribe((data) => {
-            console.log('a',data)
+            console.log('a', data);
             const g1 = data.trips?.filter((trip) => trip.my_action === 'pending')?.sort((a, b) => b.id - a.id) || [];
             const g2 = data.trips?.filter((trip) => trip.my_action !== 'pending')?.sort((a, b) => b.id - a.id) || [];
             this.tripsNeedApproves = [...g1, ...g2];
@@ -280,6 +287,6 @@ this.moreInfoWrapperOpen=true;
 
             console.log('tripsNeedApproves', data);
         });
-        console.log(this.trips)
+        console.log(this.trips);
     }
 }

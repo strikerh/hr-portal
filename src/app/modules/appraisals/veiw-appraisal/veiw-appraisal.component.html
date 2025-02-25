@@ -2,7 +2,7 @@
 
 <div class="w-full flex flex-col h-full overflow-scroll">
 <header class="w-full flex p-4 border-b bg-gray-50">
-<mat-icon svgIcon="keyboard_arrow_left" class="text-lg cursor-pointer" (click)="backMethod()"></mat-icon>   
+<mat-icon svgIcon="keyboard_arrow_left" class="text-lg cursor-pointer" (click)="backMethod()"></mat-icon>
  <h1 class="text-3xl font-bold flex items-center text-primary-900">
       <mat-icon svgIcon="mat_solid:speaker_notes" class="icon-size-10 text-primary-800 mx-4" ></mat-icon>
       {{appraisal.employee_id[1]}} appraisals
@@ -18,7 +18,7 @@
       <label class="text-2xl font-semibold text-gray-800 mt-4">{{appraisal.employee_id[1]}}</label>
       <span class="text-sm text-gray-500 mt-2">Employee</span>
     </div>
-  
+
     <!-- Manager Card -->
     <div class="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-md w-full md:w-1/2">
       <div class="bg-blue-100 p-4 rounded-full">
@@ -29,19 +29,19 @@
     </div>
 
      <!-- Result -->
-    
+
   </div>
   <div class="flex items-center justify-center bg-blue-50 p-4 rounded-lg">
     <mat-icon class="text-blue-600 text-5xl mr-3">check_circle</mat-icon>
     <span class="text-3xl font-bold text-gray-800">{{appraisal.result}}</span>
   </div>
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
   <div class="w-full h-full bg-gray-50 flex flex-wrap md:flex-row flex-col">
     <!-- User Feedback -->
     <div class="userFedback flex-1 md:w-1/2 w-full p-4 bg-white shadow-md">
@@ -49,8 +49,8 @@
         <img src="data:image/svg+xml;base64,{{employeeImage}}" alt="userImage" class="w-5 h-5">
         <h1 class="font-bold text-2xl">Your Feedback</h1>
       </div>
-  
-      <div *ngIf="appraisal.employee_feedback_published" [innerHTML]="userFedback"></div>
+
+      <div *ngIf="appraisal.employee_feedback_published" [innerHTML]="userFeedback"></div>
       <div
         *ngIf="!appraisal.employee_feedback_published"
         class="flex flex-col items-center justify-center h-100 mt-4 mat-elevation-z2 bg-gray-50 border rounded-lg"
@@ -59,15 +59,15 @@
         <p class="mat-body-1 text-center text-gray-600">Your feedback is pending</p>
       </div>
     </div>
-  
+
     <!-- Manager Feedback -->
     <div class="userFedback flex-1 md:w-1/2 w-full p-4 bg-white shadow-md">
       <div class="flex items-center gap-1">
         <img *ngFor="let image of managerImages" src="data:image/svg+xml;base64,{{image}}" alt="Manager Image" class="w-5 h-5">
         <h1 class="font-bold text-2xl">{{appraisal.managerDetails[0].name}} Feedback</h1>
       </div>
-  
-      <div *ngIf="appraisal.manager_feedback_published" [innerHTML]="managerFedback"></div>
+
+      <div *ngIf="appraisal.manager_feedback_published" [innerHTML]="managerFeedback"></div>
       <div
         *ngIf="!appraisal.manager_feedback_published"
         class="flex flex-col items-center justify-center h-100 mt-4 mat-elevation-z2 bg-gray-50 border rounded-lg"
@@ -77,7 +77,7 @@
       </div>
     </div>
   </div>
-  
+
 </div>
 
 

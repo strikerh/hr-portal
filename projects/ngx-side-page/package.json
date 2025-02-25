@@ -4,9 +4,10 @@
   "description": "A versatile Angular library for creating and managing side pages with ease.",
   "scripts": {
     "publish-sidePage": "ng build ngx-side-page && cd ../../dist/ngx-side-page && npm publish",
-    "build-sidePage": "ng build ngx-side-page"
+      "build-sidePage": "ng build ngx-side-page",
+      "watch-sidePage": "ng build ngx-side-page --watch"
   },
-  "author": "Hazem Safwat",
+    "author": "Hazem Safwat",
   "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^18.2.0",

@@ -32,7 +32,7 @@ export class SidePageComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('ezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+    console.log('ezz after updates')
     this.sidePageService.initiated = true;
     this.sidePageService.getSidePage().subscribe((sidePages) => {
       this.sidePages = sidePages;

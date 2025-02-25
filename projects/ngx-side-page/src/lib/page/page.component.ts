@@ -20,7 +20,6 @@ export class PageComponent implements OnInit {
 
   @Input() sidePage!: SidePageInfo;
   @Output() close: EventEmitter<SidePageInfo> = new EventEmitter();
-
   _isOpen = false;
   _key = '';
   _options: SidePageOption = {};
@@ -34,7 +33,8 @@ export class PageComponent implements OnInit {
   }
 
   ngOnInit() {
-    const sp = this.sidePage;
+      console.log('ezz after chache')
+      const sp = this.sidePage;
     if (sp?.state) {
       this._isOpen = sp.state;
       this._key = sp.key;

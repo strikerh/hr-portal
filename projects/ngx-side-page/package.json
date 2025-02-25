@@ -1,0 +1,20 @@
+{
+  "name": "ngx-side-page",
+  "version": "18.0.53",
+  "description": "A versatile Angular library for creating and managing side pages with ease.",
+  "scripts": {
+    "publish-sidePage": "ng build ngx-side-page && cd ../../dist/ngx-side-page && npm publish",
+    "build-sidePage": "ng build ngx-side-page"
+  },
+  "author": "Hazem Safwat",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": "^18.2.0",
+    "@angular/core": "^18.2.0"
+
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

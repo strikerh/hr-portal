@@ -7,6 +7,7 @@ import { MatFormField, MatFormFieldModule, MatHint, MatLabel } from '@angular/ma
 import { MatIconModule } from '@angular/material/icon';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
+import { fuseAnimations } from '@fuse/animations';
 import { AfterCloseSidePageService } from 'app/core/services/after-close-side-page.service';
 import { EmployeeRequestService } from 'app/modules/employee-request/employee-request-api.service';
 import { SIDE_PAGE_DATA, SIDE_PAGE_REF, SidePageInfo, SidePageRef } from 'ngx-side-page';
@@ -24,7 +25,8 @@ import { SIDE_PAGE_DATA, SIDE_PAGE_REF, SidePageInfo, SidePageRef } from 'ngx-si
 
   ],
   templateUrl: './new-resignation.component.html',
-  styleUrl: './new-resignation.component.scss'
+  styleUrl: './new-resignation.component.scss',
+   animations: fuseAnimations,
 })
 export class NewResignationComponent implements OnInit{
 resignationForm:FormGroup

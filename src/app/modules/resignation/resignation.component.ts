@@ -13,13 +13,15 @@ import { DialogDateFormComponent } from '../employee-request/dialog/dialog-date.
 import { ViewRequestService } from './view-request.service';
 import { ViewResignationComponent } from "./view-resignation/view-resignation.component";
 import { AfterCloseSidePageService } from 'app/core/services/after-close-side-page.service';
+import { fuseAnimations } from '@fuse/animations';
 
 @Component({
   selector: 'app-resignation',
   standalone: true,
   imports: [MatIcon, MatButtonModule, MatTableModule, NgIf, DatePipe, ViewResignationComponent],
   templateUrl: './resignation.component.html',
-  styleUrl: './resignation.component.scss'
+  styleUrl: './resignation.component.scss',
+   animations: fuseAnimations,
 })
 export class ResignationComponent implements OnInit{
 

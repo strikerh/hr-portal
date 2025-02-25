@@ -109,6 +109,7 @@
                         <span class="whitespace-nowrap">
                         <button class="hover:bg-green-800 w-20 text-white p-2 rounded-lg mr-3 bg-green-700" *ngIf="element.request_status==='new' || element.request_status==='refused' " (click)="updateInfo(element);$event.stopPropagation()">Edit</button>
                         <button class="hover:bg-blue-800 w-20 text-white p-2 rounded-lg bg-blue-700" *ngIf="element.request_status==='new'" (click)="updateRequestStatus('submit',element.id);$event.stopPropagation()">Submit</button>
+                        <button class="hover:bg-blue-800 w-20 text-white p-2 rounded-lg bg-blue-700" *ngIf="element.request_status==='refused'" (click)="updateRequestStatus('cancel',element.id);$event.stopPropagation()">Cancel</button>
                     </span>
                 </td>
                 </ng-container>

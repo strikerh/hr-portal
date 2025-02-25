@@ -1,0 +1,18 @@
+:host{
+  z-index: 800;
+
+}
+.side-page {
+  transition: transform 0.3s ease-in-out;
+}
+.overlay{
+  @apply pointer-events-auto;
+  opacity: 1;
+  --tw-bg-opacity: 0.5;
+  background-color: rgb(75 85 99 / var(--tw-bg-opacity));
+  justify-content: flex-end;
+  display: flex;
+  inset: 0;
+  position: fixed;
+
+}

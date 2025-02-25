@@ -1,0 +1,19 @@
+
+  /*body > app-side-page > lib-page > div > app-test-dialog*/
+
+  .contentContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+
+::ng-deep .contentContainer > *:first-child {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-grow: 1;
+}
+  ::ng-deep body{
+    overflow: hidden;
+  }

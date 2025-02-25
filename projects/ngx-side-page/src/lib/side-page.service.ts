@@ -42,11 +42,11 @@ export interface SidePageInfo<T = any> {
 })
 export class SidePageService {
     sidePages: SidePageInfo[] = [];
+    initiated: boolean = false;
     private sidePages$ = new BehaviorSubject<SidePageInfo[]>([]);
     private startClosing$ = new Subject<any>();
     private endClosing$ = new Subject<any>();
     private endOpening$ = new Subject<any>();
-    initiated: boolean = false;
     private options: SidePageOption = {
         position: 'end',
         width: '100%',
@@ -93,12 +93,13 @@ export class SidePageService {
         debugger;
         const sp = this.sidePages[this.sidePages.length - 1];
         this.startClosing$.next({ key: sp.key, sidePage: sp, value: someValue });
-        this.startClosing$.complete();
+        // this.startClosing$.complete();
         this.sidePages.pop();
+        this.sidePages$.next(this.sidePages);
         setTimeout(() => {
             debugger;
             this.endClosing$.next({ key: sp.key, sidePage: sp, value: someValue });
-            this.endClosing$.complete();
+            // this.endClosing$.complete();
         }, 300);
     }
 
@@ -108,12 +109,12 @@ export class SidePageService {
             return;
         }
         this.startClosing$.next({ key: sp.key, sidePage: sp, value: someValue });
-        this.startClosing$.complete();
+        // this.startClosing$.complete();
         this.sidePages.pop();
         setTimeout(() => {
             debugger;
             this.endClosing$.next({ key: sp.key, sidePage: sp, value: someValue });
-            this.endClosing$.complete();
+            // this.endClosing$.complete();
         }, 300);
     }
 
@@ -124,7 +125,7 @@ export class SidePageService {
 
         const _options = { ...this.options, ...options };
         const thisSp = { key: key, component, options: _options, state: true };
-        debugger
+        debugger;
         const spRef = new SidePageRef<T>(
             thisSp,
             this.sidePages,
@@ -135,10 +136,10 @@ export class SidePageService {
         );
         this.sidePages.push({ ...thisSp, ref: spRef });
         this.sidePages$.next(this.sidePages);
-        this.sidePages$.complete();
+        // this.sidePages$.complete();
         setTimeout(() => {
             this.endOpening$.next(thisSp);
-            this.endOpening$.complete();
+            // this.endOpening$.complete();
         }, 300);
 
         return spRef;
@@ -191,13 +192,9 @@ export class SidePageRef<T> {
     }
 
     beforeClosed(): Observable<any> {
-        debugger
         return this._startClosing$.asObservable().pipe(
-            filter((value) => {
-              debugger;
-               return value.key === this._sidePage.key;
-            })
-            // map((value) => value.value)
+            filter((value) => value.key === this._sidePage.key),
+            map((value) => value.value)
         );
     }
 

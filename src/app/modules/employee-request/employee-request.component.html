@@ -47,7 +47,7 @@
                 <ng-container matColumnDef="id">
                     <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Id </span></th>
                     <td mat-cell *matCellDef="let element"> {{ element.id }}</td>
-                </ng-container> 
+                </ng-container>
 
 
                 <ng-container matColumnDef="Sequence">
@@ -105,16 +105,17 @@
                 <ng-container matColumnDef="action" stickyEnd>
                     <th mat-header-cell *matHeaderCellDef><span
                         class="whitespace-nowrap">  </span></th>
-                    <td mat-cell *matCellDef="let element">
-                        <span class="whitespace-nowrap">
-                        <button class="hover:bg-green-800 w-20 text-white p-2 rounded-lg mr-3 bg-green-700" *ngIf="element.request_status==='new' || element.request_status==='refused' " (click)="updateInfo(element);$event.stopPropagation()">Edit</button>
-                        <button class="hover:bg-blue-800 w-20 text-white p-2 rounded-lg bg-blue-700" *ngIf="element.request_status==='new'" (click)="updateRequestStatus('submit',element.id);$event.stopPropagation()">Submit</button>
-                    </span>
+                    <td mat-cell *matCellDef="let element" class="w-0">
+                        <div class="flex flex-nowrap items-center justify-end gap-2">
+                        <button matTooltip="Edit" mat-icon-button color="primary" *ngIf="element.request_status==='new' || element.request_status==='refused' " (click)="updateInfo(element);$event.stopPropagation()"><mat-icon svgIcon="edit"></mat-icon></button>
+                        <button matTooltip="Submit" mat-icon-button color="primary" *ngIf="element.request_status==='new'" (click)="updateRequestStatus('submit',element.id);$event.stopPropagation()"><mat-icon svgIcon="send"></mat-icon></button>
+                        <button matTooltip="Cancel" mat-icon-button color="primary" *ngIf="element.request_status === 'refused'" (click)="updateRequestStatus('cancel',element.id);$event.stopPropagation()"><mat-icon>cancel</mat-icon></button>
+                    </div>
                 </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns1;" class="hover:cursor-pointer hover:bg-indigo-600 hover:text-gray-50" (click)="openView(row)"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns1;" class="hover:cursor-pointer hover:bg-indigo-50 hover:text-black" (click)="openView(row)"></tr>
             </table>
             <table *ngIf="tabIndex === 'team'" mat-table [dataSource]="requestNeedsAprroves" class="table-primary  ">
 
@@ -125,7 +126,7 @@
                 <ng-container matColumnDef="id">
                     <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Id </span></th>
                     <td mat-cell *matCellDef="let element"> {{ element.id }}</td>
-                </ng-container> 
+                </ng-container>
 
 
                 <ng-container matColumnDef="Sequence">
@@ -183,23 +184,23 @@
                 <ng-container matColumnDef="action" stickyEnd>
                     <th mat-header-cell *matHeaderCellDef><span
                         class="whitespace-nowrap">  </span></th>
-                    <td mat-cell *matCellDef="let element">
-                        <span class="whitespace-nowrap">
-                        <button class="hover:bg-green-800 w-20 text-white p-2 rounded-lg mr-3 bg-green-700" *ngIf="element.request_status != 'rejected' && element.request_status !='approved' " (click)="updateRequestStatus('approved',element.id);$event.stopPropagation()">Approve</button>
-                        <button class="hover:bg-red-800 w-20 text-white p-2 rounded-lg bg-red-700" *ngIf="element.request_status != 'rejected' && element.request_status != 'approved'" (click)="updateRequestStatus('rejected',element.id);$event.stopPropagation()">Reject</button>
-                    </span>
+                    <td mat-cell *matCellDef="let element" class="w-0">
+                        <div class="flex flex-nowrap items-center justify-end gap-2">
+                        <button matTooltip="Approve" mat-icon-button color="primary" *ngIf="element.request_status != 'rejected' && element.request_status !='approved' " (click)="updateRequestStatus('approved',element.id);$event.stopPropagation()"><mat-icon>check_circle</mat-icon></button>
+                        <button matTooltip="Reject" mat-icon-button color="primary" *ngIf="element.request_status != 'rejected' && element.request_status != 'approved'" (click)="updateRequestStatus('rejected',element.id);$event.stopPropagation()"><mat-icon>block</mat-icon></button>
+                    </div>
                 </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns1;" class="hover:cursor-pointer hover:bg-indigo-600 hover:text-gray-50" (click)="openView(row)"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns1;" class="hover:cursor-pointer hover:bg-indigo-50 hover:text-black" (click)="openView(row)"></tr>
             </table>
 
-          
+
             </div>
 
         </div>
     </section>
 </div>
 
-<app-view-employee-request class="w-full" *ngIf="isOpenView" [requestType]="selectedType" [request]="selectedRequest"></app-view-employee-request>
+<app-view-employee-request class="w-full" *ngIf="isOpenView" [request]="selectedRequest"></app-view-employee-request>

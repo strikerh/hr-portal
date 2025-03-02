@@ -1,23 +1,17 @@
-<div class="w-full flex flex-col" >
+<div class="w-full flex flex-col overflow-scroll" >
 
-    <header class="w-full flex justify-between p-4 border-b bg-gray-50">
+    <header class="w-full flex flex-wrap flex-col p-4 border-b bg-gray-50">
         <h1 class="text-3xl font-bold flex items-center text-primary-900">
-          <span class="cursor-pointer m-2 flex items-center justify-center" (click)="onBackPressed()"><mat-icon svgIcon="arrow_back_ios"></mat-icon></span>
+          <span *ngIf="!sidePage" class="cursor-pointer m-2 flex items-center justify-center" (click)="onBackPressed()"><mat-icon svgIcon="arrow_back_ios"></mat-icon></span>
           <span>Request Details</span>
         </h1>
-        <div class="grid grid-cols-4 gap-4 mb-4">
-            <div class="p-4 text-center text-white rounded-lg font-medium"
-            [ngClass]="request.request_status === 'new'
-             ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'"
-            >Step 1: Submission</div>
-           <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700"
-           [ngClass]="request.request_status === 'direct_manager'
-             ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'"
-             >Step 2: Manager</div>
-           <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700"
-           [ngClass]="request.request_status === 'hr_review'? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'">Step 3: HR</div>
-           <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700" >Step 4: Approval</div>
-       </div>
+        <div class="flex flex-wrap items-center gap-1">
+          <div class="w-auto px-2 bg-green-400 h-7 rounded-lg text-center flex items-center justify-center">Submission</div>
+          <div class="w-auto px-2 bg-gray-200 h-7 rounded-lg text-center  flex items-center justify-center">Direct Manager</div>
+          <div class="w-auto px-2 bg-gray-200 h-7 rounded-lg text-center  flex items-center justify-center">Project Manager</div>
+          <div class="w-auto px-2 bg-gray-200 h-7 rounded-lg text-center  flex items-center justify-center">HR</div>
+          <div class="w-auto px-2 bg-gray-200 h-7 rounded-lg text-center  flex items-center justify-center">Approval</div>
+        </div>
     </header>
      <!-- <header class="w-full flex justify-between p-4 border-b">
         <h1 class="text-3xl font-bold flex items-center text-primary-900">
@@ -31,24 +25,24 @@
         </header>
 
         <div class="bg-white p-9 rounded-lg flex flex-col gap-2">
-  
+
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
       <div class="col-span-2">
         <strong class="text-gray-600">Employee:</strong>
-        <p class="text-gray-800">{{ request.employee_name || 'N/A' }}</p>
+        <p class="text-gray-800">{{ data.employee_name || 'N/A' }}</p>
       </div>
       <div>
         <strong class="text-gray-600">Overtime type:</strong>
-        <p class="text-gray-800">{{ request.overtime_type || 'N/A' }}</p>
+        <p class="text-gray-800">{{ data.overtime_type || 'N/A' }}</p>
       </div>
-      <div *ngIf="request.project_id">
+      <div *ngIf="data.project_id">
         <strong class="text-gray-600">Project:</strong>
-        <p class="text-gray-800">{{ getProjectName(request.project_id) }}</p>
+        <p class="text-gray-800">{{ getProjectName(data.project_id) }}</p>
       </div>
     </div>
     <!-- Display change family list if 'for_whom' is 'family' -->
       <h3 class="text-xl font-semibold mt-6 mb-4 text-gray-800">Overtime List</h3>
-      <table class="min-w-180 m-auto table-auto bg-gray-50 border border-gray-300 shadow-sm rounded-lg">
+      <table class="min-w-180 m-auto table-auto bg-gray-50 border border-gray-300 shadow-sm rounded-lg overflow-scroll">
         <thead>
           <tr class="bg-gray-200">
             <th class="px-4 py-2 text-sm text-gray-600 font-medium">Day type</th>
@@ -59,7 +53,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of request.overtime_list" class="border-t border-gray-300">
+          <tr *ngFor="let item of data.overtime_list" class="border-t border-gray-300">
             <td class="px-4 py-2 text-sm text-gray-700">{{ item.day_type }}</td>
             <td class="px-4 py-2 text-sm text-gray-700">{{ item.note }}</td>
             <td class="px-4 py-2 text-sm text-gray-700">{{ item.overtime_date }}</td>
@@ -70,7 +64,7 @@
       </table>
 
 
-      <table class="min-w-180 m-auto mt-6 table-auto bg-gray-50 border border-gray-300 shadow-sm rounded-lg" *ngIf="salaryInfo">
+      <table class="min-w-180 m-auto mt-6 table-auto bg-gray-50 border border-gray-300 shadow-sm rounded-lg overflow-scroll" *ngIf="salaryInfo">
         <thead>
           <tr class="bg-gray-200">
             <th class="px-4 py-2 text-sm text-gray-600 font-medium">type</th>
@@ -113,34 +107,38 @@
         </tbody>
       </table>
 
-    <div class="flex flex-wrap justify-center gap-8 mt-4 border-t pt-5">
-      <div *ngFor="let attachment of files" class="max-w-xs w-full p-4 border rounded-lg shadow-md">
-          <p class="text-lg font-semibold text-gray-800">{{ attachment.name }} ({{ attachment.mimetype }})</p>
-          
-          <!-- View Button -->
-          <div class="flex justify-evenly">
-              <button 
-              (click)="viewAttachment(attachment.url)" 
-              mat-button 
-              class="mt-2 px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300"
-              >
-              View
-          </button>
-          
-          <!-- Download Button -->
-          <a 
-          [href]="getFullUrl(attachment.url)" 
-          download="{{ attachment.name }}" 
-          target="_blank"
-          class="mt-2 inline-block px-4 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-300"
-          >
-          <button mat-button class="w-full">Download</button>
-      </a>
-  </div>
-</div>
-</div>
-  
+<!--    <div class="flex flex-wrap justify-center gap-8 mt-4 border-t pt-5">-->
+<!--      <div *ngFor="let attachment of files" class="max-w-xs w-full p-4 border rounded-lg shadow-md">-->
+<!--          <p class="text-lg font-semibold text-gray-800">{{ attachment.name }} ({{ attachment.mimetype }})</p>-->
+
+<!--          &lt;!&ndash; View Button &ndash;&gt;-->
+<!--          <div class="flex justify-evenly">-->
+<!--              <button-->
+<!--              (click)="viewAttachment(attachment.url)"-->
+<!--              mat-button-->
+<!--              class="mt-2 px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300"-->
+<!--              >-->
+<!--              View-->
+<!--          </button>-->
+
+<!--          &lt;!&ndash; Download Button &ndash;&gt;-->
+<!--          <a-->
+<!--          [href]="getFullUrl(attachment.url)"-->
+<!--          download="{{ attachment.name }}"-->
+<!--          target="_blank"-->
+<!--          class="mt-2 inline-block px-4 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-300"-->
+<!--          >-->
+<!--          <button mat-button class="w-full">Download</button>-->
+<!--      </a>-->
+<!--  </div>-->
+<!--</div>-->
+<!--</div>-->
+
 
         </div>
      </section>
+    <button *ngIf="sidePage" mat-button color="primary" (click)="seeMore()">
+        See More
+    </button>
 </div>
+

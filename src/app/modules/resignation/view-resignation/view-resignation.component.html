@@ -1,10 +1,23 @@
 <div class="w-full flex flex-col" >
 
-    <header class="w-full flex justify-between p-4 border-b bg-gray-50">
+    <header class="w-full flex flex-wrap items-center justify-between p-4 border-b bg-gray-50">
         <h1 class="text-3xl font-bold flex items-center text-primary-900">
-          <span class="cursor-pointer m-2 flex items-center justify-center" (click)="onBackPressed()"><mat-icon svgIcon="arrow_back_ios"></mat-icon></span>
+          <span *ngIf="!sidePage" class="cursor-pointer m-2 flex items-center justify-center" (click)="onBackPressed()"><mat-icon svgIcon="arrow_back_ios"></mat-icon></span>
           <span>Request Details</span>
         </h1>
+        <div class="flex items-center justify-center space-x-2">
+          <div class="px-4 py-2 font-bold text-black bg-green-400 border-2 border-black">Step 1</div>
+          <div class="w-0 h-0 border-l-[14px] border-l-black border-y-[12px] border-y-transparent"></div>
+        
+          <div class="px-4 py-2 font-bold text-black bg-gray-200 border-2 border-black">Step 1</div>
+          <div class="w-0 h-0 border-l-[14px] border-l-black border-y-[12px] border-y-transparent"></div>
+        
+          <div class="px-4 py-2 font-bold text-black bg-gray-200 border-2 border-black">Step 1</div>
+          <div class="w-0 h-0 border-l-[14px] border-l-black border-y-[12px] border-y-transparent"></div>
+        
+          <div class="px-4 py-2 font-bold text-black bg-gray-200 border-2 border-black">Step 1</div>
+        </div>
+        
     </header>
      <!-- <header class="w-full flex justify-between p-4 border-b">
         <h1 class="text-3xl font-bold flex items-center text-primary-900">
@@ -16,58 +29,47 @@
         <header class="flex justify-between items-end mb-2">
             <h2 class="font-bold text-primary-800 pb-2">Requests Details</h2>
         </header>
-    <div class="grid grid-cols-4 gap-4 mb-4">
-        <div class="p-4 text-center text-white rounded-lg font-medium"
-         [ngClass]="request.request_status === 'new'
-          ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'"
-         >Step 1: Submission</div>
-        <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700"
-        [ngClass]="request.request_status === 'direct_manager'
-          ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'"
-          >Step 2: Manager</div>
-        <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700"
-        [ngClass]="request.request_status === 'hr_review'? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'">Step 3: HR</div>
-        <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700" >Step 4: Approval</div>
-    </div>
 
-        <header class="flex justify-between items-end mb-2">
-            <h2 class="font-bold text-primary-800 pb-2">Requests Details</h2>
-        </header>
 
         <div class="bg-white p-9 rounded-lg flex flex-col gap-2">
-  
+
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div>
             <strong class="text-gray-600">Employee:</strong>
-            <p class="text-gray-800">{{ request.employee_name || 'N/A' }}</p>
+            <p class="text-gray-800">{{ data.employee_name || 'N/A' }}</p>
           </div>
       <div>
         <strong class="text-gray-600">Type:</strong>
-        <p class="text-gray-800">{{ request.resignation_type || 'N/A' }}</p>
+        <p class="text-gray-800">{{ data.resignation_type || 'N/A' }}</p>
       </div>
-  
-      <div *ngIf="request.resignation_reason">
+
+      <div *ngIf="data.resignation_reason">
         <strong class="text-gray-600">Resignation Reason:</strong>
-        <p class="text-gray-800">{{ request.resignation_reason  || 'N/A' }}</p>
+        <p class="text-gray-800">{{ data.resignation_reason  || 'N/A' }}</p>
       </div>
-  
-      <div *ngIf="request.last_date">
+
+      <div *ngIf="data.last_date">
         <strong class="text-gray-600">Last Date:</strong>
-        <p class="text-gray-800">{{ request.last_date  || 'N/A' }}</p>
+        <p class="text-gray-800">{{ data.last_date  || 'N/A' }}</p>
       </div>
-  
-      <div *ngIf="request.termination_reason">
+
+      <div *ngIf="data.termination_reason">
         <strong class="text-gray-600">Termination Reason:</strong>
-        <p class="text-gray-800">{{ request.termination_reason  || 'N/A' }}</p>
+        <p class="text-gray-800">{{ data.termination_reason  || 'N/A' }}</p>
       </div>
-  
-      <div *ngIf="request.other_reason">
+
+      <div *ngIf="data.other_reason">
         <strong class="text-gray-600">Other Reason:</strong>
-        <p class="text-gray-800">{{ request.other_reason  || 'N/A' }}</p>
+        <p class="text-gray-800">{{ data.other_reason  || 'N/A' }}</p>
       </div>
-  
-   
+
+
 </div>
         </div>
      </section>
+
+<!--    <button *ngIf="sidePage" mat-button color="primary" (click)="seeMore()">-->
+<!--        See More-->
+<!--    </button>-->
 </div>
+

@@ -39,10 +39,10 @@ export interface GetAllLeaveTypesRemainingLeavesDTO {
 
 export interface TripResponse {
     msg: string;
-    time_off_list: vacation[];
+    time_off_list: Vacation[];
 }
 
-export interface vacation {
+export interface Vacation {
     time_off_list: any;
     description: string;
     duration: string;

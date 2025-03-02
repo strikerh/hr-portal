@@ -1,0 +1,35 @@
+.step-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    .step {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 32px;
+      font-weight: 600;
+      color: white;
+      clip-path: polygon(0% 0%, 85% 0%, 100% 50%, 85% 100%, 0% 100%, 15% 50%);
+      
+      &.step-1 { background-color: #ec4899; } // Pink
+      &.step-2 { background-color: #f87171; } // Light Red
+      &.step-3 { background-color: #ef4444; } // Dark Red
+      &.step-4 {
+        background-color: #d1d5db; // Gray (Inactive)
+        color: #4b5563;
+      }
+  
+      &:first-child {
+        border-radius: 8px 0 0 8px; // Rounded left side
+        clip-path: polygon(0% 0%, 85% 0%, 100% 50%, 85% 100%, 0% 100%);
+      }
+  
+      &:last-child {
+        border-radius: 0 8px 8px 0; // Rounded right side
+        clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 100% 100%, 0% 100%, 15% 50%);
+      }
+    }
+  }
+  

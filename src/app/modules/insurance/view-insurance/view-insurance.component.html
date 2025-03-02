@@ -5,19 +5,14 @@
           <span class="cursor-pointer m-2 flex items-center justify-center" (click)="onBackPressed()"><mat-icon svgIcon="arrow_back_ios"></mat-icon></span>
           <span>Request Details</span>
         </h1>
-        <div class="grid grid-cols-4 gap-4 mb-4">
-          <div class="p-4 text-center text-white rounded-lg font-medium"
-          [ngClass]="request.request_status === 'new'
-           ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'"
-          >Step 1: Submission</div>
-         <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700"
-         [ngClass]="request.request_status === 'direct_manager'
-           ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'"
-           >Step 2: Manager</div>
-         <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700"
-         [ngClass]="request.request_status === 'hr_review'? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'">Step 3: HR</div>
-         <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700" >Step 4: Approval</div>
-     </div>
+        <div class="step-progress">
+          <div class="step step-1">Step 1</div>
+          <div class="step step-2">Step 2</div>
+          <div class="step step-3">Step 3</div>
+          <div class="step step-4">Step 4</div>
+        </div>
+        
+        
     </header>
      <!-- <header class="w-full flex justify-between p-4 border-b">
         <h1 class="text-3xl font-bold flex items-center text-primary-900">

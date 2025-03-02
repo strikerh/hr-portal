@@ -48,13 +48,13 @@
               <td mat-cell *matCellDef="let element"> {{ element.id }}</td>
           </ng-container>
 
-<!-- 
+<!--
           <ng-container matColumnDef="Sequence">
               <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> # </span></th>
               <td mat-cell *matCellDef="let element"> {{ element.Sequence }}</td>
           </ng-container>
 
-          <!-- date_end Column
+           date_end Column
           <ng-container matColumnDef="end_date">
               <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Date End </span>
               </th>
@@ -121,7 +121,7 @@
 
 
           <!-- total_days Column -->
-      
+
 
           <!-- trip_type Column -->
           <ng-container matColumnDef="type">
@@ -166,14 +166,14 @@
                   class="whitespace-nowrap"> Cancel</span></th>
               <td mat-cell *matCellDef="let element">
                   <span class="whitespace-nowrap"  *ngIf="element.state === 'draft'||element.state === 'To Approve'">
-                      
+
                       <button mat-button (click)="cancel_request(element.id)">Cancel</button>
               </span></td>
           </ng-container> -->
 
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns1;"class="hover:cursor-pointer hover:bg-indigo-600 hover:text-gray-50" (click)="veiwAppraisalMethod(row.id)" ></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns1;" class="hover:cursor-pointer hover:bg-indigo-50 hover:text-black" (click)="veiwAppraisalMethod(row.id)" ></tr>
       </table>
 
       <table *ngIf="filter === 'team'" mat-table [dataSource]="teamApprisals" class="table-primary  ">
@@ -187,13 +187,13 @@
             <td mat-cell *matCellDef="let element"> {{ element.id }}</td>
         </ng-container>
 
-<!-- 
+<!--
         <ng-container matColumnDef="Sequence">
             <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> # </span></th>
             <td mat-cell *matCellDef="let element"> {{ element.Sequence }}</td>
         </ng-container>
 
-        <!-- date_end Column
+       date_end Column
         <ng-container matColumnDef="end_date">
             <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Date End </span>
             </th>
@@ -309,14 +309,14 @@
                 class="whitespace-nowrap"> Cancel</span></th>
             <td mat-cell *matCellDef="let element">
                 <span class="whitespace-nowrap"  *ngIf="element.state === 'draft'||element.state === 'To Approve'">
-                    
+
                     <button mat-button (click)="cancel_request(element.id)">Cancel</button>
             </span></td>
         </ng-container> -->
 
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns1;"class="hover:cursor-pointer hover:bg-indigo-600 hover:text-gray-50" (click)="veiwAppraisalMethod(row.id)" ></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns1;" class="hover:cursor-pointer hover:bg-indigo-50 hover:text-black" (click)="veiwAppraisalMethod(row.id)" ></tr>
     </table>
       </div>
 
@@ -325,6 +325,6 @@
   </div>
   <veiw-appraisal style="width: 100%;" *ngIf="veiwPageOpen && viewAppraisal" [data]="viewAppraisal"></veiw-appraisal>
 
-  
-  
+
+
 

@@ -1,0 +1,54 @@
+<div class="  border-b py-4  text-center">
+    <h1 class="text-xl font-bold"> Filter Vacation</h1>
+</div>
+
+<section class="p-6 overflow-auto">
+    <form class="flex flex-col gap-2" [formGroup]="filterVactionsForm" (ngSubmit)="filter()">
+        <mat-form-field>
+            <mat-label>ID</mat-label>
+            <input matInput [formControlName]="'id'">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [rangePicker]="picker" (click)="picker.open()">
+                <input matStartDate formControlName="startDate" placeholder="Start date">
+                <input matEndDate formControlName="endDate" placeholder="End date">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Employee</mat-label>
+            <input matInput [formControlName]="'employee'">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Status</mat-label>
+            <mat-select [formControlName]="'status'">
+                <mat-option [value]="'To Approve'">To Approve</mat-option>
+                <mat-option [value]="'validate'">Validate</mat-option>
+                <mat-option [value]="'refuse'">Refuse</mat-option>
+                <mat-option [value]="'confirm'">confirm</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Description</mat-label>
+            <input matInput [formControlName]="'description'">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Vacation Type</mat-label>
+            <mat-select [formControlName]="'status'">
+                <mat-option *ngFor="let type of lookupResponse.time_off_type" [value]="type.name">{{type.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="flex items-center justify-end gap-2">
+            <button type="button" mat-stroked-button color="primary" (click)="clearFilter()">Clear</button>
+            <button type="submit" mat-raised-button color="primary">Submit</button>
+        </div>
+    </form>
+</section>

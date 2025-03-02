@@ -12,6 +12,7 @@ import {
 import { MatDivider } from '@angular/material/divider';
 import { MatFormField, MatFormFieldModule, MatHint, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatOption, MatSelect, MatSelectChange } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -22,8 +23,6 @@ import { UploadComponent } from '../../../components/upload/upload.component';
 import { UserService } from '../../../core/user/user.service';
 import { VacationsApiService } from '../vacations-api.service';
 import { VacationLookupResponse } from '../vacationsModels';
-import { MatDialog } from '@angular/material/dialog';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
     selector: 'app-new-vacation',
@@ -53,7 +52,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
         UploadComponent,
         UpperCasePipe,
         TitleCasePipe,
-        MatProgressSpinner
+        MatProgressSpinner,
     ],
     templateUrl: './new-vacation.component.html',
     styleUrl: './new-vacation.component.scss',
@@ -88,8 +87,8 @@ export class NewVacationComponent implements OnInit {
             holiday_status_local: [null],
             holiday_status_id: [1],
             description: [''],
-            request_hour_from: ['9'],
-            request_hour_to: ['9.5'],
+            request_hour_from: [''],
+            request_hour_to: [''],
             date_to: [''],
             date_from: [''],
             file_attachment: [''],
@@ -110,10 +109,10 @@ export class NewVacationComponent implements OnInit {
                 console.error(error);
             },
         });
-        this.vacationApi.get_all_leave_types_remaining_leaves().subscribe((data)=>{
-            console.log(data)
-console.log(data)
-        })
+        this.vacationApi.get_all_leave_types_remaining_leaves().subscribe((data) => {
+            console.log(data);
+            console.log(data);
+        });
 
         this.vacationForm.valueChanges
             .pipe(
@@ -127,7 +126,7 @@ console.log(data)
             )
             .subscribe((value) => {
                 // debugger;
-                console.log(value)
+                console.log(value);
                 if (value.holiday_status_local.request_unit === 'day') {
                     if (value.date_from && value.date_to) {
                         const startDate: DateTime = value.date_from.startOf('day');
@@ -148,20 +147,22 @@ console.log(data)
                       this.totalTime = `${hours}:${minutes} Hours`;*/
 
                     const delta = Math.abs(Number(value.request_hour_from) - Number(value.request_hour_to));
-                    this.totalTime = delta.toFixed(2)+ ' Hours';
-                    console.log(this.totalTime)
+                    this.totalTime = delta.toFixed(2) + ' Hours';
+                    console.log(this.totalTime);
                 }
             });
     }
 
-    buttonDisabled:boolean=false;
+    buttonDisabled: boolean = false;
+
     submit($event: SubmitEvent) {
         // this.validateForm();
         if (this.vacationForm.invalid) {
             this.openSnackBar('Please fill in all the required fields');
             return;
         }
-this.buttonDisabled=true;
+        console.log(this.totalTime);
+        this.buttonDisabled = true;
         if (
             Number(this.totalTime.split(' ')[0]) >
             Number(this.vacationForm.value['holiday_status_local'].virtual_remaining_leaves)
@@ -204,32 +205,34 @@ this.buttonDisabled=true;
         // finalPayload['file_attachment'] = (this.vacationForm.value['file_attachment'] as any[])[0];
         // finalPayload['file_attachment'] = (this.vacationForm.value['date_from'] as any[])[0];
 
-        this.vacationApi.createTripRequest(finalPayload).subscribe((value) => {
-            if (value) {
-                console.log(value)
-                this.openSnackBar(value.msg);
-                this.refs.close();
-                this.buttonDisabled=false
+        this.vacationApi.createTripRequest(finalPayload).subscribe(
+            (value) => {
+                if (value) {
+                    console.log(value);
+                    this.openSnackBar(value.msg);
+                    this.refs.close();
+                    this.buttonDisabled = false;
+                }
+            },
+            (error) => {
+                this.handleError(error.error);
+                this.buttonDisabled = false;
             }
-        },
-        (error)=>{
-            this.handleError(error.error);
-            this.buttonDisabled=false
-
-        }
-    );
+        );
     }
-    showError:boolean = false;
-    errorInfo:string;
-    handleError(error: any): void {
-      this.showError = true;
-      this.errorInfo=error;
 
+    showError: boolean = false;
+    errorInfo: string;
+
+    handleError(error: any): void {
+        console.log(error);
+       this.openSnackBar(error);
     }
 
     closeAlert(): void {
-      this.showError = false;
+        this.showError = false;
     }
+
     private validateForm() {
         this.vacationForm.markAllAsTouched();
         const val = this.vacationForm.value;

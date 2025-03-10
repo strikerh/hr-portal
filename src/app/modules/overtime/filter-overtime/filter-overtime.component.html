@@ -1,0 +1,55 @@
+<div class="  border-b py-4  text-center">
+    <h1 class="text-xl font-bold"> Filter Business</h1>
+</div>
+
+<section class="p-6 overflow-auto">
+    <form class="flex flex-col gap-2" [formGroup]="filterForm" (ngSubmit)="filter()">
+       
+        <mat-form-field>
+            <mat-label>Employee</mat-label>
+            <input matInput [formControlName]="'employee'">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Create date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Status</mat-label>
+            <mat-select [formControlName]="'status'">
+                <mat-option [value]="'new'">New</mat-option>
+                <mat-option [value]="'direct_manager'">Direct manager</mat-option>
+                <mat-option [value]="'project_manager'">Project manager</mat-option>
+                <mat-option [value]="'hr_review'">HR review</mat-option>
+                <mat-option [value]="'approved'">Approved</mat-option>
+                <mat-option [value]="'refused'">Refused</mat-option>
+                <mat-option [value]="'cancel'">Cancel</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+       
+
+        <mat-form-field>
+            <mat-label>Type</mat-label>
+            <mat-select [formControlName]="'type'">
+                <mat-option [value]="'administrator'">Administrator</mat-option>
+                <mat-option [value]="'project'">Project</mat-option>
+            
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="filterForm.get('type').value==='project'">
+            <mat-label>Project</mat-label>
+            <input matInput [formControlName]="'project'">
+        </mat-form-field>
+
+        <div class="flex items-center justify-end gap-2">
+            <button type="button" mat-stroked-button color="primary" (click)="clearFilter()">Clear</button>
+            <button type="submit" mat-raised-button color="primary">Submit</button>
+        </div>
+    </form>
+</section>

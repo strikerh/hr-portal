@@ -6,18 +6,19 @@ import { MatOption, MatSelect } from '@angular/material/select';
 import { UploadComponent } from "../../../components/upload/upload.component";
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, SlicePipe } from '@angular/common';
 import { EmployeeRequestService } from 'app/modules/employee-request/employee-request-api.service';
 import { forEach } from 'lodash';
 import { SIDE_PAGE_DATA, SIDE_PAGE_REF, SidePageInfo, SidePageRef } from 'ngx-side-page';
 import { CreateEmployeeRequestComponent } from 'app/modules/employee-request/create-employee-request/create-employee-request.component';
 import { AfterCloseSidePageService } from 'app/core/services/after-close-side-page.service';
 import { environment } from 'environments/environment';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-new-insurance',
   standalone: true,
-  imports: [MatFormField, MatSelect, MatOption, MatLabel, MatHint, ReactiveFormsModule, MatInputModule, UploadComponent,MatButtonModule,MatTableModule,NgIf,NgFor],
+  imports: [MatFormField, MatSelect, MatOption, MatLabel, MatHint, ReactiveFormsModule, MatInputModule, UploadComponent,MatButtonModule,MatTableModule,NgIf,NgFor,SlicePipe,MatTooltip],
   templateUrl: './new-insurance.component.html',
   styleUrl: './new-insurance.component.scss'
 })
@@ -160,7 +161,7 @@ submit(){
           this.api.uploadAttchment(file,response.employee_request['id']).subscribe({
             next: (response) => {
               console.log(response);
-              this.reload.setValue(true)
+              this.reload.setValue('insurance')
               this.refs.close()
             },
             error: (error) => {
@@ -169,7 +170,7 @@ submit(){
           })
         })
         }
-        this.reload.setValue(true)
+        this.reload.setValue('insurance')
 
       },
       error: (error) => {
@@ -191,7 +192,7 @@ this.api.createEmployeeRequest(data).subscribe({
       this.api.uploadAttchment(file,response.employee_request['id']).subscribe({
         next: (response) => {
           console.log(response);
-          this.reload.setValue(true)
+          this.reload.setValue('insurance')
           this.refs.close()
         },
         error: (error) => {
@@ -201,7 +202,7 @@ this.api.createEmployeeRequest(data).subscribe({
     })
     }
     else{
-    this.reload.setValue(true)
+    this.reload.setValue('insurance')
     this.refs.close()
 
   }
@@ -235,7 +236,7 @@ else if(this.updateData){
         this.api.uploadAttchment(file,this.updateData['id']).subscribe({
           next: (response) => {
             console.log(response);
-            this.reload.setValue(true)
+            this.reload.setValue('insurance')
             this.refs.close()
           },
           error: (error) => {
@@ -244,7 +245,7 @@ else if(this.updateData){
         })
       })
       }
-      this.reload.setValue(true)
+      this.reload.setValue('insurance')
       this.refs.close()
     })
   }
@@ -264,7 +265,7 @@ else if(this.updateData){
             this.api.uploadAttchment(file,this.updateData['id']).subscribe({
               next: (response) => {
                 console.log(response);
-                this.reload.setValue(true)
+                this.reload.setValue('insurance')
                 this.refs.close()
               },
               error: (error) => {
@@ -276,7 +277,7 @@ else if(this.updateData){
         }
         else{
           console.log('out if file')
-          this.reload.setValue(true)
+          this.reload.setValue('insurance')
           this.refs.close()
         }
         

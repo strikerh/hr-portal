@@ -1,14 +1,15 @@
 import { NgForOf, NgIf, TitleCasePipe } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatRipple } from '@angular/material/core';
 import {
-    MatDatepickerModule,
-    MatDatepickerToggle,
     MatDateRangeInput,
     MatDateRangePicker,
+    MatDatepickerModule,
+    MatDatepickerToggle,
 } from '@angular/material/datepicker';
+import { MatFormField } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
@@ -17,9 +18,12 @@ import { SidePageService } from 'ngx-side-page';
 import { firstValueFrom } from 'rxjs';
 import { UserService } from '../../core/user/user.service';
 import { User } from '../../core/user/user.types';
+import { FilterVacationComponent } from './filter-vacation/filter-vacation.component';
 import { NewVacationComponent } from './new-vacation/new-vacation.component';
 import { VacationsApiService } from './vacations-api.service';
-import { GetAllLeaveTypesRemainingLeavesDTO, vacation, VacationLookupResponse } from './vacationsModels';
+import { GetAllLeaveTypesRemainingLeavesDTO, VacationLookupResponse, Vacation } from './vacationsModels';
+import { MatTooltip } from '@angular/material/tooltip';
+import { ViewVacationComponent } from './view-vacation/view-vacation.component';
 
 @Component({
     selector: 'app-vacations',
@@ -58,13 +62,16 @@ import { GetAllLeaveTypesRemainingLeavesDTO, vacation, VacationLookupResponse } 
         ReactiveFormsModule,
         FormsModule,
         NgForOf,
+        MatFormField,
+        MatIconButton,
+        MatTooltip,
     ],
     templateUrl: './vacations.component.html',
     styleUrl: './vacations.component.scss',
 })
 export class VacationsComponent implements OnInit {
-    vacations: vacation[] = [];
-    vacationsNeedApproves: vacation[] = [];
+    vacations: Vacation[] = [];
+    vacationsNeedApproves: Vacation[] = [];
     displayedColumns1: string[] = [
         'id',
         // 'Sequence',
@@ -92,15 +99,14 @@ export class VacationsComponent implements OnInit {
     tabIndex: 'needApprove' | 'myTrips' = 'myTrips';
     dashboardData: GetAllLeaveTypesRemainingLeavesDTO;
     filterOpened: boolean = false;
-    filterVactionsForm: FormGroup;
-    filteredMyRequestData: vacation[];
-    filteredEmployeesData: vacation[];
+    filteredMyRequestData: Vacation[];
+    filteredEmployeesData: Vacation[];
     currentDate = Date.now();
     lookupResponse: VacationLookupResponse = {} as VacationLookupResponse;
-    employeeVacationData: vacation;
+    employeeVacationData: Vacation;
     private user: User;
     private _snackBar = inject(MatSnackBar);
-
+    formData: {};
     constructor(
         private fb: FormBuilder,
         private sidePageService: SidePageService,
@@ -109,7 +115,26 @@ export class VacationsComponent implements OnInit {
     ) {}
 
     toggleFilter() {
-        this.filterOpened = !this.filterOpened;
+        let ref = this.sidePageService.openSidePage('filter-vacations', FilterVacationComponent, {
+            width: '95%',
+            maxWidth: '400px',
+            data: {
+                type: this.tabIndex,
+                requests: this.tabIndex === 'myTrips' ? this.vacations : this.vacationsNeedApproves,
+                formData: this.formData,
+            },
+        });
+        ref.afterClosed().subscribe((res) => {
+            console.log(res);
+            if (res) {
+                this.formData = res.formData;
+                if (res.type === 'myTrips') {
+                    this.filteredMyRequestData = res.data;
+                } else {
+                    this.filteredEmployeesData = res.data;
+                }
+            }
+        });
     }
 
     async ngOnInit(): Promise<void> {
@@ -120,18 +145,6 @@ export class VacationsComponent implements OnInit {
         this.vacationApi.get_all_leave_types_remaining_leaves().subscribe((data) => {
             console.log('dashborad', data);
             this.dashboardData = data;
-        });
-        this.filterVactionsForm = this.fb.group({
-            id: [],
-            startDate: [],
-            endDate: [],
-            employee: [],
-            total: [],
-            status: [],
-            description: [],
-            type: [],
-            maxTotal: [],
-            minTotal: [],
         });
 
         this.vacationApi.fetchCreateTripLookup().subscribe({
@@ -148,15 +161,6 @@ export class VacationsComponent implements OnInit {
         });
     }
 
-    filter() {
-        if (this.tabIndex == 'myTrips') {
-            this.filteredMyRequestData = this.vacations.filter(this.filterMethod.bind(this));
-        } else {
-            this.filteredEmployeesData = this.vacationsNeedApproves.filter(this.filterMethod.bind(this));
-        }
-        this.toggleFilter();
-    }
-
     openNewBusinessTrip() {
         debugger;
         const ref = this.sidePageService.openSidePage('new-vacation', NewVacationComponent, {
@@ -168,69 +172,6 @@ export class VacationsComponent implements OnInit {
             console.log('The dialog was closed');
             this.reloadData();
         });
-    }
-
-    filterMethod(item: vacation) {
-        const filters = this.filterVactionsForm.value;
-        if (filters.id && Number(item.id) !== Number(filters.id)) {
-            return false;
-        }
-
-        if (filters.startDate) {
-            const itemStartDate = new Date(item.start_date);
-            const filterStartDate = new Date(filters.startDate);
-
-            // Compare day, month, and year
-            if (
-                itemStartDate.getFullYear() < filterStartDate.getFullYear() ||
-                (itemStartDate.getFullYear() === filterStartDate.getFullYear() &&
-                    (itemStartDate.getMonth() < filterStartDate.getMonth() ||
-                        (itemStartDate.getMonth() === filterStartDate.getMonth() &&
-                            itemStartDate.getDate() < filterStartDate.getDate())))
-            ) {
-                return false;
-            }
-        }
-
-        if (filters.endDate) {
-            const itemEndDate = new Date(item.end_date);
-            const filterEndDate = new Date(filters.endDate);
-
-            // Compare day, month, and year
-            if (
-                itemEndDate.getFullYear() > filterEndDate.getFullYear() ||
-                (itemEndDate.getFullYear() === filterEndDate.getFullYear() &&
-                    (itemEndDate.getMonth() > filterEndDate.getMonth() ||
-                        (itemEndDate.getMonth() === filterEndDate.getMonth() &&
-                            itemEndDate.getDate() > filterEndDate.getDate())))
-            ) {
-                return false;
-            }
-        }
-
-        if (filters.employee && !item.employee_name.toLowerCase().includes(filters.employee.toLowerCase())) {
-            return false;
-        }
-        if (filters.minTotal && item.duration < filters.minTotal) {
-            return false;
-        }
-
-        if (filters.maxTotal && item.duration > filters.maxTotal) {
-            return false;
-        }
-        if (filters.status && item.state.toLowerCase() !== filters.status.toLowerCase()) {
-            return false;
-        }
-
-        if (filters.description && !item.description.toLowerCase().includes(filters.description.toLowerCase())) {
-            return false;
-        }
-
-        if (filters.type && !item.time_off_type.toLowerCase().includes(filters.type.toLowerCase())) {
-            return false;
-        }
-
-        return true; // If all conditions pass
     }
 
     doAction(approve: 'approve' | 'reject', trip_id: number) {
@@ -306,5 +247,25 @@ export class VacationsComponent implements OnInit {
         // this.employeeVacationData=data;
         // console.log(data)
         //         })
+
     }
+  openView(value,type:string) {
+         let data={
+             ...value,
+             type:type
+         }
+         console.log(data)
+         const ref = this.sidePageService.openSidePage('view-vacation', ViewVacationComponent, {
+             width: '95%',
+             maxWidth: '400px',
+             data: data,
+             showCloseBtn:false,
+         });
+ 
+         ref.afterClosed().subscribe((res) => {
+             console.log(res)
+            this.reloadData()
+         });
+ 
+     }
 }

@@ -112,7 +112,7 @@ submit(){
       
     }
     this.api.updateEmployeeRequest(dataToUpdlod,this.data.data['id']).subscribe((response)=>{
-      this.reload.setValue(true)
+      this.reload.setValue('resignation')
       console.log(response)
       this.refs.close()
     })
@@ -121,7 +121,7 @@ submit(){
 
   
     this.api.createEmployeeRequest(data).subscribe((response)=>{
-      this.reload.setValue(true)
+      this.reload.setValue('resignation')
 
       console.log(response)
       this.refs.close()

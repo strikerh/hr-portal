@@ -14,6 +14,7 @@ import { SalarySlipComponent } from './salary-slip/salary-slip.component';
 import { BusinessCardFormComponent } from "./business-card/business-card-form.component";
 import { DefineJobComponent } from "./define-job/define-job.component";
 import { UpdateEmployeeDataComponent } from './update-employee-data/update-employee-data.component';
+import { AfterCloseSidePageService } from 'app/core/services/after-close-side-page.service';
 
 @Component({
   selector: 'app-create-employee-request',
@@ -46,7 +47,7 @@ export class CreateEmployeeRequestComponent implements OnInit {
     selectedRequest=null
     oldData:any;
     // oldData:any;
-  constructor(private form: FormBuilder,private api:EmployeeRequestService) { }
+  constructor(private form: FormBuilder,private api:EmployeeRequestService,private reload:AfterCloseSidePageService) { }
   ngOnInit(): void {
  
     this.requestForm = this.form.group({
@@ -132,6 +133,7 @@ this.api.createEmployeeRequest(data).subscribe({
     }
     console.log(response)
     this.refs.close()
+    this.reload.setValue('employee')
   }
 })
   

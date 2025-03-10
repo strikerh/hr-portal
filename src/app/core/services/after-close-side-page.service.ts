@@ -5,13 +5,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AfterCloseSidePageService {
- afterClose$=new BehaviorSubject<boolean>(false);
+ afterClose$=new BehaviorSubject<string | null>(null);
   constructor() { }
 
-  setValue(value:boolean){
+  setValue(value:string){
     this.afterClose$.next(value)
   }
-  getValue():Observable<boolean>{
+  getValue():Observable<string>{
     return this.afterClose$.asObservable();
   }
 }

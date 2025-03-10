@@ -1,6 +1,6 @@
 import { DatePipe, DecimalPipe, NgIf, TitleCasePipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatRipple } from '@angular/material/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -16,6 +16,9 @@ import { NewBusinessTripComponent } from './new-business-trip/new-business-trip.
 import { MatDatepickerModule, MatDatepickerToggle, MatDateRangeInput, MatDateRangePicker } from '@angular/material/datepicker';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormField } from '@angular/material/form-field';
+import { FilterBusinessTripComponent } from './filter-business-trip/filter-business-trip.component';
+import { MatTooltip } from '@angular/material/tooltip';
+import { ViewBusinessTripComponent } from './view-business-trip/view-business-trip.component';
 
 @Component({
     selector: 'app-business-trips',
@@ -37,6 +40,8 @@ import { MatFormField } from '@angular/material/form-field';
         ReactiveFormsModule,
         FormsModule,
         MatFormField,
+        MatIconButton,
+        MatTooltip,
     ],
     templateUrl: './business-trips.component.html',
     styleUrl: './business-trips.component.scss',
@@ -46,108 +51,10 @@ export class BusinessTripsComponent implements OnInit {
     tripsNeedApproves: Trip[];
     moreInfoWrapperOpen: boolean = false;
     moreInfoWrapperData: any = {};
-    filterOpened: boolean = false;
-    filterForm: FormGroup;
     filteredMyRequestData: Trip[];
     filteredEmployeeData: Trip[];
+    formData: any;
 
-    toggleFilter() {
-        this.filterOpened = !this.filterOpened;
-    }
-    filter() {
-        if (this.tabIndex == 'myTrips') {
-            this.filteredMyRequestData = this.trips.filter(this.filterMethod.bind(this));
-            console.log();
-        } else {
-            this.filteredEmployeeData = this.tripsNeedApproves.filter(this.filterMethod.bind(this));
-        }
-        this.toggleFilter();
-    }
-    filterMethod(item: Trip) {
-        const filters = this.filterForm.value;
-        if (filters.approval && !item.Sequence.toLowerCase().includes(filters.approval.toLowerCase())) {
-            return false;
-        }
-
-        if (filters.startDate) {
-            const itemStartDate = new Date(item.date_start);
-            const filterStartDate = new Date(filters.startDate);
-
-            // Compare day, month, and year
-            if (
-                itemStartDate.getFullYear() < filterStartDate.getFullYear() ||
-                (itemStartDate.getFullYear() === filterStartDate.getFullYear() &&
-                    (itemStartDate.getMonth() < filterStartDate.getMonth() ||
-                        (itemStartDate.getMonth() === filterStartDate.getMonth() &&
-                            itemStartDate.getDate() < filterStartDate.getDate())))
-            ) {
-                return false;
-            }
-        }
-
-        if (filters.endDate) {
-            const itemEndDate = new Date(item.date_end);
-            const filterEndDate = new Date(filters.endDate);
-
-            // Compare day, month, and year
-            if (
-                itemEndDate.getFullYear() > filterEndDate.getFullYear() ||
-                (itemEndDate.getFullYear() === filterEndDate.getFullYear() &&
-                    (itemEndDate.getMonth() > filterEndDate.getMonth() ||
-                        (itemEndDate.getMonth() === filterEndDate.getMonth() &&
-                            itemEndDate.getDate() > filterEndDate.getDate())))
-            ) {
-                return false;
-            }
-        }
-
-        if (filters.employee && !item.employee.toLowerCase().includes(filters.employee.toLowerCase())) {
-            return false;
-        }
-        if (filters.minTotal && item.total_compensation < filters.minTotal) {
-            return false;
-        }
-
-        if (filters.maxTotal && item.total_compensation > filters.maxTotal) {
-            return false;
-        }
-        if (filters.status && item.status.toLowerCase() !== filters.status.toLowerCase()) {
-            return false;
-        }
-
-        if (filters.grade && !item.employee_grade.toLowerCase().includes(filters.grade.toLowerCase())) {
-            return false;
-        }
-
-        if (filters.type && !item.trip_type.toLowerCase().includes(filters.type.toLowerCase())) {
-            return false;
-        }
-
-        if (filters.project && !item.project_id.toLowerCase().includes(filters.project.toLowerCase())) {
-            return false;
-        }
-
-        return true; // If all conditions pass
-    }
-    openMoreInfo(id: number) {
-        if (this.tabIndex == 'myTrips') {
-            this.moreInfoWrapperData = this.trips.find((x) => x.id == id);
-        } else {
-            this.moreInfoWrapperData = this.tripsNeedApproves.find((x) => x.id == id);
-        }
-        setTimeout(() => {
-            const wrapperElement = document.querySelector('.wrapper');
-            if (wrapperElement) {
-                // Scroll the wrapper element into view with smooth scrolling
-                wrapperElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }, 0);
-
-        this.moreInfoWrapperOpen = true;
-    }
-    toggle() {
-        this.moreInfoWrapperOpen = !this.moreInfoWrapperOpen;
-    }
     displayedColumns1: string[] = [
         // 'id',
         'Sequence',
@@ -210,22 +117,58 @@ export class BusinessTripsComponent implements OnInit {
     ) {}
 
     async ngOnInit(): Promise<void> {
-        this.filterForm = this.fb.group({
-            approval: [],
-            startDate: [],
-            endDate: [],
-            employee: [],
-            total: [],
-            status: [],
-            grade: [],
-            type: [],
-            project: [],
-            maxTotal: [],
-            minTotal: [],
-        });
         const user = await firstValueFrom(this.userService.user$);
         this.user = user;
         this.reloadData();
+    }
+
+    toggleFilter() {
+        let ref = this.sidePageService.openSidePage('filter-business', FilterBusinessTripComponent, {
+            width: '95%',
+            maxWidth: '400px',
+            data: {
+                type: this.tabIndex,
+                requests: this.tabIndex === 'myTrips' ? this.trips : this.tripsNeedApproves,
+                formData: this.formData,
+            },
+        });
+        ref.afterClosed().subscribe((res) => {
+            console.log(res);
+            if(res){
+            this.formData = res.formData || {};
+            if (res.type === 'myTrips') {
+                this.filteredMyRequestData = res.data;
+            } else {
+                this.filteredEmployeeData = res.data;
+            } }
+
+        });
+    }
+
+    openMoreInfo(id: number,type:string) {
+        if (this.tabIndex == 'myTrips') {
+            this.moreInfoWrapperData = this.trips.find((x) => x.id == id);
+        } else {
+            this.moreInfoWrapperData = this.tripsNeedApproves.find((x) => x.id == id);
+        }
+        let data={
+            ...this.moreInfoWrapperData,
+            type:type
+        }
+        console.log(data)
+      let ref=this.sidePageService.openSidePage('business-trip',ViewBusinessTripComponent,{
+        width:'95%',
+        minWidth:'400px',
+        maxWidth:'500px',
+        data:data,
+        showCloseBtn:false
+      })
+      ref.afterClosed().subscribe((res)=>{
+        this.reloadData()
+      })
+    }
+    toggle() {
+        this.moreInfoWrapperOpen = !this.moreInfoWrapperOpen;
     }
 
     openNewBusinessTrip() {

@@ -1,0 +1,68 @@
+<div class="  border-b py-4  text-center">
+    <h1 class="text-xl font-bold"> Filter Business</h1>
+</div>
+
+<section class="p-6 overflow-auto">
+    <form class="flex flex-col gap-2" [formGroup]="filterBusinessForm" (ngSubmit)="filter()">
+        <mat-form-field>
+            <mat-label>Approval Number</mat-label>
+            <input matInput [formControlName]="'approval'">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [rangePicker]="picker" (click)="picker.open()">
+                <input matStartDate formControlName="startDate" placeholder="Start date">
+                <input matEndDate formControlName="endDate" placeholder="End date">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Employee</mat-label>
+            <input matInput [formControlName]="'employee'">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Total Compensation</mat-label>
+            <div fxLayout="row" fxLayoutGap="10px">
+                <input matInput type="number" [formControlName]="'minTotal'" placeholder="From">
+                <input matInput type="number" [formControlName]="'maxTotal'" placeholder="To">
+            </div>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Status</mat-label>
+            <mat-select [formControlName]="'status'">
+                <mat-option [value]="'pending'">Pending</mat-option>
+                <mat-option [value]="'new'">New</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Employee grade</mat-label>
+            <input matInput [formControlName]="'grade'">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Trip type</mat-label>
+            <mat-select [formControlName]="'type'">
+                <mat-option [value]="'short_term'">Short Term</mat-option>
+                <mat-option [value]="'medium_term'">Medium Term</mat-option>
+                <mat-option [value]="'long_term'">Long Term</mat-option>
+                <mat-option [value]="'visit_clients'">Visit Clients</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Project</mat-label>
+            <input matInput [formControlName]="'project'">
+        </mat-form-field>
+
+        <div class="flex items-center justify-end gap-2">
+            <button type="button" mat-stroked-button color="primary" (click)="clearFilter()">Clear</button>
+            <button type="submit" mat-raised-button color="primary">Submit</button>
+        </div>
+    </form>
+</section>

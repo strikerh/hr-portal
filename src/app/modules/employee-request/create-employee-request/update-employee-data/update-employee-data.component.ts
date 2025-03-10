@@ -16,105 +16,110 @@ import { EmployeeRequestService } from '../../employee-request-api.service';
   selector: 'app-update-employee-data',
   standalone: true,
   imports: [
-     MatFormFieldModule, // Use MatFormFieldModule instead of MatFormField
-                ReactiveFormsModule,
-                MatLabel, // Correct
-                MatSelectModule, // Correct
-                MatInputModule, // Required for input fields inside mat-form-field
-                MatOptionModule, // Required for mat-option inside mat-select
-                MatButtonModule, // Optional, but useful for buttons
-                MatDatepickerModule, // Optional, if you use date pickers
-                MatNativeDateModule,
-                MatRadioModule,
-                MatInput,
-                NgForOf,
-                NgFor,
-                NgIf,
-                UploadComponent
+    MatFormFieldModule, // Use MatFormFieldModule instead of MatFormField
+    ReactiveFormsModule,
+    MatLabel, // Correct
+    MatSelectModule, // Correct
+    MatInputModule, // Required for input fields inside mat-form-field
+    MatOptionModule, // Required for mat-option inside mat-select
+    MatButtonModule, // Optional, but useful for buttons
+    MatDatepickerModule, // Optional, if you use date pickers
+    MatNativeDateModule,
+    MatRadioModule,
+    MatInput,
+    NgForOf,
+    NgFor,
+    NgIf,
+    UploadComponent
   ],
   templateUrl: './update-employee-data.component.html',
   styleUrl: './update-employee-data.component.scss'
 })
-export class UpdateEmployeeDataComponent implements OnInit{
-updateEmployeeData:FormGroup;
-updated_data = [];
-@Output() formSubmitted=new EventEmitter<any>();
-@Input() data:any;
-documents:any
-imageWantToDelete:any[]=[]
-imageWantToUpload:any[]=[]
-constructor(private _formBuilder:FormBuilder,private api:EmployeeRequestService){}
-ngOnInit(): void {
-  this.updateEmployeeData=this._formBuilder.group({
-    field_name:['',Validators.required],
-    old_data:['',Validators.required],
-    new_data:['',Validators.required],
-    documents:['']
-  })
-  if(this.data){
-    console.log(this.data)
-    this.updated_data=this.data.updated_data
-    if(this.data.documents){
-      this.documents=this.data.documents
-     this.documents[0].url=environment.apiUrl+this.documents[0].url
+export class UpdateEmployeeDataComponent implements OnInit {
+  updateEmployeeData: FormGroup;
+  updated_data = [];
+  @Output() formSubmitted = new EventEmitter<any>();
+  @Input() data: any;
+  documents: any
+  imageWantToDelete: any[] = []
+  imageWantToUpload: any[] = []
+  constructor(private _formBuilder: FormBuilder, private api: EmployeeRequestService) { }
+  ngOnInit(): void {
+    this.updateEmployeeData = this._formBuilder.group({
+      field_name: ['', Validators.required],
+      old_data: ['', Validators.required],
+      new_data: ['', Validators.required],
+      documents: ['']
+    })
+    if (this.data) {
+      console.log(this.data)
+      this.updated_data = this.data.updated_data
+      if (this.data.documents) {
+        this.documents = this.data.documents;
+      }
+
     }
   }
-}
-submit(){
-  let data;
-  if(this.updated_data.length>0){
-    data={updated_data:this.updated_data}
-    if(this.updateEmployeeData.get('documents').value && !this.data){
-      data={
-        ...data,
-        hasFile:true,
-        documents:this.updateEmployeeData.get('documents').value
-      }
-    }
-    if(this.data){
-      if(this.imageWantToDelete){
-        this.imageWantToDelete.forEach((image)=>{
-          this.api.deleteAttchemnt(image).subscribe({
-            next:(response)=>{
 
-            }
+  getFullUrl(url: string): string {
+    return `${environment.apiUrl}${url}`;
+  }
+
+  submit() {
+    let data;
+    if (this.updated_data.length > 0) {
+      data = { updated_data: this.updated_data }
+      if (this.updateEmployeeData.get('documents').value && !this.data) {
+        data = {
+          ...data,
+          hasFile: true,
+          documents: this.updateEmployeeData.get('documents').value
+        }
+      }
+      if (this.data) {
+        if (this.imageWantToDelete) {
+          this.imageWantToDelete.forEach((image) => {
+            this.api.deleteAttchemnt(image).subscribe({
+              next: (response) => {
+
+              }
+            })
           })
-        })
-      }
-      if(this.imageWantToUpload){
-        this.imageWantToUpload.forEach((image)=>{
-          this.api.uploadAttchment(image,this.data.id).subscribe((response)=>{
+        }
+        if (this.imageWantToUpload) {
+          this.imageWantToUpload.forEach((image) => {
+            this.api.uploadAttchment(image, this.data.id).subscribe((response) => {
 
+            })
           })
-        })
+        }
       }
+      this.formSubmitted.emit(data)
     }
-    this.formSubmitted.emit(data)
   }
-}
 
-addRow(){
-  if(this.updateEmployeeData.valid){
+  addRow() {
+    if (this.updateEmployeeData.valid) {
 
-    this.updated_data.push(this.updateEmployeeData.value)
+      this.updated_data.push(this.updateEmployeeData.value)
+    }
+    this.updateEmployeeData.patchValue({
+      field_name: '',
+      old_data: '',
+      new_data: ''
+    });
   }
-  this.updateEmployeeData.patchValue({
-    field_name: '',
-    old_data: '',
-    new_data: ''
-  });
+  deleteRow(index: number) {
+    this.updated_data.splice(index, 1);
   }
-deleteRow(index:number){
-  this.updated_data.splice(index, 1);
-}
-handleFile(value){
-  if(this.data){
-    this.imageWantToUpload.push(value);
+  handleFile(value) {
+    if (this.data) {
+      this.imageWantToUpload.push(value);
+    }
+    this.updateEmployeeData.get('documents').setValue([value])
   }
-this.updateEmployeeData.get('documents').setValue([value])
-}
-removeAttachment(id){
-  delete this.documents[0]
-this.imageWantToDelete.push(id);
-}
+  removeAttachment(id) {
+    delete this.documents[0]
+    this.imageWantToDelete.push(id);
+  }
 }

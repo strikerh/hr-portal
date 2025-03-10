@@ -1,5 +1,5 @@
 import { ApplicationRef, ComponentRef, createComponent, Inject, Injectable, Optional } from '@angular/core';
-import { BehaviorSubject, filter, map, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, Subject, take } from 'rxjs';
 import { SIDE_PAGE_CONFIG } from './side-page-config.token';
 import { SidePageComponent } from './side-page.component';
 
@@ -176,6 +176,7 @@ export class SidePageRef<T> {
         debugger;
         return this._endClosing$.asObservable().pipe(
             filter((value) => value.key === this._sidePage.key),
+            take(1),
             map((value) => value.value)
         );
     }

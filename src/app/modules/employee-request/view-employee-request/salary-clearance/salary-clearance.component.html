@@ -1,109 +1,111 @@
-<!-- <p>salary-clearance works!</p> -->
-<div class="w-full flex flex-col" >
+<div class="w-full flex flex-col overflow-scroll">
 
-    <header class="w-full flex justify-between p-4 border-b bg-gray-50">
-        <h1 class="text-3xl font-bold flex items-center text-primary-900">
-          <span class="cursor-pointer m-2 flex items-center justify-center" (click)="closeView()"><mat-icon svgIcon="arrow_back_ios"></mat-icon></span>
-          <span>Salary Clearance</span>
+    <header class="w-full flex flex-wrap flex-col p-4 border-b bg-gray-50">
+      <div class="w-full flex justify-between items-center">
+        <span class="cursor-pointer" (click)="closeSidePage()">
+          <mat-icon svgIcon="close"></mat-icon>
+        </span>
+        <h1 class="text-xl font-bold text-primary-900 text-center flex-1">
+          Employee Request Details
         </h1>
+      </div>
     </header>
-     <!-- <header class="w-full flex justify-between p-4 border-b">
-        <h1 class="text-3xl font-bold flex items-center text-primary-900">
-            <span class="cursor-pointer mr-4" (click)="closeView()"><</span>Define job
-        </h1>
-    </header>
-     -->
-     <section class="details p-6 flex flex-col">
-        <header class="flex justify-between items-end mb-2">
-            <h2 class="font-bold text-primary-800 pb-2">Requests Details</h2>
-        </header>
-
-    <div class="grid grid-cols-3 gap-4 mb-4">
-        <div class="p-4 text-center text-white rounded-lg font-medium"
-         [ngClass]="request.request_status === 'new'
-          ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'"
-         >Step 1: Submission</div>
-        <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700"
-        [ngClass]="request.request_status === 'hr_review'? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'">Step 2: HR</div>
-        <div class="p-4 text-center bg-gray-200 rounded-lg font-medium text-gray-700">Step 3: Approval</div>
+  
+    <div class="w-full flex flex-wrap items-center justify-center py-8 border-b-2 gap-y-2">
+      <div class="flex items-center">
+        <div class="text-black flex items-center justify-center px-2 py-1 rounded-lg border-solid border-black border-2 border-opacity-50" [ngClass]="request.request_status==='new'?'bg-green-300':'bg-slate-50'">Submission</div>
+        <div class="flex items-center"><mat-icon svgIcon="keyboard_arrow_right"></mat-icon></div>
+      </div>
+      <div class="flex items-center">
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg border-solid border-black border-2 border-opacity-50" [ngClass]="request.request_status==='hr_review'?'bg-green-300':'bg-slate-50'">HR</div>
+        <div class="flex items-center"><mat-icon svgIcon="keyboard_arrow_right"></mat-icon></div>
+      </div>
+    
+      <div class="flex items-center">
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg bg-slate-50 border-solid border-black border-2 border-opacity-50"  *ngIf="request.request_status != 'approved' && request.request_status!='refused' && request.request_status!='cancel'">Approval</div>
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg bg-green-300 border-solid border-black border-2 border-opacity-50"  *ngIf="request.request_status == 'approved'">Approved</div>
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg bg-red-400 border-solid border-black border-2 border-opacity-50"  *ngIf="request.request_status == 'refused'">Refused</div>
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg bg-red-400 border-solid border-black border-2 border-opacity-50"  *ngIf="request.request_status == 'cancel'">Canceled</div>
+      </div>
     </div>
-    <div class="bg-white p-9 rounded-lg flex flex-col gap-2">
-        <div class="pt-3">
-            <p class="text-lg font-medium text-gray-700">Employee Name:</p>
-            <p class="text-gray-600">{{request.employee_name}}</p>
+  
+    <section class="details p-6 pb-2 flex flex-col">
+      <div class="bg-white py-2 rounded-lg flex flex-col gap-2">
+  
+        <div class="grid grid-cols-2 sm:grid-cols-2 gap-4 mb-4">
+          <div>
+            <span class="text-black text-opacity-50 text-lg">Employee:</span>
+            <p class="text-black font-bold text-lg">{{ request.employee_name || 'N/A' }}</p>
+          </div>
+        
+          <div >
+            <span class="text-black text-opacity-50 text-lg" >Chamber of Commerce:</span>
+            <p class="text-black font-bold text-lg">{{ request.salary_certificate_attested?'Yes':'No' }}</p>
+          </div> 
+          <div *ngIf="request.certificate_language">
+            <span class="text-black text-opacity-50 text-lg" >Language:</span>
+            <p class="text-black font-bold text-lg">{{ request.certificate_language || 'N/A' }}</p>
+          </div>
+          <div *ngIf="request.salary_addressed_to">
+            <span class="text-black text-opacity-50 text-lg" >Addressed to a specific entity, or general?</span>
+            <p class="text-black font-bold text-lg">{{ request.salary_addressed_to || 'N/A' }}</p>
+          </div>
+          <div *ngIf="request.entity_name">
+            <span class="text-black text-opacity-50 text-lg" >Entity:</span>
+            <p class="text-black font-bold text-lg">{{ request.entity_name || 'N/A' }}</p>
+          </div>
+          <div *ngIf="request.salary_breakdown_type">
+            <span class="text-black text-opacity-50 text-lg" >Breakdown to be detailed or summarized:</span>
+            <p class="text-black font-bold text-lg">{{ request.salary_breakdown_type || 'N/A' }}</p>
+          </div>
+          <div *ngIf="request.addressed_to_bank">
+            <span class="text-black text-opacity-50 text-lg" >Addressed to a bank:</span>
+            <p class="text-black font-bold text-lg">{{request.addressed_to_bank  ? 'yes':'no'}}</p>
+          </div>
         </div>
         
-        <div class="border-t pt-3">
-            <p class="text-lg font-medium text-gray-700">Chamber of Commerce:</p>
-            <p class="text-gray-600">{{request.salary_certificate_attested ? 'yes':'no'}}</p>
-        </div>
-        
-        <div class="border-t pt-3">
-            <p class="text-lg font-medium text-gray-700">Language:</p>
-            <p class="text-gray-600">{{request.certificate_language}}</p>
-        </div>
-        
-        <div class="border-t pt-3">
-            <p class="text-lg font-medium text-gray-700">Do you want it addressed to a specific entity, or "Whom it may concern"?</p>
-            <div class="flex items-center gap-x-4">
-                <label class="text-gray-600">
-                    <input [disabled]="true" type="radio" name="entity" value="Specific Entity" [checked]="request.salary_addressed_to==='specific'">
-                    Specific Entity
-                </label>
-                <label class="text-gray-600">
-                    <input [disabled]="true" type="radio" name="entity" value="Whom it may concern" [checked]="request.salary_addressed_to==='general'">
-                    Whom it may concern
-                </label>
+        <span class="text-black text-opacity-50 text-lg">Attachments</span>
+        @for (file of attachments; track $index) {
+        <a [href]="getFullUrl(file.url)" class="flex items-center justify-between bg-slate-50 hover:bg-slate-100 cursor-pointer rounded">
+          <div class="flex flex-col pl-2">
+            <span>File name</span>
+            <span class="font-bold" [matTooltip]="file.name">
+              {{ file.name.length > 18 ? (file.name | slice:0:18) + '...' : file.name }}
+            </span>            
             </div>
-        </div>
-        <div class="border-t pt-3" *ngIf="request.salary_addressed_to==='specific'">
-            <p class="text-lg font-medium text-gray-700">Entity:</p>
-            <p class="text-gray-600">{{request.entity_name}}</p>
-        </div>
-        <div class="border-t pt-3">
-            <p class="text-lg font-medium text-gray-700">Do you want the salary breakdown to be detailed or summarized?</p>
-            <div class="flex items-center gap-x-4">
-                <label class="text-gray-600">
-                    <input [disabled]="true" type="radio" name="breakdown" value="Detailed" [checked]="request.salary_breakdown_type==='detailed'">
-                    Detailed
-                </label>
-                <label class="text-gray-600">
-                    <input [disabled]="true" type="radio" name="breakdown" value="Summarized" [checked]="request.salary_breakdown_type==='summarized'">
-                    Summarized
-                </label>
+            <div *ngIf="file.mimetype.includes('image')">
+              <img [src]="getFullUrl(file.url)" [alt]="file.name" class="w-13 h-13 rounded border-black border border-opacity-12 object-cover">
             </div>
-        </div>
-        <div class="border-t pt-3">
-            <p class="text-lg font-medium text-gray-700">Will it be addressed to a bank? (Salary Fixation Needed)</p>
-            <p class="text-gray-600">{{request.addressed_to_bank  ? 'yes':'no'}}</p>
+            <div *ngIf="!file.mimetype.includes('image')" class="w-14 h-14 flex items-center justify-center bg-slate-500 rounded">
+              <img src="icons/pdf.png" alt="PDF Icon" class="w-9 h-9">
+            </div>
+        </a>}
+        
+        <div *ngIf="attachments.length<=0" class="flex items-center justify-center h-14 bg-slate-50 hover:bg-slate-100 cursor-pointer rounded">
+          There is no attachment         
         </div>
 
-        <div class="flex flex-wrap justify-center gap-8 mt-4 border-t pt-5">
-            <div *ngFor="let attachment of attachments" class="max-w-xs w-full p-4 border rounded-lg shadow-md">
-                <p class="text-lg font-semibold text-gray-800">{{ attachment.name }} ({{ attachment.mimetype }})</p>
-                
-                <!-- View Button -->
-                <div class="flex justify-evenly">
-                    <button 
-                    (click)="viewAttachment(attachment.url)" 
-                    mat-button 
-                    class="mt-2 px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300"
-                    >
-                    View
-                </button>
-                
-                <!-- Download Button -->
-                <a 
-                [href]="getFullUrl(attachment.url)" 
-                download="{{ attachment.name }}" 
-                target="_blank"
-                class="mt-2 inline-block px-4 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-300"
-                >
-                <button mat-button class="w-full">Download</button>
-            </a>
-        </div>
-    </div>
-</div>
+        <span class="text-black text-opacity-50 text-lg" *ngIf="request.signed">Signed Attachments</span>
+        <a *ngIf="request.signed" [href]="getFullUrl(request.sign_attachment)" class="flex items-center justify-between bg-slate-50 hover:bg-slate-100 cursor-pointer rounded">
+          <div class="flex flex-col pl-2">
+            <span>File name</span>
+            <span class="font-bold" matTooltip="Sign attachment">
+              Sign attachment
+            </span>            
+            </div>
+            <!-- <div *ngIf="files[0].mimetype.includes('image')">
+              <img [src]="getFullPath(files[0].url)" [alt]="files[0].name" class="w-13 h-13 rounded border-black border border-opacity-12 object-cover">
+            </div> -->
+            <div class="w-14 h-14 flex items-center justify-center bg-slate-500 rounded">
+              <img src="icons/pdf.png" alt="PDF Icon" class="w-8 h-8">
+            </div>
+        </a>
+        <div class="flex items-center gap-3 justify-end mt-8">
+            <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="request.request_status==='new' || request.request_status==='refused'" (click)="updateInfo(request)">Edit</button>
+            <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="request.request_status==='new' && request.type==='self' " (click)="updateRequestStatus('submit',request.id)">Submit</button>
+            <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="request.type!='self'" (click)="updateRequestStatus('rejected',request.id)">Reject</button>
+            <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="request.type!='self'" (click)="updateRequestStatus('approved',request.id)">Approve</button>
+          </div>
 </div>
     </section>
     

@@ -78,7 +78,7 @@
           <app-upload-request *ngIf="!documents" (fileSelected)="handleFile($event)"></app-upload-request>
           
           <div *ngIf="documents && documents[0]" class="relative">
-            <a [href]="documents && documents[0].url" target="_blank">
+            <a [href]="getFullUrl(documents[0].url)" target="_blank">
               <div class="w-full h-15 bg-slate-300 flex items-center justify-center">
                 Download Attacment
               </div>

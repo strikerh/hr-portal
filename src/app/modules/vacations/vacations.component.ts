@@ -23,6 +23,7 @@ import { NewVacationComponent } from './new-vacation/new-vacation.component';
 import { VacationsApiService } from './vacations-api.service';
 import { GetAllLeaveTypesRemainingLeavesDTO, VacationLookupResponse, Vacation } from './vacationsModels';
 import { MatTooltip } from '@angular/material/tooltip';
+import { ViewVacationComponent } from './view-vacation/view-vacation.component';
 
 @Component({
     selector: 'app-vacations',
@@ -246,5 +247,25 @@ export class VacationsComponent implements OnInit {
         // this.employeeVacationData=data;
         // console.log(data)
         //         })
+
     }
+  openView(value,type:string) {
+         let data={
+             ...value,
+             type:type
+         }
+         console.log(data)
+         const ref = this.sidePageService.openSidePage('view-vacation', ViewVacationComponent, {
+             width: '95%',
+             maxWidth: '400px',
+             data: data,
+             showCloseBtn:false,
+         });
+ 
+         ref.afterClosed().subscribe((res) => {
+             console.log(res)
+            this.reloadData()
+         });
+ 
+     }
 }

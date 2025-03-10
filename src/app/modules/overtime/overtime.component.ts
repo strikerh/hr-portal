@@ -13,6 +13,7 @@ import { ViewRequestService } from './view-request.service';
 import { ViewOvertimeComponent } from "./view-overtime/view-overtime.component";
 import { AfterCloseSidePageService } from 'app/core/services/after-close-side-page.service';
 import { MatTooltip } from '@angular/material/tooltip';
+import { FilterOvertimeComponent } from './filter-overtime/filter-overtime.component';
 
 @Component({
     selector: 'app-overtime',
@@ -23,11 +24,14 @@ import { MatTooltip } from '@angular/material/tooltip';
 })
 export class OvertimeComponent implements OnInit {
     tabIndex: 'my' | 'team' = 'my';
-    displayedColumns1: string[] = ['id', 'Sequence', 'date', 'type', 'status', 'Note', 'action'];
+    displayedColumns1: string[] = ['id', 'Sequence', 'employee','date', 'type', 'status', 'Note', 'action'];
     employeeRequest: any[] = [];
     requestsNeedapproves: any[] = [];
     isOpenView: boolean = false;
     selectedRequest: any;
+    filterData:any
+    filterEmployeeRequests:any
+    filterRequestneedApproves:any
     showAlert(message) {
         this.snackBar.open(message, 'Close', {
             duration: 3000, // Auto close after 3 seconds
@@ -49,7 +53,7 @@ export class OvertimeComponent implements OnInit {
         this.getRequestNeedApproves();
         this.reload.getValue().subscribe((value) => {
             console.log(value);
-            if (value) {
+            if (value==='overtime') {
                 this.getEmployeeRequest();
                 this.getRequestNeedApproves();
             }
@@ -87,8 +91,8 @@ export class OvertimeComponent implements OnInit {
         });
 
         ref.afterClosed().subscribe((result) => {
-            console.log('The dialog was closed');
-            this.getEmployeeRequest();
+            this.getEmployeeRequest()
+            this.getRequestNeedApproves()
         });
     }
 
@@ -135,25 +139,28 @@ export class OvertimeComponent implements OnInit {
             maxWidth: '800px',
         });
         ref.afterClosed().subscribe((value) => {
-            console.log('ezz');
+            this.getEmployeeRequest()
+            this.getRequestNeedApproves();
         });
     }
 
-    openView(value) {
+    openView(value,type:string) {
+        let data={
+            ...value,
+            type:type
+        }
+        console.log(data)
         const ref = this._sidePageSerivce.openSidePage('view-overtime', ViewOvertimeComponent, {
             width: '95%',
-            maxWidth: '650px',
-
-            data: value,
+            maxWidth: '800px',
+            data: data,
+            showCloseBtn:false,
         });
 
         ref.afterClosed().subscribe((res) => {
-            if(res){
-                if(res.seeMore){
-                    this.selectedRequest = value;
-                    this.view.setOpen(true);
-                }
-            }
+            console.log(res)
+           this.getEmployeeRequest()
+           this.getRequestNeedApproves()
         });
 
     }
@@ -165,5 +172,28 @@ export class OvertimeComponent implements OnInit {
         } else {
             return value;
         }
+    }
+
+   toggleFilter() {
+        let ref = this._sidePageSerivce.openSidePage('filter-business', FilterOvertimeComponent, {
+            width: '95%',
+            maxWidth: '400px',
+            data: {
+                type: this.tabIndex,
+                requests: this.tabIndex === 'my' ? this.employeeRequest : this.requestsNeedapproves,
+                formData: this.filterData,
+            },
+        });
+        ref.afterClosed().subscribe((res) => {
+            console.log(res);
+            if(res){
+            this.filterData = res.formData || {};
+            if (res.type === 'my') {
+                this.filterEmployeeRequests = res.data;
+            } else {
+                this.filterRequestneedApproves = res.data;
+            } }
+
+        });
     }
 }

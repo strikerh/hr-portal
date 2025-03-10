@@ -96,19 +96,32 @@
             <ng-container *ngIf="salaryClearanceForm.get('addressed_to_bank')?.value">
               <div formArrayName="documents">
                 <ng-container *ngFor="let doc of documentsArray.controls; let i = index" [formGroupName]="i">
-                  <mat-label>{{ doc.get('type')?.value.replace('_',' ') }}</mat-label>
+                  <mat-label *ngIf="!(documents && documents[doc.get('type').value])">{{ doc.get('type')?.value.replace('_',' ') }}</mat-label>
                   <app-upload-request *ngIf="!(documents && documents[doc.get('type').value])" (fileSelected)="handleFile($event, i)"></app-upload-request>
                   
-                  <div *ngIf="documents[doc.get('type').value]" class="relative flex items-center justify-center">
-                    <a [href]="documents[doc.get('type').value].url" download="{{ doc.get('type').value }}" target="_blank">
-                      <!-- <img *ngIf="documents[doc.get('type').value].type.contain('image')" src="images/logo/hawsabah-logo.png" alt="Image" class="w-20 h-20 bg-slate-300 flex items-center justify-center"> -->
-                      <div class="w-full h-15 bg-slate-300 flex items-center justify-center">
-                        Download attachment
-                      </div>
+                  <div *ngIf="documents[doc.get('type').value]" class="relative">
+                    <a  [href]="getFullUrl(documents[doc.get('type').value].url)" class="flex items-center justify-between bg-slate-50 hover:bg-slate-100 cursor-pointer rounded">
+                      <div class="flex flex-col pl-2">
+                        <span>File name</span>
+                        <span class="font-bold" [matTooltip]="documents[doc.get('type').value].name">
+                          {{doc.get('type').value.length > 18 ? (doc.get('type').value | slice:0:18) + '...' : doc.get('type').value }}
+                        </span>            
+                        </div>
+                        <div *ngIf="documents[doc.get('type').value].type.includes('image')">
+                          <img [src]="documents[doc.get('type').value].url" [alt]="doc.get('type').value" class="w-13 h-13 rounded border-black border border-opacity-12 object-cover">
+                        </div>
+                        <div *ngIf="!documents[doc.get('type').value].type.includes('image')" class="w-14 h-14 flex items-center justify-center bg-slate-500 rounded">
+                          <img src="icons/pdf.png" alt="PDF Icon" class="w-8 h-8">
+                        </div>
                     </a>
-                    <button (click)="removeAttachment(documents[doc.get('type').value].id,doc.get('type').value);$event.stopPropagation()" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
-                      ✕
+                    <button 
+                    type="button" 
+                    class="absolute -top-2 -right-2 bg-white text-black w-6 h-6 flex items-center justify-center rounded-full shadow-md hover:bg-slate-50 transition-transform transform hover:scale-110" 
+                    (click)="removeAttachment(documents[doc.get('type').value].id,doc.get('type').value);$event.stopPropagation()"
+                  >
+                    ✖
                   </button>
+                    
                   </div>
                   
                 </ng-container>

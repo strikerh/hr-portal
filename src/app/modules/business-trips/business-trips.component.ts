@@ -18,6 +18,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MatFormField } from '@angular/material/form-field';
 import { FilterBusinessTripComponent } from './filter-business-trip/filter-business-trip.component';
 import { MatTooltip } from '@angular/material/tooltip';
+import { ViewBusinessTripComponent } from './view-business-trip/view-business-trip.component';
 
 @Component({
     selector: 'app-business-trips',
@@ -144,21 +145,27 @@ export class BusinessTripsComponent implements OnInit {
         });
     }
 
-    openMoreInfo(id: number) {
+    openMoreInfo(id: number,type:string) {
         if (this.tabIndex == 'myTrips') {
             this.moreInfoWrapperData = this.trips.find((x) => x.id == id);
         } else {
             this.moreInfoWrapperData = this.tripsNeedApproves.find((x) => x.id == id);
         }
-        setTimeout(() => {
-            const wrapperElement = document.querySelector('.wrapper');
-            if (wrapperElement) {
-                // Scroll the wrapper element into view with smooth scrolling
-                wrapperElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }, 0);
-
-        this.moreInfoWrapperOpen = true;
+        let data={
+            ...this.moreInfoWrapperData,
+            type:type
+        }
+        console.log(data)
+      let ref=this.sidePageService.openSidePage('business-trip',ViewBusinessTripComponent,{
+        width:'95%',
+        minWidth:'400px',
+        maxWidth:'500px',
+        data:data,
+        showCloseBtn:false
+      })
+      ref.afterClosed().subscribe((res)=>{
+        this.reloadData()
+      })
     }
     toggle() {
         this.moreInfoWrapperOpen = !this.moreInfoWrapperOpen;

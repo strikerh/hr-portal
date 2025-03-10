@@ -13,6 +13,7 @@ import { DialogFormComponent } from '../employee-request/dialog/dialog.component
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AfterCloseSidePageService } from 'app/core/services/after-close-side-page.service';
 import { MatTooltip } from '@angular/material/tooltip';
+import { FilterInsuranceComponent } from './filter-insurance/filter-insurance.component';
 
 @Component({
     selector: 'app-insurance',
@@ -28,7 +29,9 @@ export class InsuranceComponent implements OnInit {
     displayedColumns1: string[] = ['id', 'Sequence', 'date', 'type', 'status', 'Note', 'action'];
     isOpenView: boolean = false;
     selectedRequest: any;
-
+    filterEmployeeRequests:any;
+    filterRequestNeedApproves:any
+    filterData:any
     showAlert(message) {
         this.snackBar.open(message, 'Close', {
             duration: 3000, // Auto close after 3 seconds
@@ -48,7 +51,7 @@ export class InsuranceComponent implements OnInit {
     ngOnInit(): void {
         this.reload.getValue().subscribe((value) => {
             console.log(value);
-            if (value) {
+            if (value==='insurance') {
                 this.getEmployeeRequest();
                 this.getRequestNeedApproves();
             }
@@ -140,9 +143,25 @@ export class InsuranceComponent implements OnInit {
             console.log(data);
         });
     }
-    openView(value) {
-        this.selectedRequest = value;
-        this.view.setOpen(true);
+ openView(value,type:string) {
+        let data={
+            ...value,
+            type:type
+        }
+        console.log(data)
+        const ref = this.sidePageSerivce.openSidePage('view-insurance', ViewInsuranceComponent, {
+            width: '95%',
+            maxWidth: '500px',
+            minWidth: '400px',
+            data: data,
+            showCloseBtn:false,
+        });
+
+        ref.afterClosed().subscribe((res) => {
+           this.getEmployeeRequest()
+           this.getRequestNeedApproves()
+        });
+
     }
     getStatus(value) {
         if (value == 'hr_review') {
@@ -153,4 +172,26 @@ export class InsuranceComponent implements OnInit {
             return value;
         }
     }
+     toggleFilter() {
+            let ref = this.sidePageSerivce.openSidePage('filter-business', FilterInsuranceComponent, {
+                width: '95%',
+                maxWidth: '400px',
+                data: {
+                    type: this.tabIndex,
+                    requests: this.tabIndex === 'my' ? this.employeeRequest : this.requestNeedApproves,
+                    formData: this.filterData,
+                },
+            });
+            ref.afterClosed().subscribe((res) => {
+                console.log(res);
+                if(res){
+                this.filterData = res.formData || {};
+                if (res.type === 'my') {
+                    this.filterEmployeeRequests = res.data;
+                } else {
+                    this.filterRequestNeedApproves = res.data;
+                } }
+    
+            });
+        }
 }

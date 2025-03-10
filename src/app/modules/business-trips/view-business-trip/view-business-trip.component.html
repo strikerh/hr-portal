@@ -1,0 +1,113 @@
+<div class="w-full flex flex-col overflow-auto">
+
+    <header class="w-full flex flex-wrap flex-col p-4 border-b bg-gray-50">
+      <div class="w-full flex justify-between items-center">
+        <span class="cursor-pointer" (click)="seeMore()">
+          <mat-icon svgIcon="close"></mat-icon>
+        </span>
+        <h1 class="text-xl font-bold text-primary-900 text-center flex-1">
+         Business trip Request Details
+        </h1>
+      </div>
+    </header>
+  
+    <div class="w-full flex flex-wrap justify-center px-2 py-8 border-b-2 gap-y-2">
+      <div class="flex items-center">
+        <div class="text-black flex items-center justify-center px-2 py-1 rounded-lg border-solid border-black border-2 border-opacity-50" [ngClass]="data.status==='new'?'bg-green-300':'bg-slate-50'">Submission</div>
+        <div class="flex items-center"><mat-icon svgIcon="keyboard_arrow_right"></mat-icon></div>
+      </div>
+      <div class="flex items-center">
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg border-solid border-black border-2 border-opacity-50"  [ngClass]="data.status=='direct_manager'?'bg-green-300':'bg-slate-50'">Direct Manager</div>
+        <div class="flex items-center"><mat-icon svgIcon="keyboard_arrow_right"></mat-icon></div>
+      </div>
+      <div class="flex items-center">
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg border-solid border-black border-2 border-opacity-50"  [ngClass]="data.status==='project_manager'?'bg-green-300':'bg-slate-50'">Project Manager</div>
+        <div class="flex items-center"><mat-icon svgIcon="keyboard_arrow_right"></mat-icon></div>
+      </div>
+      <div class="flex items-center">
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg border-solid border-black border-2 border-opacity-50" [ngClass]="data.status==='hr_review'?'bg-green-300':'bg-slate-50'">HR</div>
+        <div class="flex items-center"><mat-icon svgIcon="keyboard_arrow_right"></mat-icon></div>
+      </div>
+      <div class="flex items-center">
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg bg-slate-50 border-solid border-black border-2 border-opacity-50"  *ngIf="data.status != 'approved' && data.status!='refused' && data.status!='cancel'">Approval</div>
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg bg-green-300 border-solid border-black border-2 border-opacity-50"  *ngIf="data.status == 'approved'">Approved</div>
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg bg-red-400 border-solid border-black border-2 border-opacity-50"  *ngIf="data.status == 'refused'">Refused</div>
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg bg-red-400 border-solid border-black border-2 border-opacity-50"  *ngIf="data.status == 'cancel'">Canceled</div>
+      </div>
+    </div>
+    <!-- <header class="w-full flex justify-between p-4 border-b">
+          <h1 class="text-3xl font-bold flex items-center text-primary-900">
+              <span class="cursor-pointer mr-4" (click)="closeView()"><</span>Define job
+          </h1>
+      </header>
+       -->
+    <section class="details p-6 pb-2 flex flex-col">
+      <div class="bg-white py-2 rounded-lg flex flex-col gap-2">
+  
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div>
+            <span class="text-black text-opacity-50 text-lg">Employee:</span>
+            <p class="text-black font-medium text-lg">{{ data.employee || 'N/A' }}</p>
+          </div>
+          <div  *ngIf="data.Sequence">
+            <span class="text-black text-opacity-50 text-lg">Sequence:</span>
+            <p class="text-black font-medium text-lg">{{ data.Sequence || 'N/A' }}</p>
+          </div>
+        
+      
+          <div *ngIf="data.date_start">
+            <span class="text-black text-opacity-50 text-lg" >Start Date:</span>
+            <p class="text-black font-medium text-lg">{{ data.date_start || 'N/A' }}</p>
+          </div>
+          <div *ngIf="data.date_end">
+            <span class="text-black text-opacity-50 text-lg" >End Date:</span>
+            <p class="text-black font-medium text-lg">{{ data.date_start || 'N/A' }}</p>
+          </div>
+          <div *ngIf="data.distance">
+            <span class="text-black text-opacity-50 text-lg" >Distance:</span>
+            <p class="text-black font-medium text-lg">{{ data.distance || 'N/A' }}</p>
+          </div>
+          <div *ngIf="data.project_id">
+            <span class="text-black text-opacity-50 text-lg" >Project Name:</span>
+            <p class="text-black font-medium text-lg">{{ data.project_id || 'N/A' }}</p>
+          </div>
+          <div *ngIf="data.status">
+            <span class="text-black text-opacity-50 text-lg" >Status:</span>
+            <p class="text-black font-medium text-lg">{{ data.status || 'N/A' }}</p>
+          </div>
+          <div *ngIf="data.trip_type">
+            <span class="text-black text-opacity-50 text-lg" >Trip Type:</span>
+            <p class="text-black font-medium text-lg">{{ data.trip_type || 'N/A' }}</p>
+          </div>
+          <div *ngIf="data.international_trip !=null">
+            <span class="text-black text-opacity-50 text-lg" >International Trip:</span>
+            <p class="text-black font-medium text-lg">{{ data.international_trip?'Yes':'No' }}</p>
+          </div>
+          <div *ngIf="data.car_provided != null">
+            <span class="text-black text-opacity-50 text-lg">Car Provided:</span>
+            <p class="text-black font-medium text-lg">{{ data.car_provided?'Yes':'No' || 'N/A' }}</p>
+          </div>
+          <div *ngIf="data.accommodation_paid_by_company!=null">
+            <span class="text-black text-opacity-50 text-lg" >Accommodation Paid:</span>
+            <p class="text-black font-medium text-lg">{{ data.accommodation_paid_by_company?'Yes':'No' }}</p>
+          </div>
+          <div *ngIf="data.request_manager">
+            <span class="text-black text-opacity-50 text-lg" >Request Manager:</span>
+            <p class="text-black font-medium text-lg">{{ data.request_manager || 'N/A' }}</p>
+          </div>
+          <div *ngIf="data.total_compensation">
+            <span class="text-black text-opacity-50 text-lg" >Total Compensation:</span>
+            <p class="text-black font-medium text-lg">{{ data.total_compensation || 0 | number:'1.2-2'}}<span class="text-xs">SAR</span> </p>
+          </div>
+        </div>
+
+      
+        <div class="flex items-center gap-3 justify-end mt-8">
+            <!-- <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="data.request_status==='new' || data.request_status==='refused'" (click)="updateInfo(data)">Edit</button> -->
+            <!-- <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="data.request_status==='new' && data.type==='self' " (click)="doAction('submit',data.id)">Submit</button> -->
+            <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="data.my_action =='pending' && data.type!='self'" (click)="doAction('reject',data.id)">Reject</button>
+            <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="data.my_action =='pending' && data.type!='self'" (click)="doAction('approve',data.id)">Approve</button>
+          </div>
+      </div>
+    </section>
+</div>

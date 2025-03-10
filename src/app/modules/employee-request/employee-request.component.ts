@@ -14,6 +14,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogFormComponent } from './dialog/dialog.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltip } from '@angular/material/tooltip';
+import { AfterCloseSidePageService } from 'app/core/services/after-close-side-page.service';
+import { FilterEmployeeRequestComponent } from './filter-employee-request/filter-employee-request.component';
 
 @Component({
     selector: 'app-employee-request',
@@ -43,12 +45,16 @@ export class EmployeeRequestComponent implements OnInit {
     isOpenView: boolean = false;
     selectedType: any;
     selectedRequest: any;
+    filterEmployeeRequests:any;
+    filterRequestNeedApproves:any
+    filterData:any
     constructor(
         private sidePageService: SidePageService,
         private api: EmployeeRequestService,
         private view: ViewRequestService,
         private dialog: MatDialog,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private reload:AfterCloseSidePageService
     ) {}
 
     showAlert(message) {
@@ -61,6 +67,14 @@ export class EmployeeRequestComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.reload.getValue().subscribe((res)=>{
+            
+            if(res==='employee'){
+                this.getEmployeeRequest();
+                this.getRequestNeedApproves();
+
+            }
+        })
         this.view.isOpen$.subscribe((value) => {
             this.isOpenView = value;
         });
@@ -107,6 +121,7 @@ export class EmployeeRequestComponent implements OnInit {
         ref.afterClosed().subscribe((result) => {
             console.log('The dialog was closed');
             this.getEmployeeRequest();
+            this.getRequestNeedApproves()
         });
     }
     getEmployeeRequest() {
@@ -125,9 +140,21 @@ export class EmployeeRequestComponent implements OnInit {
             },
         });
     }
-    openView(value) {
-        this.selectedRequest = value;
-        this.view.setOpen(true);
+    openView(value,type:string) {
+        let data={
+            ...value,
+            type:type
+        }
+       let ref= this.sidePageService.openSidePage('employee-request',ViewEmployeeRequestComponent,{
+            width:'98%',
+            maxWidth:'400px',
+            data:data,
+            showCloseBtn:false
+        })
+        ref.afterClosed().subscribe(()=>{
+            this.getEmployeeRequest()
+            this.getRequestNeedApproves()
+        })
     }
     showPopup = false; // Controls the visibility of the popup
     message: string;
@@ -189,4 +216,26 @@ export class EmployeeRequestComponent implements OnInit {
             return value;
         }
     }
+       toggleFilter() {
+            let ref = this.sidePageService.openSidePage('filter-business', FilterEmployeeRequestComponent, {
+                width: '95%',
+                maxWidth: '400px',
+                data: {
+                    type: this.tabIndex,
+                    requests: this.tabIndex === 'my' ? this.employeeRequests : this.requestNeedsAprroves,
+                    formData: this.filterData,
+                },
+            });
+            ref.afterClosed().subscribe((res) => {
+                console.log(res);
+                if(res){
+                this.filterData = res.formData || {};
+                if (res.type === 'my') {
+                    this.filterEmployeeRequests = res.data;
+                } else {
+                    this.filterRequestNeedApproves = res.data;
+                } }
+    
+            });
+        }
 }

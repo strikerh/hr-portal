@@ -19,6 +19,13 @@
                     Filter
                 </button> -->
                 <button type="button"
+                        class="rounded px-3 py-1 border-b-2 flex items-center"
+                        (click)="toggleFilter()"
+                >
+                <mat-icon svgIcon="search"></mat-icon> Filter
+                </button>
+
+                <button type="button"
                         class="rounded px-3 py-1 border-b-2"
                         [class.bg-green-700]="tabIndex === 'my'"
                         [class.text-white]="tabIndex === 'my'"
@@ -38,7 +45,7 @@
         </header>
         <div class="py-2 bg-white rounded shadow flex flex-col overflow-x-auto relative">
             <div class="min-h-100">
-            <table *ngIf="tabIndex === 'my'" mat-table [dataSource]="employeeRequest" class="table-primary  ">
+            <table *ngIf="tabIndex === 'my'" mat-table [dataSource]="filterEmployeeRequests||employeeRequest" class="table-primary  ">
 
                 <!--- Note that these columns can be defined in any order.
                       The actual rendered columns are set as a property on the row definition" -->
@@ -53,6 +60,11 @@
                 <ng-container matColumnDef="Sequence">
                     <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Sequence </span></th>
                     <td mat-cell *matCellDef="let element"> {{ element.name }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="employee">
+                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Employee </span></th>
+                    <td mat-cell *matCellDef="let element"> {{ element.employee_name }}</td>
                 </ng-container>
 
                 <!-- date_end Column -->
@@ -115,9 +127,9 @@
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns1;" class="cursor-pointer hover:bg-indigo-50 hover:text-black" (click)="openView(row)"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns1;" class="cursor-pointer hover:bg-indigo-50 hover:text-black" (click)="openView(row,'self')"></tr>
             </table>
-            <table *ngIf="tabIndex === 'team'" mat-table [dataSource]="requestsNeedapproves" class="table-primary">
+            <table *ngIf="tabIndex === 'team'" mat-table [dataSource]="filterRequestneedApproves || requestsNeedapproves" class="table-primary">
 
                 <!--- Note that these columns can be defined in any order.
                       The actual rendered columns are set as a property on the row definition" -->
@@ -132,6 +144,11 @@
                 <ng-container matColumnDef="Sequence">
                     <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Sequence </span></th>
                     <td mat-cell *matCellDef="let element"> {{ element.name }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="employee">
+                    <th mat-header-cell *matHeaderCellDef><span class="whitespace-nowrap"> Employee </span></th>
+                    <td mat-cell *matCellDef="let element"> {{ element.employee_name }}</td>
                 </ng-container>
 
                 <!-- date_end Column -->
@@ -185,14 +202,14 @@
                     <th mat-header-cell *matHeaderCellDef><span></span></th>
                     <td mat-cell *matCellDef="let element"  class="w-0">
                         <div class="flex flex-nowrap items-center justify-end gap-2">
-                        <button matTooltip="Approve" mat-icon-button color="primary" *ngIf="element.request_status != 'rejected' && element.request_status !='approved' " (click)="updateRequestStatus('approved',element.id);$event.stopPropagation()"><mat-icon>check_circle</mat-icon></button>
-                        <button matTooltip="Reject" mat-icon-button color="primary" *ngIf="element.request_status != 'rejected' && element.request_status != 'approved'" (click)="updateRequestStatus('rejected',element.id);$event.stopPropagation()"><mat-icon>block</mat-icon></button>
+                        <button matTooltip="Approve" mat-icon-button color="primary" *ngIf="element.can_approve" (click)="updateRequestStatus('approved',element.id);$event.stopPropagation()"><mat-icon>check_circle</mat-icon></button>
+                        <button matTooltip="Reject" mat-icon-button color="primary" *ngIf="element.can_approve" (click)="updateRequestStatus('rejected',element.id);$event.stopPropagation()"><mat-icon>block</mat-icon></button>
                     </div>
                 </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns1;" class="hover:cursor-pointer hover:bg-indigo-50 hover:text-black" (click)="openView(row)"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns1;" class="hover:cursor-pointer hover:bg-indigo-50 hover:text-black" (click)="openView(row,'needApproves')"></tr>
             </table>
 
 

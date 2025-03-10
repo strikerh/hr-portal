@@ -113,12 +113,12 @@ export class NewOvertimeComponent implements OnInit{
       if(this.updateData){
         console.log("doen")
         this.api.updateEmployeeRequest(data,this.updateData.id).subscribe((response)=>{
-          this.reload.setValue(true)
+          this.reload.setValue('overtime')
           this.refs.close()
         })
       }else{
       this.api.createEmployeeRequest(data).subscribe((response)=>{
-        this.reload.setValue(true)
+        this.reload.setValue('overtime')
         this.refs.close()
       })
     }

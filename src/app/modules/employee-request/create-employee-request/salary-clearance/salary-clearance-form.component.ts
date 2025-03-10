@@ -1,4 +1,4 @@
-import { NgFor, NgForOf, NgIf } from '@angular/common';
+import { NgFor, NgForOf, NgIf, SlicePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { UploadComponent } from '../../upload/upload.component';
 import { environment } from 'environments/environment';
 import { EmployeeRequestService } from '../../employee-request-api.service';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-salary-clearance-form',
@@ -29,7 +30,9 @@ import { EmployeeRequestService } from '../../employee-request-api.service';
         UploadComponent,
         NgIf,
         UploadComponent,
-        NgFor
+        NgFor,
+        SlicePipe,
+        MatTooltip
   ],
   templateUrl: './salary-clearance-form.component.html',
   styleUrl: './salary-clearance-form.component.scss'
@@ -41,7 +44,7 @@ export class SalaryClearanceFormComponent implements OnInit {
     @Input() data:any;
     deletedImage:any[]=[]
     uploatedImgate:any[]=[]
-    documents:any={'IBAN_certificate':null,'national_residence':null,passport:null}
+    documents:any={'IBAN_certificate':null,'national_residence':null,'passport':null}
 
     constructor(private form: FormBuilder,private api:EmployeeRequestService) { }
   ngOnInit(): void {
@@ -94,7 +97,10 @@ export class SalaryClearanceFormComponent implements OnInit {
 
     console.log(this.documents)
   }
-  
+
+  getFullUrl(url: string): string {
+    return `${environment.apiUrl}${url}`;
+  }
   createDocumentGroup(type: string): FormGroup {
     if(this.data){
       return this.form.group({
@@ -114,6 +120,7 @@ export class SalaryClearanceFormComponent implements OnInit {
   }
 
   get documentsArray(): FormArray {
+    console.log(this.salaryClearanceForm.get('documents'))
     return this.salaryClearanceForm.get('documents') as FormArray;
   }
 

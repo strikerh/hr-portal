@@ -1,18 +1,18 @@
-<div class="w-full flex flex-col">
-    @if (request.approval_type==='Business Card') {
-        <app-business-card [request]="request"></app-business-card>
+<div class="w-full flex flex-col overflow-y-auto">
+    @if (data.approval_type==='Business Card') {
+        <app-business-card [request]="data" (close)="close()"></app-business-card>
     }
     
-    @if (request.approval_type==='Define Job') {
-        <app-define-job-view [request]="request"></app-define-job-view>
+    @if (data.approval_type==='Define Job') {
+        <app-define-job-view [request]="data" (close)="close()"></app-define-job-view>
     }
-    @if (request.approval_type==='Salary Slip') {
-        <app-salary-slip [request]="request"></app-salary-slip>
+    @if (data.approval_type==='Salary Slip') {
+        <app-salary-slip [request]="data" (close)="close()"></app-salary-slip>
     }
-    @if (request.approval_type==='Update Data') {
-        <app-update-employee-data [request]="request"></app-update-employee-data>
+    @if (data.approval_type==='Update Data') {
+        <app-update-employee-data [request]="data" (close)="close()"></app-update-employee-data>
     }
-    @if (request.approval_type==='Salary Clearance') {
-        <app-salary-clearance [request]="request"></app-salary-clearance>
+    @if (data.approval_type==='Salary Clearance') {
+        <app-salary-clearance [request]="data" (close)="close()"></app-salary-clearance>
     }
 </div>

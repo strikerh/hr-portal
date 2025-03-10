@@ -16,6 +16,7 @@ import { AfterCloseSidePageService } from 'app/core/services/after-close-side-pa
 import { fuseAnimations } from '@fuse/animations';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ViewOvertimeComponent } from '../overtime/view-overtime/view-overtime.component';
+import { FilterResignationComponent } from './filter-resignation/filter-resignation.component';
 
 @Component({
     selector: 'app-resignation',
@@ -32,6 +33,9 @@ export class ResignationComponent implements OnInit {
     displayedColumns1: string[] = ['id', 'Sequence', 'date', 'type', 'status', 'Note', 'action'];
     isOpenView: boolean = false;
     selectedRequest: any;
+    filterEmployeeRequest:any
+    filterRequestNeedApproves:any
+    filterData:any
     constructor(
         private _sidePageService: SidePageService,
         private api: resignationApiService,
@@ -53,7 +57,7 @@ export class ResignationComponent implements OnInit {
     ngOnInit(): void {
         this.reload.getValue().subscribe((value) => {
             console.log(value);
-            if (value) {
+            if (value==='resignation') {
                 this.getEmployeeRequest();
                 this.getRequestNeedApproves();
             }
@@ -69,12 +73,13 @@ export class ResignationComponent implements OnInit {
         this.i++;
         console.log(this.i);
         let ref = this._sidePageService.openSidePage('resignation-request' + this.i, NewResignationComponent, {
-            width: '40%',
+            width: '95%',
             maxWidth: '600px',
         });
 
-        ref.beforeClosed().subscribe((data) => {
-            console.log('ezz');
+        ref.afterClosed().subscribe((data) => {
+            this.getEmployeeRequest()
+            this.getRequestNeedApproves()
         });
     }
     getEmployeeRequest() {
@@ -157,25 +162,28 @@ export class ResignationComponent implements OnInit {
                 next: (response) => {
                     this.showAlert('Request ' + action);
                     this.getEmployeeRequest();
-                    // this.getRequestNeedApproves()
+                    this.getRequestNeedApproves()
                 },
             });
         }
     }
-    openView(value) {
+    openView(value,type:string) {
+        let data={
+            ...value,
+            type:type
+        }
         const ref = this._sidePageService.openSidePage('view-overtime', ViewResignationComponent, {
             width: '95%',
-            maxWidth: '670px',
-            data: value,
+            maxWidth: '500px',
+            minWidth:'400px',
+            data: data,
+            showCloseBtn:false,
         });
 
         ref.afterClosed().subscribe((res) => {
-            if(res){
-                if(res.seeMore){
-                    this.selectedRequest = value;
-                    this.view.setOpen(true);
-                }
-            }
+            console.log(res)
+            this.getEmployeeRequest()
+            this.getRequestNeedApproves()
         });
 
     }
@@ -189,7 +197,7 @@ export class ResignationComponent implements OnInit {
         }
         console.log(data);
 
-        const ref = this._sidePageService.openSidePage('create-employee-request', NewResignationComponent, {
+        const ref = this._sidePageService.openSidePage('create-resignation-request', NewResignationComponent, {
             width: '40%',
             maxWidth: '600px',
             data: data,
@@ -198,6 +206,7 @@ export class ResignationComponent implements OnInit {
         ref.afterClosed().subscribe((result) => {
             console.log('The dialog was closed');
             this.getEmployeeRequest();
+            this.getRequestNeedApproves()
         });
     }
 
@@ -210,4 +219,27 @@ export class ResignationComponent implements OnInit {
             return value;
         }
     }
+
+     toggleFilter() {
+            let ref = this._sidePageService.openSidePage('filter-business', FilterResignationComponent, {
+                width: '95%',
+                maxWidth: '400px',
+                data: {
+                    type: this.tabIndex,
+                    requests: this.tabIndex === 'my' ? this.employeeRequest : this.requestNeedApproves,
+                    formData: this.filterData,
+                },
+            });
+            ref.afterClosed().subscribe((res) => {
+                console.log(res);
+                if(res){
+                this.filterData = res.formData || {};
+                if (res.type === 'my') {
+                    this.filterEmployeeRequest = res.data;
+                } else {
+                    this.filterRequestNeedApproves = res.data;
+                } }
+    
+            });
+        }
 }

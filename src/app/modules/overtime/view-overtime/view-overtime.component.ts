@@ -6,6 +6,11 @@ import { MatIcon } from '@angular/material/icon';
 import { CommonModule, NgClass, NgFor, NgIf } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { SIDE_PAGE_DATA, SIDE_PAGE_REF, SidePageInfo, SidePageRef, SidePageService } from 'ngx-side-page';
+import { DialogFormComponent } from 'app/modules/employee-request/dialog/dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { NewOvertimeComponent } from '../new-overtime/new-overtime.component';
+import { AfterCloseSidePageService } from 'app/core/services/after-close-side-page.service';
 
 @Component({
     selector: 'app-view-overtime',
@@ -24,7 +29,7 @@ export class ViewOvertimeComponent implements OnInit {
     workingHours: number;
     totalPaidForWorkingDay: number;
     totalPaidForWorkingHoliday: number;
-    data: any;
+    data: any={};
     sidePage: boolean = false;
 
     readonly requestData: SidePageInfo<ViewOvertimeComponent> | null= inject(SIDE_PAGE_DATA,{ optional: true });
@@ -32,7 +37,11 @@ export class ViewOvertimeComponent implements OnInit {
 
     constructor(
         private view: ViewRequestService,
-        private api: OvertimeService
+        private api: OvertimeService,
+        private dialog: MatDialog,
+        private snackBar: MatSnackBar,
+        private _sidePageSerivce:SidePageService,
+        private reload:AfterCloseSidePageService
     ) {}
     ngOnInit(): void {
         console.log(this.request);
@@ -41,6 +50,7 @@ export class ViewOvertimeComponent implements OnInit {
             console.log(this.data);
         }
         if(this.requestData){
+            console.log(this.requestData.data);
         if(this.requestData.data){
             this.data=this.requestData.data;
             this.sidePage=true
@@ -63,13 +73,14 @@ export class ViewOvertimeComponent implements OnInit {
         });
     }
     getProjectName(id) {
+        console.log(id)
         return this.projects.find((m) => m.id === id)?.name || '';
     }
     ngOnDestroy(): void {
         this.view.setOpen(false);
     }
     onBackPressed() {
-        this.view.setOpen(false);
+        this.refs.close({'ove':'a'})
     }
 
     overtimeAmountFromToatlSalaryDay: number;
@@ -82,6 +93,7 @@ export class ViewOvertimeComponent implements OnInit {
     totalOvertimeHoursHoliday: number;
 
     calc() {
+        debugger
         const workdays = this.data.overtime_list.filter((item) => item.day_type === 'workday');
 
         this.overtimeAmountFromToatlSalaryDay =
@@ -94,6 +106,9 @@ export class ViewOvertimeComponent implements OnInit {
         this.totalOvertimeHoursDay = workdays.reduce((sum, item) => sum + item.overtime_duration, 0);
 
         this.totalPaidForWorkingDay = this.amountPerHourDay * this.totalOvertimeHoursDay;
+
+        console.log(this.totalOvertimeHoursDay)
+        console.log(this.totalPaidForWorkingDay)
 
         const holidays = this.data.overtime_list.filter((item) => item.day_type === 'holiday');
         this.overtimeAmountFromToatlSalaryHoliday =
@@ -110,4 +125,75 @@ export class ViewOvertimeComponent implements OnInit {
     seeMore(){
         this.refs.close({seeMore: true});
     }
+
+     updateRequestStatus(action: string, id: string) {
+            if (action === 'rejected') {
+                const dialogRef = this.dialog.open(DialogFormComponent, {
+                    width: '400px',
+                    data: { message: '' }, // Pass initial data if needed
+                });
+                dialogRef.afterClosed().subscribe((result) => {
+                    if (result) {
+                        let data = {
+                            request_status: action,
+                            reject_reason: result.message,
+                        };
+                        this.api.updateRequestStatus(data, id).subscribe({
+                            next: (response) => {
+                                this.showAlert('Request ' + action);
+                               this.refs.close()
+                            },
+                        });
+                    } else {
+                        console.log('Dialog closed without form submission');
+                    }
+                });
+            } else {
+                let data = {
+                    request_status: action,
+                };
+                this.api.updateRequestStatus(data, id).subscribe({
+                    next: (response) => {
+                        this.showAlert('Request ' + action);
+                        this.refs.close()
+
+                    },
+                });
+            }
+        }
+        
+         async updateInfo(value) {
+                let data = {
+                    ...value,
+                };
+                console.log(data);
+        
+                this.refs.close();
+               
+                    const ref = this._sidePageSerivce.openSidePage('update-overtime', NewOvertimeComponent, {
+                        width: '40%',
+                        maxWidth: '600px',
+                        data: data,
+                    });
+            
+                    ref.afterClosed().subscribe((result) => {
+                        // console.log('The dialog was closed');
+                        this.reload.setValue('overtime')
+                        
+                    });
+                
+               
+            }
+
+        showAlert(message) {
+            this.snackBar.open(message, 'Close', {
+                duration: 3000, // Auto close after 3 seconds
+                verticalPosition: 'top', // 'top' or 'bottom'
+                horizontalPosition: 'center', // 'start', 'center', 'end', 'left', 'right'
+                panelClass: ['custom-snackbar'], // Add custom CSS class if needed
+            });
+        }
+        getFullPath(url:string){
+            return environment.apiUrl+url
+            }
 }

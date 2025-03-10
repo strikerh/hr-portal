@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { DefineJobComponent } from "../view-employee-request/define-job/define-job.component";
 import { BusinessCardComponent } from './business-card/business-card.component';
 import { SalaryClearanceComponent } from './salary-clearance/salary-clearance.component';
@@ -6,6 +6,8 @@ import { SalarySlipComponent } from './salary-slip/salary-slip.component';
 import { UpdateEmployeeDataComponent } from './update-employee-data/update-employee-data.component';
 import { CreateEmployeeRequestComponent } from "../create-employee-request/create-employee-request.component";
 import { ViewRequestService } from '../view-request.service';
+import { SIDE_PAGE_DATA, SIDE_PAGE_REF, SidePageInfo, SidePageRef } from 'ngx-side-page';
+
 
 @Component({
   selector: 'app-view-employee-request',
@@ -16,10 +18,25 @@ import { ViewRequestService } from '../view-request.service';
 })
 export class ViewEmployeeRequestComponent implements OnInit,OnDestroy {
 @Input() request:any;
+data: any={};
+
+readonly requestData: SidePageInfo<ViewEmployeeRequestComponent> | null= inject(SIDE_PAGE_DATA,{ optional: true });
+readonly refs: SidePageRef<ViewEmployeeRequestComponent> | null = inject(SIDE_PAGE_REF,{ optional: true });
 constructor(private view:ViewRequestService){
 
 }
 ngOnInit(): void {
+  if(this.requestData){
+    console.log(this.requestData.data);
+if(this.requestData.data){
+    this.data=this.requestData.data;
+}}
+  console.log(this.request);
+  if (this.request) {
+      this.data = this.request;
+      console.log(this.data);
+  }
+
   console.log(this.request)
   window.history.pushState(null, '', window.location.href);
 
@@ -33,5 +50,9 @@ onBackPressed() {
   // Ensure that `this.view` is defined
   this.view.setOpen(false);
 }
+close(){
+  this.refs.close()
+}
+
 
 }

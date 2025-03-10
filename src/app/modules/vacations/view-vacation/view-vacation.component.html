@@ -1,0 +1,93 @@
+<div class="w-full flex flex-col overflow-scroll">
+
+    <header class="w-full flex flex-wrap flex-col p-4 border-b bg-gray-50">
+      <div class="w-full flex justify-between items-center">
+        <span class="cursor-pointer" (click)="seeMore()">
+          <mat-icon svgIcon="close"></mat-icon>
+        </span>
+        <h1 class="text-xl font-bold text-primary-900 text-center flex-1">
+         Overtime Request Details
+        </h1>
+      </div>
+    </header>
+  
+    <div class="w-full flex flex-wrap justify-center py-8 border-b-2 gap-y-2">
+      <div class="flex items-center">
+        <div class="text-black flex items-center justify-center px-2 py-1 rounded-lg border-solid border-black border-2 border-opacity-50" [ngClass]="data.request_status==='new'?'bg-green-300':'bg-slate-50'">Submission</div>
+        <div class="flex items-center"><mat-icon svgIcon="keyboard_arrow_right"></mat-icon></div>
+      </div>
+      <div class="flex items-center">
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg border-solid border-black border-2 border-opacity-50"  [ngClass]="data.request_status=='direct_manager'?'bg-green-300':'bg-slate-50'">Direct Manager</div>
+        <div class="flex items-center"><mat-icon svgIcon="keyboard_arrow_right"></mat-icon></div>
+      </div>
+      <div class="flex items-center">
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg border-solid border-black border-2 border-opacity-50"  [ngClass]="data.request_status==='project_manager'?'bg-green-300':'bg-slate-50'">Project Manager</div>
+        <div class="flex items-center"><mat-icon svgIcon="keyboard_arrow_right"></mat-icon></div>
+      </div>
+      <div class="flex items-center">
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg border-solid border-black border-2 border-opacity-50" [ngClass]="data.request_status==='hr_review'?'bg-green-300':'bg-slate-50'">HR</div>
+        <div class="flex items-center"><mat-icon svgIcon="keyboard_arrow_right"></mat-icon></div>
+      </div>
+      <div class="flex items-center">
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg bg-slate-50 border-solid border-black border-2 border-opacity-50"  *ngIf="data.request_status != 'approved' && data.request_status!='refused' && data.request_status!='cancel'">Approval</div>
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg bg-green-300 border-solid border-black border-2 border-opacity-50"  *ngIf="data.request_status == 'approved'">Approved</div>
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg bg-red-400 border-solid border-black border-2 border-opacity-50"  *ngIf="data.request_status == 'refused'">Refused</div>
+        <div class="flex items-center justify-center px-2 py-1 rounded-lg bg-red-400 border-solid border-black border-2 border-opacity-50"  *ngIf="data.request_status == 'cancel'">Canceled</div>
+      </div>
+    </div>
+    <!-- <header class="w-full flex justify-between p-4 border-b">
+          <h1 class="text-3xl font-bold flex items-center text-primary-900">
+              <span class="cursor-pointer mr-4" (click)="closeView()"><</span>Define job
+          </h1>
+      </header>
+       -->
+    <section class="details p-6 pb-2 flex flex-col">
+      <div class="bg-white py-2 rounded-lg flex flex-col gap-2">
+  
+        <div class="grid grid-cols-2 sm:grid-cols-2 gap-4 mb-4">
+          <div>
+            <span class="text-black text-opacity-50 text-lg">Employee:</span>
+            <p class="text-black font-bold text-xl">{{ data.employee_name || 'N/A' }}</p>
+          </div>
+          					
+          <div>
+            <span class="text-black text-opacity-50 text-lg">Date Start:</span>
+            <p class="text-black font-bold text-xl">{{ data.start_date ||  'N/A' }}</p>
+          </div>
+          <div>
+            <span class="text-black text-opacity-50 text-lg">Date End:</span>
+            <p class="text-black font-bold text-xl">{{ data.end_date ||  'N/A' }}</p>
+          </div>
+          <div>
+            <span class="text-black text-opacity-50 text-lg">Date End:</span>
+            <p class="text-black font-bold text-xl">{{ data.end_date ||  'N/A' }}</p>
+          </div>
+          <div>
+            <span class="text-black text-opacity-50 text-lg">Duration:</span>
+            <p class="text-black font-bold text-xl">{{ data.duration ||  'N/A' }}</p>
+          </div>
+          <div>
+            <span class="text-black text-opacity-50 text-lg">Description:</span>
+            <p class="text-black font-bold text-xl">{{ data.description ||  'N/A' }}</p>
+          </div>
+          <div>
+            <span class="text-black text-opacity-50 text-lg">Status:</span>
+            <p class="text-black font-bold text-xl">{{ data.state ||  'N/A' }}</p>
+          </div>
+          <div>
+            <span class="text-black text-opacity-50 text-lg">Time Off Type:</span>
+            <p class="text-black font-bold text-xl">{{ data.time_off_type ||  'N/A' }}</p>
+          </div>
+
+         
+        
+        </div>
+        
+        <div class="flex items-center gap-3 justify-end mt-8">
+            <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="data.state === 'draft'||data.state === 'To Approve' && data.type==='self' " (click)="cancel_request(data.id)">Cancel</button>
+            <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="data.type!='self'" (click)="doAction('rejected',data.id)">Reject</button>
+            <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="data.type!='self'" (click)="doAction('approved',data.id)">Approve</button>
+        </div>
+      </div>
+    </section>
+</div>

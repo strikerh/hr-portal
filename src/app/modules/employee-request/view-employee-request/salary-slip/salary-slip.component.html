@@ -35,23 +35,23 @@
         <div class="grid grid-cols-2 sm:grid-cols-2 gap-4 mb-4">
           <div>
             <span class="text-black text-opacity-50 text-lg">Employee:</span>
-            <p class="text-black font-bold text-lg">{{ request.employee_name || 'N/A' }}</p>
+            <p class="text-black font-medium text-lg">{{ request.employee_name || 'N/A' }}</p>
           </div>
           <div>
             <span class="text-black text-opacity-50 text-lg" *ngIf="request.requested_salary_date">requested salary date:</span>
-            <p class="text-black font-bold text-lg">{{ request.requested_salary_date || 'N/A' }}</p>
+            <p class="text-black font-medium text-lg">{{ request.requested_salary_date || 'N/A' }}</p>
           </div>
           <div>
             <span class="text-black text-opacity-50 text-lg" *ngIf="request.id_no">Id number:</span>
-            <p class="text-black font-bold text-lg">{{ request.id_no || 'N/A' }}</p>
+            <p class="text-black font-medium text-lg">{{ request.id_no || 'N/A' }}</p>
           </div>
           <div>
             <span class="text-black text-opacity-50 text-lg" *ngIf="request.iban_no">IBAN:</span>
-            <p class="text-black font-bold text-lg">{{ request.iban_no || 'N/A' }}</p>
+            <p class="text-black font-medium text-lg">{{ request.iban_no || 'N/A' }}</p>
           </div>
           <div>
             <span class="text-black text-opacity-50 text-lg" *ngIf="request.iban_no">Passport number:</span>
-            <p class="text-black font-bold text-lg">{{ request.pass_no || 'N/A' }}</p>
+            <p class="text-black font-medium text-lg">{{ request.pass_no || 'N/A' }}</p>
           </div>
         </div>
 
@@ -73,8 +73,8 @@
         <div class="flex items-center gap-3 justify-end mt-8">
             <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="request.request_status==='new' || request.request_status==='refused'" (click)="updateInfo(request)">Edit</button>
             <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="request.request_status==='new' && request.type==='self' " (click)="updateRequestStatus('submit',request.id)">Submit</button>
-            <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="request.type!='self'" (click)="updateRequestStatus('rejected',request.id)">Reject</button>
-            <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="request.type!='self'" (click)="updateRequestStatus('approved',request.id)">Approve</button>
+            <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="request.type!='self' && request.can_approve" (click)="updateRequestStatus('rejected',request.id)">Reject</button>
+            <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="request.type!='self' && request.can_approve" (click)="updateRequestStatus('approved',request.id)">Approve</button>
           </div>
     </div>
 </section>

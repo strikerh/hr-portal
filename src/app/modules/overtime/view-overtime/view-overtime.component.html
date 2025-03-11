@@ -47,27 +47,27 @@
       <div class="grid grid-cols-2 sm:grid-cols-2 gap-4 mb-4">
         <div>
           <span class="text-black text-opacity-50 text-lg">Employee:</span>
-          <p class="text-black font-bold text-xl">{{ data.employee_name || 'N/A' }}</p>
+          <p class="text-black font-medium text-lg">{{ data.employee_name || 'N/A' }}</p>
         </div>
         <div>
           <span class="text-black text-opacity-50 text-lg">Overtime type:</span>
-          <p class="text-black font-bold text-xl">{{ data.overtime_type || 'N/A' }}</p>
+          <p class="text-black font-medium text-lg">{{ data.overtime_type || 'N/A' }}</p>
         </div>
         <div *ngIf="data.project_id">
           <span class="text-black text-opacity-50 text-lg">Project:</span>
-          <p class="text-black font-bold text-xl">{{ getProjectName(data.project_id) }}</p>
+          <p class="text-black font-medium text-lg">{{ getProjectName(data.project_id) }}</p>
         </div>
         <div *ngIf="salaryInfo">
           <span class="text-black text-opacity-50 text-lg">Total salary:</span>
-          <p class="text-black font-bold text-xl">{{ salaryInfo.total_salary | number:'1.2-2'}} <span class="text-xs">SAR</span></p>
+          <p class="text-black font-medium text-lg">{{ salaryInfo.total_salary | number:'1.2-2'}} <span class="text-xs">SAR</span></p>
         </div>
         <div *ngIf="salaryInfo">
           <span class="text-black text-opacity-50 text-lg">Wage:</span>
-          <p class="text-black font-bold text-xl">{{ salaryInfo.wage | number:'1.2-2'}} <span class="text-xs">SAR</span></p>
+          <p class="text-black font-medium text-lg">{{ salaryInfo.wage | number:'1.2-2'}} <span class="text-xs">SAR</span></p>
         </div>
         <div *ngIf="salaryInfo">
           <span class="text-black text-opacity-50 text-lg">Working hour peer day:</span>
-          <p class="text-black font-bold text-xl">{{ salaryInfo.working_hour_per_day}}</p>
+          <p class="text-black font-medium text-lg">{{ salaryInfo.working_hour_per_day}}</p>
         </div>
         <div>
           <span class="text-blue-500 text-opacity-50 text-lg">Total paid:</span>
@@ -162,8 +162,8 @@
       <div class="flex items-center gap-3 justify-end mt-8">
         <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="data.request_status==='new' || data.request_status==='refused'" (click)="updateInfo(data)">Edit</button>
         <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="data.request_status==='new' && data.type==='self' " (click)="updateRequestStatus('submit',data.id)">Submit</button>
-        <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="data.type!='self'" (click)="updateRequestStatus('rejected',data.id)">Reject</button>
-        <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="data.type!='self'" (click)="updateRequestStatus('approved',data.id)">Approve</button>
+        <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="data.type!='self' && data.can_approve" (click)="updateRequestStatus('rejected',data.id)">Reject</button>
+        <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="data.type!='self' && data.can_approve" (click)="updateRequestStatus('approved',data.id)">Approve</button>
       </div>
     </div>
   </section>

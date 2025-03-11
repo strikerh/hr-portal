@@ -35,32 +35,32 @@
         <div class="grid grid-cols-2 sm:grid-cols-2 gap-4 mb-4">
           <div>
             <span class="text-black text-opacity-50 text-lg">Employee:</span>
-            <p class="text-black font-bold text-lg">{{ request.employee_name || 'N/A' }}</p>
+            <p class="text-black font-medium text-lg">{{ request.employee_name || 'N/A' }}</p>
           </div>
         
           <div >
             <span class="text-black text-opacity-50 text-lg" >Chamber of Commerce:</span>
-            <p class="text-black font-bold text-lg">{{ request.salary_certificate_attested?'Yes':'No' }}</p>
+            <p class="text-black font-medium text-lg">{{ request.salary_certificate_attested?'Yes':'No' }}</p>
           </div> 
           <div *ngIf="request.certificate_language">
             <span class="text-black text-opacity-50 text-lg" >Language:</span>
-            <p class="text-black font-bold text-lg">{{ request.certificate_language || 'N/A' }}</p>
+            <p class="text-black font-medium text-lg">{{ request.certificate_language || 'N/A' }}</p>
           </div>
           <div *ngIf="request.salary_addressed_to">
             <span class="text-black text-opacity-50 text-lg" >Addressed to a specific entity, or general?</span>
-            <p class="text-black font-bold text-lg">{{ request.salary_addressed_to || 'N/A' }}</p>
+            <p class="text-black font-medium text-lg">{{ request.salary_addressed_to || 'N/A' }}</p>
           </div>
           <div *ngIf="request.entity_name">
             <span class="text-black text-opacity-50 text-lg" >Entity:</span>
-            <p class="text-black font-bold text-lg">{{ request.entity_name || 'N/A' }}</p>
+            <p class="text-black font-medium text-lg">{{ request.entity_name || 'N/A' }}</p>
           </div>
           <div *ngIf="request.salary_breakdown_type">
             <span class="text-black text-opacity-50 text-lg" >Breakdown to be detailed or summarized:</span>
-            <p class="text-black font-bold text-lg">{{ request.salary_breakdown_type || 'N/A' }}</p>
+            <p class="text-black font-medium text-lg">{{ request.salary_breakdown_type || 'N/A' }}</p>
           </div>
           <div *ngIf="request.addressed_to_bank">
             <span class="text-black text-opacity-50 text-lg" >Addressed to a bank:</span>
-            <p class="text-black font-bold text-lg">{{request.addressed_to_bank  ? 'yes':'no'}}</p>
+            <p class="text-black font-medium text-lg">{{request.addressed_to_bank  ? 'yes':'no'}}</p>
           </div>
         </div>
         
@@ -103,8 +103,8 @@
         <div class="flex items-center gap-3 justify-end mt-8">
             <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="request.request_status==='new' || request.request_status==='refused'" (click)="updateInfo(request)">Edit</button>
             <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="request.request_status==='new' && request.type==='self' " (click)="updateRequestStatus('submit',request.id)">Submit</button>
-            <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="request.type!='self'" (click)="updateRequestStatus('rejected',request.id)">Reject</button>
-            <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="request.type!='self'" (click)="updateRequestStatus('approved',request.id)">Approve</button>
+            <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="request.type!='self' && request.can_approve" (click)="updateRequestStatus('rejected',request.id)">Reject</button>
+            <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="request.type!='self' && request.can_approve" (click)="updateRequestStatus('approved',request.id)">Approve</button>
           </div>
 </div>
     </section>

@@ -42,31 +42,31 @@
       <div class="grid grid-cols-2 sm:grid-cols-2 gap-4 mb-4">
         <div>
           <span class="text-black text-opacity-50 text-lg">Employee:</span>
-          <p class="text-black font-bold text-lg">{{ data.employee_name || 'N/A' }}</p>
+          <p class="text-black font-medium text-lg">{{ data.employee_name || 'N/A' }}</p>
         </div>
       <div>
         <span class="text-black text-opacity-50 text-lg">Type:</span>
-        <p class="text-black font-bold text-lg">{{ data.resignation_type || 'N/A' }}</p>
+        <p class="text-black font-medium text-lg">{{ data.resignation_type || 'N/A' }}</p>
       </div>
 
       <div *ngIf="data.resignation_reason">
         <span class="text-black text-opacity-50 text-lg">Resignation Reason:</span>
-        <p class="text-black font-bold text-lg">{{ data.resignation_reason  || 'N/A' }}</p>
+        <p class="text-black font-medium text-lg">{{ data.resignation_reason  || 'N/A' }}</p>
       </div>
 
       <div *ngIf="data.last_date">
         <span class="text-black text-opacity-50 text-lg">Last Date:</span>
-        <p class="text-black font-bold text-lg">{{ data.last_date  || 'N/A' }}</p>
+        <p class="text-black font-medium text-lg">{{ data.last_date  || 'N/A' }}</p>
       </div>
 
       <div *ngIf="data.termination_reason">
         <span class="text-black text-opacity-50 text-lg">Termination Reason:</span>
-        <p class="text-black font-bold text-lg">{{ data.termination_reason  || 'N/A' }}</p>
+        <p class="text-black font-medium text-lg">{{ data.termination_reason  || 'N/A' }}</p>
       </div>
 
       <div *ngIf="data.other_reason">
         <span class="text-black text-opacity-50 text-lg">Other Reason:</span>
-        <p class="text-black font-bold text-lg">{{ data.other_reason  || 'N/A' }}</p>
+        <p class="text-black font-medium text-lg">{{ data.other_reason  || 'N/A' }}</p>
       </div>
 
      
@@ -75,8 +75,8 @@
 <div class="flex items-center gap-3 justify-end mt-8">
   <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="data.request_status==='new' || data.request_status==='refused' && data.type==='self'" (click)="updateInfo(data)">Edit</button>
   <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="data.request_status==='new' && data.type==='self' " (click)="updateRequestStatus('submit',data.id)">Submit</button>
-  <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="data.type!='self'" (click)="updateRequestStatus('rejected',data.id)">Reject</button>
-  <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="data.type!='self'" (click)="updateRequestStatus('approved',data.id)">Approve</button>
+  <button class="w-26 h-6 bg-gray-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-gray-500" *ngIf="data.type!='self' && data.can_approve" (click)="updateRequestStatus('rejected',data.id)">Reject</button>
+  <button class="w-26 h-6 bg-emerald-400 text-black px-8 py-5 rounded flex items-center justify-center hover:bg-emerald-500" *ngIf="data.type!='self' && data.can_approve" (click)="updateRequestStatus('approved',data.id)">Approve</button>
 </div>
         </div>
      </section>

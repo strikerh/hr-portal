@@ -1,7 +1,7 @@
 <div class="  border-b py-4  text-center">
     <h1 class="text-xl font-bold"> Request Business Trip</h1>
 </div>
-<section class="p-6 overflow-auto">
+<section class="p-6 overflow-auto text-">
     <form class="flex flex-col gap-2" [formGroup]="businessTripForm" (submit)="submit($event)">
 
 
@@ -144,13 +144,13 @@
             <!-- <button type="button" (click)="saveBusinessTrip()" class="mr-1" mat-raised-button color="accent"> Save</button> -->
             <button [disabled]="buttonDisabled" type="submit" mat-raised-button color="primary">
                <span *ngIf="!buttonDisabled">Submit</span>
-               
-                <mat-progress-spinner 
+
+                <mat-progress-spinner
                  [diameter]="24"
                 [mode]="'indeterminate'"
                  *ngIf="buttonDisabled">
                 </mat-progress-spinner>
-                
+
             </button>
 
         </div>
@@ -167,8 +167,8 @@
     <div class="bg-red-600 text-white p-4 rounded shadow-lg max-w-sm">
       <p class="font-bold">Error!</p>
       <p>{{errorInfo.error}}</p>
-      <button 
-        (click)="closeAlert()" 
+      <button
+        (click)="closeAlert()"
         class="mt-2 bg-white text-red-500 px-4 py-2 rounded hover:bg-gray-100">
         Close
       </button>
